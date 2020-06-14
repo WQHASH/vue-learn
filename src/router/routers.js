@@ -2,10 +2,10 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-01 14:10:16
- * @LastEditTime: 2020-06-14 11:58:31
+ * @LastEditTime: 2020-06-14 21:18:15
  */
 
-import Layout from '@/views/layout'
+import Layout from '@/views/layout';
 
 // 公共路由
 const commonRoutes = [{
