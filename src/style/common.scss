@@ -1,0 +1,89 @@
+input[type="button"],
+input[type="submit"],
+input[type="search"],
+input[type="reset"] {
+    -webkit-appearance: none;
+}
+
+textarea {
+    -webkit-appearance: none;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+body{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.clear:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.clear {
+    zoom: 1;
+}
+
+.back_img {
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.margin {
+    margin: 0 auto;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.text_center {
+    text-align: center;
+}
+
+.text_left {
+    text-align: left;
+}
+
+.text_right {
+    text-align: right;
+}
+
+.ver_align {
+    vertical-align: middle;
+}
+
+.rflex {
+    display: flex;
+    flex-direction: row;
+}
+
+.cflex {
+    display: flex;
+    flex-direction: column;
+}
+
+.wflex {
+    flex: 1;
+}
+
+// 公共的color
+$left-bgColor:#2a3542; // 左侧菜单背景颜色;

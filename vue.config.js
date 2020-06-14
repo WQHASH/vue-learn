@@ -1,0 +1,148 @@
+/*
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2020-05-29 17:29:56
+ * @LastEditTime: 2020-06-12 16:11:27
+ */
+
+const path = require('path')
+// const defaultSettings = require('./src/config/index.js')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const resolve = dir => path.join(__dirname, dir)
+
+// page title
+// const name = defaultSettings.title || 'vue mobile template'
+
+const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
+
+module.exports = {
+    publicPath: '/',
+    outputDir: 'dist', //  生产环境构建文件的目录
+    assetsDir: 'static', //  outputDir的静态资源(js、css、img、fonts)目录
+    lintOnSave: false,
+    productionSourceMap: !IS_PROD, // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
+    devServer: {
+        host: '0.0.0.0',
+        port: 8088, // 端口
+        open: false, // 启动后打开浏览器
+        overlay: {
+            //  当出现编译器错误或警告时，在浏览器中显示全屏覆盖层
+            warnings: false,
+            errors: true
+        },
+        proxy: {
+            //配置跨域
+            '/api': {
+                target: 'http://192.168.4.55:8081/', //"http://192.168.4.152:8181/",
+                // ws:true,
+                changOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
+        }
+    },
+
+    css: {
+        extract: IS_PROD,
+        sourceMap: false,
+        loaderOptions: {
+
+            scss: {
+                // 向全局sass样式传入共享的全局变量, $src可以配置图片cdn前缀
+                // 详情: https://cli.vuejs.org/guide/css.html#passing-options-to-pre-processor-loaders
+                prependData: `
+              @import "assets/css/index.scss";
+              @import "assets/css/mixin.scss";
+              @import "assets/css/variables.scss";
+              `
+                //  $cdn: "${defaultSettings.$cdn}";
+            }
+        }
+    },
+    configureWebpack: config => {
+        // config.name = name
+
+        // 为生产环境修改配置...
+        if (IS_PROD) {
+            // externals
+            // config.externals = externals
+        }
+    },
+
+    chainWebpack: config => {
+        config.plugins.delete('preload') // TODO: need test
+        config.plugins.delete('prefetch') // TODO: need test
+
+        // 别名 alias
+        config.resolve.alias
+            .set('@', resolve('src'))
+            .set('assets', resolve('src/assets'))
+            .set('api', resolve('src/api'))
+            .set('views', resolve('src/views'))
+            .set('components', resolve('src/components'))
+
+        /**
+         * 设置保留空格
+         */
+        config.module
+            .rule('vue')
+            .use('vue-loader')
+            .loader('vue-loader')
+            .tap(options => {
+                options.compilerOptions.preserveWhitespace = true
+                return options
+            })
+            .end()
+        /**
+         * 打包分析
+         */
+        if (IS_PROD) {
+            config.plugin('webpack-report').use(BundleAnalyzerPlugin, [
+                {
+                    analyzerMode: 'static'
+                }
+            ])
+        }
+        config.when(!IS_PROD, config => config.devtool('cheap-source-map'))
+        config.when(IS_PROD, config => {
+            config
+                .plugin('ScriptExtHtmlWebpackPlugin')
+                .after('html')
+                .use('script-ext-html-webpack-plugin', [
+                    {
+                        // 将 runtime 作为内联引入不单独存在
+                        inline: /runtime\..*\.js$/
+                    }
+                ])
+                .end()
+            config.optimization.splitChunks({
+                chunks: 'all',
+                cacheGroups: {
+                    // cacheGroups 下可以可以配置多个组，每个组根据test设置条件，符合test条件的模块
+                    commons: {
+                        name: 'chunk-commons',
+                        test: resolve('src/components'),
+                        minChunks: 3, //  被至少用三次以上打包分离
+                        priority: 5, // 优先级
+                        reuseExistingChunk: true // 表示是否使用已有的 chunk，如果为 true 则表示如果当前的 chunk 包含的模块已经被抽取出去了，那么将不会重新生成新的。
+                    },
+                    node_vendors: {
+                        name: 'chunk-libs',
+                        chunks: 'initial', // 只打包初始时依赖的第三方
+                        test: /[\\/]node_modules[\\/]/,
+                        priority: 10
+                    },
+                    vantUI: {
+                        name: 'chunk-vantUI', // 单独将 vantUI 拆包
+                        priority: 20, // 数字大权重到，满足多个 cacheGroups 的条件时候分到权重高的
+                        test: /[\\/]node_modules[\\/]_?vant(.*)/
+                    }
+                }
+            })
+            config.optimization.runtimeChunk('single')
+        })
+    }
+
+
+}
