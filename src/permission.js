@@ -2,7 +2,7 @@
  * @Description: 设置动态路由权限
  * @Author: wangqi
  * @Date: 2020-06-01 14:16:17
- * @LastEditTime: 2020-06-14 20:50:10
+ * @LastEditTime: 2020-06-15 20:53:26
  */
 
 import router from './router';
@@ -29,6 +29,32 @@ router.beforeEach((to, from, next) => {
     }
 
     let auth = Store.get('rolesType');
+    // if (auth && to.path !== '/login') {
+    //     if (hasMenus) {
+    //         next();
+    //     } else {
+    //         try {
+    //             const routesList = getRoutes(auth);
+    //             router.addRoutes(routesList);
+    //             router.options.routes = router.options.routes.concat(routesList);
+    //             hasMenus = true;
+    //             next({
+    //                 path: to.path
+    //             });
+    //         } catch (error) {
+    //             next(`/login`)
+    //         }
+    //     }
+
+    // } else {
+    //     hasMenus = false
+    //     if (to.path === '/login') {
+    //         next()
+    //     } else {
+    //         next(`/login`)
+    //     }
+    // }
+
     if (auth && to.path !== '/login') {
         if (hasMenus) {
             next();
@@ -38,13 +64,12 @@ router.beforeEach((to, from, next) => {
                 router.addRoutes(routesList);
                 router.options.routes = router.options.routes.concat(routesList);
                 hasMenus = true;
-                next({
-                    path: to.path
-                });
+                next()
             } catch (error) {
                 next(`/login`)
             }
         }
+
 
     } else {
         hasMenus = false
