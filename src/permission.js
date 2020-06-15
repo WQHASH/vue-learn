@@ -2,7 +2,7 @@
  * @Description: 设置动态路由权限
  * @Author: wangqi
  * @Date: 2020-06-01 14:16:17
- * @LastEditTime: 2020-06-15 20:53:26
+ * @LastEditTime: 2020-06-16 00:40:43
  */
 
 import router from './router';
@@ -64,19 +64,17 @@ router.beforeEach((to, from, next) => {
                 router.addRoutes(routesList);
                 router.options.routes = router.options.routes.concat(routesList);
                 hasMenus = true;
-                next()
+                next();
             } catch (error) {
                 next(`/login`)
             }
         }
-
-
     } else {
-        hasMenus = false
+        hasMenus = false;
         if (to.path === '/login') {
-            next()
+            next();
         } else {
-            next(`/login`)
+            next(`/login`);
         }
     }
 });
