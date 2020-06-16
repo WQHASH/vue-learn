@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:26
- * @LastEditTime: 2020-06-12 14:52:07
+ * @LastEditTime: 2020-06-16 16:33:55
  */
 import axios from 'axios';
 import qs from 'qs'
@@ -10,12 +10,13 @@ import { Loading, Notification } from 'element-ui';
 
 // 创建axios实例
 const service = axios.create({
+    baseURL: process.env.VUE_APP_BASE_API,
     timeout: 15000,
     // 请求头处理，设置传给后台的参数格式
     // form: application/x-www-form-urlencoded;charset=utf-8
     // json: application/json;charset=utf-8
     headers: {
-        'Content-type': 'application/json;charset=utf-8'
+        'Content-type': 'application/json;charset=utf-8',
     },
     withCredentials: true,
 })
@@ -52,6 +53,7 @@ service.interceptors.response.use((response) => {
             title: '提示',
             message: '请求失败!'
         });
+        // 这里还可以加一些提示处理： tokent过期，当前用户在其他客户端登录
         return Promise.reject(response.data);
     } else {
         setTimeout(() => {

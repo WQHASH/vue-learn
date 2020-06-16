@@ -2,7 +2,7 @@
  * @Description: axios请求配置列表
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:14
- * @LastEditTime: 2020-06-12 16:19:22
+ * @LastEditTime: 2020-06-16 15:49:56
  */
 
 
@@ -18,7 +18,7 @@ import service from '@/api/request.js';
 export function getRoby(data) {
     return service({
         method: 'get',
-        url: `/api/roby`,
+        url: `/roby`,
         data,
     })
 }
