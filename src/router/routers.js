@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-01 14:10:16
- * @LastEditTime: 2020-06-14 21:18:15
+ * @LastEditTime: 2020-06-18 00:56:53
  */
 
 import Layout from '@/views/layout';
@@ -48,17 +48,6 @@ const commonRoutes = [{
         },
         hidden: true,
         component: () => import('@/views/register/index.vue')
-    },
-    {
-        path: '*',
-        name: '404',
-        meta: {
-            title: "找不到页面",
-            requireAuth: false,
-            roles: []
-        },
-        hidden: true,
-        component: () => import('@/views/errorPage/index.vue')
     }
 ];
 
@@ -153,6 +142,17 @@ const asyncRoutes = {
                 component: () => import('@/views/course')
             }]
         },
+        {
+            path: '*',
+            name: '404',
+            meta: {
+                title: "找不到页面",
+                requireAuth: false,
+                roles: []
+            },
+            hidden: true,
+            component: () => import('@/views/errorPage/index.vue')
+        }
     ],
     'user': [{
         path: '/dataFactory',
@@ -166,7 +166,17 @@ const asyncRoutes = {
             },
             component: () => import('@/views/dataFactory')
         }]
-    }, ],
+    }, {
+        path: '*',
+        name: '404',
+        meta: {
+            title: "找不到页面",
+            requireAuth: false,
+            roles: []
+        },
+        hidden: true,
+        component: () => import('@/views/errorPage/index.vue')
+    }],
 };
 
 export {

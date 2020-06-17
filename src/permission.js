@@ -2,7 +2,7 @@
  * @Description: 设置动态路由权限
  * @Author: wangqi
  * @Date: 2020-06-01 14:16:17
- * @LastEditTime: 2020-06-16 00:40:43
+ * @LastEditTime: 2020-06-18 00:57:02
  */
 
 import router from './router';
@@ -15,6 +15,17 @@ function getRoutes(data) {
     // 权限路由
     children.push(...(asyncRoutes[data]));
     result.push(...children);
+    // children.push({
+    //     path: '*',
+    //     name: '404',
+    //     meta: {
+    //         title: "找不到页面",
+    //         requireAuth: false,
+    //         roles: []
+    //     },
+    //     hidden: true,
+    //     component: () => import('@/views/errorPage/index.vue')
+    // });
     return result;
 }
 
