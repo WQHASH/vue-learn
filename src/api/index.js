@@ -2,13 +2,42 @@
  * @Description: axios请求配置列表
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:14
- * @LastEditTime: 2020-06-16 15:49:56
+ * @LastEditTime: 2020-06-21 19:04:28
  */
-
-
 
 import service from '@/api/request.js';
 
+
+
+// 登录接口
+export function login(data) {
+    return service({
+        url: `/user/login`,
+        method: 'post',
+        data
+    })
+}
+
+// 获取用户信息
+export function getInfo(token) {
+    return service({
+        url: `/user/info`,
+        method: 'get',
+        params: { token }
+    })
+}
+
+// 退出
+export function logout() {
+    return service({
+        url: `/user/logout`,
+        method: 'post',
+    })
+}
+
+
+
+// -----------------------
 // 测试接口
 /**
  * @description: 
@@ -33,30 +62,5 @@ export function getPost() {
         // headers:{
         //     "Content-type":"application/x-www-form-urlencoded;charset=utf-8"
         // }
-    })
-}
-// 登录接口
-export function api_login(data){
-    return service({
-        method: 'post',
-        url: `/api/site/login`,
-        data: data
-    })
-}
-// 注册接口
-export function api_signup(data){
-    return service({
-        method: 'post',
-        url: `/api/site/signup`,
-        data: data
-    })
-}
-
-// 添加组织
-export function add_org(data){
-    return service({
-        method: 'post',
-        url: `/api/site/signup`,
-        data: data
     })
 }

@@ -2,7 +2,7 @@
  * @Description: 页面头部
  * @Author: wangqi
  * @Date: 2020-06-04 14:28:00
- * @LastEditTime: 2020-06-14 21:16:28
+ * @LastEditTime: 2020-06-21 18:34:46
 --> 
 
 <style lang="scss">
@@ -63,7 +63,6 @@
 </template>
 
 <script>
-import {commonRoutes} from '@/router/routers';
 export default {
     name: "HeaderNav",
     data() {
@@ -90,10 +89,11 @@ export default {
          * @param {type}
          * @return:
          */
-        signOut() {
-            this.$router.options.routes = commonRoutes;
+        async signOut() {
+            await this.$store.dispatch("user/logout");
             this.$router.push({
-                path: `/login`
+                // path: `/login?redirect=${this.$route.fullPath}`
+                  path: `/login?redirect=${this.$route.fullPath}`
             });
 
         }

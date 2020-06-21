@@ -2,19 +2,19 @@
  * @Description: 登录页
  * @Author: wangqi
  * @Date: 2020-06-01 14:18:50
- * @LastEditTime: 2020-06-14 20:33:13
+ * @LastEditTime: 2020-06-21 19:04:46
 -->
 <template>
 <div class="login-page" :style="bgBanner">
     <div class="container">
         <p class="title">登录</p>
         <div class="user-ipt">
-            <el-input size="medium" placeholder="请输入用户名..." prefix-icon="el-icon-s-custom" v-model="accountInfo" @blur="verifyAccount"> </el-input>
+            <el-input size="medium" placeholder="请输入用户名..." prefix-icon="el-icon-s-custom" v-model="accountInfo" @blur="verifyAccount"></el-input>
             <p class="error">{{accountError}}</p>
         </div>
 
         <div class="password-ipt">
-            <el-input show-password size="medium" placeholder="请输入密码" prefix-icon="el-icon-goods" v-model="pwdInfo" @blur="verifyPwd"> </el-input>
+            <el-input show-password size="medium" placeholder="请输入密码" prefix-icon="el-icon-goods" v-model="pwdInfo" @blur="verifyPwd"></el-input>
             <p class="error">{{pwdError}}</p>
         </div>
 
@@ -34,6 +34,10 @@ import {
 } from "@/api/index.js";
 import Store from "@/tools/Store";
 
+import {
+    Notification
+} from "element-ui";
+
 export default {
     name: "login",
     data() {
@@ -43,7 +47,8 @@ export default {
             accountError: "",
             pwdError: "",
             // 背景图属性
-            bgBanner: {}
+            bgBanner: {},
+            redirect: undefined
         };
     },
     created() {
@@ -51,6 +56,14 @@ export default {
         let day = new Date().getDay();
         this.bgBanner.backgroundImage =
             "url(" + require("@/assets/images/login/bg0" + day + ".jpg") + ")";
+    },
+    watch: {
+        $route: {
+            handler: function (route) {
+                this.redirect = route.query && route.query.redirect;
+            },
+            immediate: true
+        }
     },
     methods: {
         /**
@@ -88,17 +101,20 @@ export default {
                 username: this.accountInfo,
                 password: this.pwdInfo
             };
-            Store.set("rolesType", this.accountInfo);
 
-            this.$router.push({
-                path: `/dashboard`
-            });
-
-            // api_login(JSON.stringify(form))
-            //     .then(function (res) {
-            //         console.log(res);
-            //     })
-            //     .catch(error => {});
+            this.$store
+                .dispatch("user/login", auth)
+                .then(() => {
+                    this.$router.push({
+                        path: this.redirect || "/"
+                    });
+                })
+                .catch(() => {
+                    Notification.error({
+                        title: "提示",
+                        message: "登录失败!"
+                    });
+                });
         },
         /**
          * @description: 注册

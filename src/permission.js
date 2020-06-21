@@ -2,12 +2,20 @@
  * @Description: 设置动态路由权限
  * @Author: wangqi
  * @Date: 2020-06-01 14:16:17
- * @LastEditTime: 2020-06-18 00:57:02
+ * @LastEditTime: 2020-06-21 19:02:44
  */
 
 import router from './router';
-import Store from '@/tools/Store';
+import store from '@/store';
+import { getToken } from '@/tools/auth';
 import { asyncRoutes } from '@/router/routers';
+
+import { Message } from 'element-ui'
+import NProgress from 'nprogress';
+import 'nprogress/nprogress';
+
+
+NProgress.configure({ showSpinner: false });
 
 function getRoutes(data) {
     let result = [];
@@ -28,75 +36,59 @@ function getRoutes(data) {
     // });
     return result;
 }
-
-//用来控制路由跳转
-let hasMenus = false
-
-
+// 白名单
+const whiteList = ['/login'];
 // 全局前置守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+    NProgress.start();
+
     if (to.meta.title) {
         document.title = to.meta.title
     }
 
-    let auth = Store.get('rolesType');
-    // if (auth && to.path !== '/login') {
-    //     if (hasMenus) {
-    //         next();
-    //     } else {
-    //         try {
-    //             const routesList = getRoutes(auth);
-    //             router.addRoutes(routesList);
-    //             router.options.routes = router.options.routes.concat(routesList);
-    //             hasMenus = true;
-    //             next({
-    //                 path: to.path
-    //             });
-    //         } catch (error) {
-    //             next(`/login`)
-    //         }
-    //     }
+    let hasToken = getToken();
 
-    // } else {
-    //     hasMenus = false
-    //     if (to.path === '/login') {
-    //         next()
-    //     } else {
-    //         next(`/login`)
-    //     }
-    // }
-
-    if (auth && to.path !== '/login') {
-        if (hasMenus) {
-            next();
+    if (hasToken) {
+        if (to.path == '/login') {
+            // next("/");
+            next({ path: '/' })
+            NProgress.done();
         } else {
-            try {
-                const routesList = getRoutes(auth);
-                router.addRoutes(routesList);
-                router.options.routes = router.options.routes.concat(routesList);
-                hasMenus = true;
+            const hasUserInfo = store.getters.name;
+            if (hasUserInfo) {
                 next();
-            } catch (error) {
-                next(`/login`)
+            } else {
+                try {
+                    await store.dispatch("user/getInfo");
+                    next();
+                } catch (error) {
+                    await store.dispatch("user/resetToken");
+                    Message.error(error || 'Has Error')
+                    next(`/login?redirect=${to.path}`);
+                    NProgress.done()
+                }
             }
+
         }
     } else {
-        hasMenus = false;
-        if (to.path === '/login') {
+        if (whiteList.includes(to.path)) {
             next();
         } else {
-            next(`/login`);
+            next(`/login?redirect=${to.path}`);
+            NProgress.done();
         }
     }
+
+
 });
 
 // 全局解析守卫 (执行在beforeEach 和 组件内守卫和异步路由组件被解析之后)
-router.beforeResolve((to, from, next) => {
-    console.log("beforeResolve - 全局解析守卫")
-    next()
-});
+// router.beforeResolve((to, from, next) => {
+//     console.log("beforeResolve - 全局解析守卫")
+//     next()
+// });
 
 // 全局后置钩子
 router.afterEach((to, from) => {
-    console.log("afterEach - 全局后置钩子")
+    NProgress.done()
 });

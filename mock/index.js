@@ -2,9 +2,10 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-03 12:53:26
- * @LastEditTime: 2020-06-03 13:00:21
+ * @LastEditTime: 2020-06-21 16:11:19
  */
-import Mock from "mockjs";
+const Mock = require('mockjs');
+const user = require("./user");
 
 Mock.mock('/getMockData', 'post', {
     'list|1-10': [{
@@ -21,4 +22,10 @@ Mock.mock('/api/dataInfo', 'post', {
     }]
 })
 
-export default Mock;
+const mocks = [
+    ...user
+];
+
+module.exports = {
+    mocks
+}

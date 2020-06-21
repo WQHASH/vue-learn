@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-14 11:01:31
- * @LastEditTime: 2020-06-18 19:16:50
+ * @LastEditTime: 2020-06-21 17:39:05
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -22,7 +22,8 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
 }, {});
 
 
-export default new Vuex.Store({
-  getters,
-  modules: modules
-})
+const store = new Vuex.Store({
+  modules,
+  getters
+});
+export default store;

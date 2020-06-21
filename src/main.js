@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-06-06 09:33:28
+ * @LastEditTime: 2020-06-21 15:39:11
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -18,7 +18,7 @@ Vue.use(Element, {
   zIndex: 3000
 });
 Vue.config.productionTip = false;
-import '@/mock';
+
 import '@/permission';
 import '@/registerServiceWorker'
 

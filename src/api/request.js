@@ -2,11 +2,12 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:26
- * @LastEditTime: 2020-06-16 16:33:55
+ * @LastEditTime: 2020-06-21 15:19:43
  */
 import axios from 'axios';
 import qs from 'qs'
 import { Loading, Notification } from 'element-ui';
+import { getToken } from '@/tools/auth';
 
 // 创建axios实例
 const service = axios.create({
@@ -29,7 +30,7 @@ service.interceptors.request.use((config) => {
     });
 
     config.headers = {
-        'Authorization': "Bearer KhkXjzSfrx5zLmbOOfRE7m-El-L3wps8",
+        'Authorization': getToken(),    //"Bearer KhkXjzSfrx5zLmbOOfRE7m-El-L3wps8",
     };
     // 配置根据上传资源确定 contentType
     // 在请求之前对data传参进行格式转换
