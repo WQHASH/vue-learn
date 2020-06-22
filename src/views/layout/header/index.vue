@@ -2,7 +2,7 @@
  * @Description: 页面头部
  * @Author: wangqi
  * @Date: 2020-06-04 14:28:00
- * @LastEditTime: 2020-06-21 18:34:46
+ * @LastEditTime: 2020-06-22 13:40:23
 --> 
 
 <style lang="scss">
@@ -77,6 +77,7 @@ export default {
     },
     created() {
         console.log(this.$router, "router");
+        console.log(this.$route, "route");
     },
     components: {},
     methods: {

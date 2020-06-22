@@ -2,20 +2,25 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:26
- * @LastEditTime: 2020-06-21 15:19:43
+ * @LastEditTime: 2020-06-22 13:25:46
  */
 import axios from 'axios';
 import qs from 'qs'
 import { Loading, Notification } from 'element-ui';
 import { getToken } from '@/tools/auth';
+import store from '@/store';
 
 // 创建axios实例
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_API,
     timeout: 15000,
     // 请求头处理，设置传给后台的参数格式
-    // form: application/x-www-form-urlencoded;charset=utf-8
+    // form: application/x-www-form-urlencoded;charset=utf-8    
+    //          1. 配合qs使用
+    //          2. let params = new URLSearchParams(); params.append('name', 'li lei');
+    // 
     // json: application/json;charset=utf-8
+    // file: multipart/form-data
     headers: {
         'Content-type': 'application/json;charset=utf-8',
     },
@@ -28,13 +33,15 @@ service.interceptors.request.use((config) => {
     LoadingTip = Loading.service({
         fullscreen: true
     });
+    if (store.getters.token) {
+        config.headers = {
+            'Authorization': getToken(),    //"Bearer KhkXjzSfrx5zLmbOOfRE7m-El-L3wps8",
+        };
+    }
 
-    config.headers = {
-        'Authorization': getToken(),    //"Bearer KhkXjzSfrx5zLmbOOfRE7m-El-L3wps8",
-    };
     // 配置根据上传资源确定 contentType
     // 在请求之前对data传参进行格式转换
-    // const isJson = config.headers['Content-type'] == `application/json;charset=utf-8`;
+    // const isJson = config.headers['Content-type'] == `application/x-www-form-urlencoded;charset=utf-8`;
     // if (isJson) {
     //     config.transformRequest = [function (data) {
     //         data = qs.stringify(data)
@@ -110,6 +117,5 @@ service.interceptors.response.use((response) => {
     });
     return Promise.reject(err);
 });
-
 
 export default service;

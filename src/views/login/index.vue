@@ -2,7 +2,7 @@
  * @Description: 登录页
  * @Author: wangqi
  * @Date: 2020-06-01 14:18:50
- * @LastEditTime: 2020-06-21 19:04:46
+ * @LastEditTime: 2020-06-22 14:25:29
 -->
 <template>
 <div class="login-page" :style="bgBanner">
@@ -24,6 +24,10 @@
             <span @click="register">注册账号</span> |
             <span @click="forgetPwd">忘记密码</span>
         </p>
+        <div>
+            <p>admin: 123</p>
+            <p>editor: 123</p>
+        </div>
     </div>
 </div>
 </template>
@@ -151,6 +155,7 @@ export default {
 .login-page .container {
     background: rgba(255, 255, 255, 0.5);
     width: 300px;
+    height: 300px;
     text-align: center;
     border-radius: 10px;
     padding: 30px;

@@ -2,11 +2,10 @@
  * @Description: axios请求配置列表
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:14
- * @LastEditTime: 2020-06-21 19:04:28
+ * @LastEditTime: 2020-06-22 13:13:59
  */
 
 import service from '@/api/request.js';
-
 
 
 // 登录接口

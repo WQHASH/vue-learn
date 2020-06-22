@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-14 11:01:31
- * @LastEditTime: 2020-06-21 17:39:05
+ * @LastEditTime: 2020-06-22 13:16:30
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
