@@ -2,7 +2,7 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-06-21 14:49:06
- * @LastEditTime: 2020-06-21 18:15:37
+ * @LastEditTime: 2020-06-22 23:33:57
  */
 
 import { getToken, setToken, removeToken } from '@/tools/auth';
@@ -101,7 +101,7 @@ const actions = {
             });
         });
     },
-    
+
     /**
      * @description: 重置token
      * @param {type} 

@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-06-21 15:39:11
+ * @LastEditTime: 2020-06-22 23:35:47
  */
 import Vue from 'vue'
 import App from './App.vue'

@@ -2,13 +2,14 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:26
- * @LastEditTime: 2020-06-22 13:25:46
+ * @LastEditTime: 2020-06-22 23:36:16
  */
 import axios from 'axios';
+import store from '@/store';
+// const store = require("@/store");
 import qs from 'qs'
 import { Loading, Notification } from 'element-ui';
 import { getToken } from '@/tools/auth';
-import store from '@/store';
 
 // 创建axios实例
 const service = axios.create({

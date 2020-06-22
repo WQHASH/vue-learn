@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-29 17:29:56
- * @LastEditTime: 2020-06-21 17:05:38
+ * @LastEditTime: 2020-06-22 21:51:44
  */
 
 const path = require('path')
@@ -62,6 +62,7 @@ module.exports = {
             }
         }
     },
+    
     configureWebpack: config => {
         // config.name = name
 
@@ -69,6 +70,10 @@ module.exports = {
         if (IS_PROD) {
             // externals
             // config.externals = externals
+        } else {
+            return {
+                devtool: 'source-map'
+            }
         }
     },
 
@@ -145,6 +150,5 @@ module.exports = {
             config.optimization.runtimeChunk('single')
         })
     }
-
 
 }
