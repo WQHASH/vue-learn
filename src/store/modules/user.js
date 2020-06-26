@@ -2,27 +2,22 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-06-21 14:49:06
- * @LastEditTime: 2020-06-22 23:33:57
+ * @LastEditTime: 2020-06-26 15:31:43
  */
 
 import { getToken, setToken, removeToken } from '@/tools/auth';
-import { resetRouter } from '@/router';
+import router, { resetRouter } from '@/router';
 import { login, logout, getInfo } from '@/api';
 
-const getDefaultState = () => {
-    return {
-        token: getToken(),
-        name: '',
-        avatar: '',
-    };
+const state = {
+    token: getToken(),
+    roles: [],
+    name: '',
+    avatar: '',
+    introduction: '',
 };
 
-const state = getDefaultState();
-
 const mutations = {
-    RESET_STATE: (state) => {
-        Object.assign(state, getDefaultState())
-    },
     SET_TOKEN: (state, token) => {
         state.token = token;
     },
@@ -32,6 +27,12 @@ const mutations = {
     SET_AVATAR: (state, avatar) => {
         state.avatar = avatar;
     },
+    SET_INTRODUCTION: (state, avatar) => {
+        state.avatar = avatar;
+    },
+    SET_ROLES: (state, roles) => {
+        state.roles = roles;
+    }
 
 };
 
@@ -72,9 +73,15 @@ const actions = {
                     reject('获取用户信息失败~')
                 }
 
-                const { name, avatar } = data;
+                const { roles, name, avatar, introduction } = data;
+                if (!roles || roles.length <= 0) {
+                    reject("获取roles失败!");
+                }
+                context.commit('SET_ROLES', roles);
                 context.commit('SET_NAME', name);
                 context.commit('SET_AVATAR', avatar);
+                context.commit('SET_INTRODUCTION', introduction);
+
                 resolve(data);
             }).catch((err) => {
                 reject(err);
@@ -90,11 +97,19 @@ const actions = {
     logout(context) {
         return new Promise((resolve, reject) => {
             logout(context.state.token).then(() => {
+                context.commit('SET_TOKEN', '');
+                context.commit('SET_ROLES', []);
+
+                context.commit('SET_NAME', '');
+                context.commit('SET_AVATAR', '');
+                context.commit('SET_INTRODUCTION', '');
+
+
                 // 清除token
                 removeToken();
                 //重置路由
                 resetRouter()
-                context.commit('RESET_STATE');
+
                 resolve();
             }).catch((error) => {
                 reject(error);
@@ -109,8 +124,9 @@ const actions = {
      */
     resetToken(context) {
         return new Promise((resolve) => {
+            context.commit('SET_TOKEN', '');
+            context.commit('SET_ROLES', []);
             removeToken();
-            context.commit("RESET_STATE");
             resolve();
         });
     }

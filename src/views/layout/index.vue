@@ -2,7 +2,7 @@
  * @Description: 主页面
  * @Author: wangqi
  * @Date: 2020-06-04 13:24:25
- * @LastEditTime: 2020-06-10 15:19:08
+ * @LastEditTime: 2020-06-26 17:06:10
 --> 
 
 <style lang="scss">
@@ -11,7 +11,7 @@
         padding: 0px;
     }
     .el-main{
-        padding: 0;
+        padding: 10px;
     }
 }
 </style>

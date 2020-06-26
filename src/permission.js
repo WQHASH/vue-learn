@@ -2,7 +2,7 @@
  * @Description: 设置动态路由权限
  * @Author: wangqi
  * @Date: 2020-06-01 14:16:17
- * @LastEditTime: 2020-06-21 19:02:44
+ * @LastEditTime: 2020-06-26 16:40:55
  */
 
 import router from './router';
@@ -13,7 +13,6 @@ import { asyncRoutes } from '@/router/routers';
 import { Message } from 'element-ui'
 import NProgress from 'nprogress';
 import 'nprogress/nprogress';
-
 
 NProgress.configure({ showSpinner: false });
 
@@ -41,40 +40,40 @@ const whiteList = ['/login'];
 // 全局前置守卫
 router.beforeEach(async (to, from, next) => {
     NProgress.start();
-
     if (to.meta.title) {
         document.title = to.meta.title
     }
-
     let hasToken = getToken();
-
     if (hasToken) {
         if (to.path == '/login') {
             // next("/");
             next({ path: '/' })
             NProgress.done();
         } else {
-            const hasUserInfo = store.getters.name;
-            if (hasUserInfo) {
+            const hasRoles = store.getters.roles && store.getters.roles.length > 0;
+            if (hasRoles) {
                 next();
             } else {
                 try {
-                    await store.dispatch("user/getInfo");
-                    next();
+                    const { roles } = await store.dispatch("user/getInfo");
+                    const accessRoutes = await store.dispatch('permission/generateRoutes', roles);
+                    router.addRoutes(accessRoutes);
+                    next({ ...to, replace: true })
                 } catch (error) {
                     await store.dispatch("user/resetToken");
                     Message.error(error || 'Has Error')
-                    next(`/login?redirect=${to.path}`);
+                    // next(`/login?redirect=${to.path}`);
+                    next(`/login`);
                     NProgress.done()
                 }
             }
-
         }
     } else {
         if (whiteList.includes(to.path)) {
             next();
         } else {
-            next(`/login?redirect=${to.path}`);
+            // next(`/login?redirect=${to.path}`);
+            next(`/login`);
             NProgress.done();
         }
     }

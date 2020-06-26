@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:26
- * @LastEditTime: 2020-06-22 23:36:16
+ * @LastEditTime: 2020-06-26 15:44:48
  */
 import axios from 'axios';
 import store from '@/store';
@@ -63,6 +63,7 @@ service.interceptors.response.use((response) => {
             message: '请求失败!'
         });
         // 这里还可以加一些提示处理： tokent过期，当前用户在其他客户端登录
+        // 这时候就要重置tokent了 store.dispatch('user/resetToken')
         return Promise.reject(response.data);
     } else {
         setTimeout(() => {
