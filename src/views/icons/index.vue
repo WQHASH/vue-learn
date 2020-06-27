@@ -2,7 +2,7 @@
  * @Description: icons
  * @Author: wangqi
  * @Date: 2020-06-26 16:56:19
- * @LastEditTime: 2020-06-26 19:58:04
+ * @LastEditTime: 2020-06-27 11:19:49
 --> 
 
 <style lang="scss">
@@ -56,21 +56,35 @@
           </div>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="配置管理">配置管理</el-tab-pane>
+      <el-tab-pane label="elementIcons">
+        <div v-for="(item, index) of elemntIcons" :key="index">
+          <el-tooltip class="item" effect="dark" placement="top">
+            <div slot="content">{{ generateElementIconCode(item) }}</div>
+            <div class="icon-item">
+              <i :class="'el-icon-' + item "></i>
+              <span>{{item}}</span>
+            </div>
+          </el-tooltip>
+        </div>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
 import svgIcons from "./svg-icons";
-
+import elemntIcons from "./elemnt-icons";
+import "@/assets/images/email.svg";
 export default {
   name: "Icons",
   data() {
     return {
-      svgIcons
+      svgIcons,
+      elemntIcons
     };
   },
+  created() {},
+
   components: {},
 
   methods: {
@@ -78,6 +92,10 @@ export default {
 
     generateIconCode(symbol) {
       return `<svg-icon icon-class="${symbol}"/>`;
+    },
+
+    generateElementIconCode(symbol) {
+      return `<i class="el-icon-${symbol}" />`;
     }
   }
 };

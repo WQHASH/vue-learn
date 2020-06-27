@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-29 17:29:56
- * @LastEditTime: 2020-06-26 19:49:09
+ * @LastEditTime: 2020-06-27 10:21:54
  */
 
 const path = require('path')
@@ -102,7 +102,7 @@ module.exports = {
             })
             .end()
 
-        // svg图片 svg-sprite-loader
+        // 只包含svg图片 svg-sprite-loader
         config.module
             .rule('svg')
             .exclude.add(resolve('src/icons'))

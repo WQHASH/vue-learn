@@ -2,7 +2,7 @@
  * @Description: 页面头部
  * @Author: wangqi
  * @Date: 2020-06-04 14:28:00
- * @LastEditTime: 2020-06-26 16:21:29
+ * @LastEditTime: 2020-06-27 11:30:28
 --> 
 
 <style lang="scss">
@@ -88,12 +88,7 @@ export default {
       }
     };
   },
-  created() {
-    console.log(this.$router, "router");
-    console.log(this.$route, "route");
-
-    console.log(this.permissionRoutes, "permissionRoutes");
-  },
+  created() {},
   computed: {
     ...mapGetters(["permissionRoutes"]),
     activeMenu() {
