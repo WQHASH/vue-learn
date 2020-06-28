@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-01 14:10:16
- * @LastEditTime: 2020-06-26 16:58:00
+ * @LastEditTime: 2020-06-28 20:42:06
  */
 
 import Layout from '@/views/layout';
@@ -16,8 +16,9 @@ const commonRoutes = [{
 {
     path: '/dashboard',
     component: Layout,
+    redirect: '/dashboard/index',
     children: [{
-        path: "",
+        path: "index",
         name: "dashboard",
         meta: {
             title: "首页",
@@ -46,15 +47,31 @@ const commonRoutes = [{
 },
 
 {
-    path: '/icon',
+    path: '/topology',
     component: Layout,
+    redirect: '/topology/index',
+    title: "网络拓扑",
     children: [{
-        path: "",
-        name: "Icons",
+        path: "index",
+        name: "Topology",
         meta: {
-            title: "icon",
+            title: "网络拓扑",
         },
-        component: () => import('@/views/icons')
+        component: () => import('@/views/topology')
+    }]
+},
+
+{
+    path: '/map',
+    component: Layout,
+    redirect: '/map/index',
+    children: [{
+        path: "index",
+        name: "Map",
+        meta: {
+            title: "地图",
+        },
+        component: () => import('@/views/map')
     }]
 },
 ];
@@ -66,9 +83,11 @@ const asyncRoutes = [
         path: '/userManager',
         component: Layout,
         title: "admin",
+        hidden: true,
+        redirect: '/userManager/index',
         meta: { roles: ['admin'] },
         children: [{
-            path: "",
+            path: "index",
             name: "userManager",
             meta: {
                 title: "admin",
@@ -88,77 +107,20 @@ const asyncRoutes = [
     },
 
     {
-        path: '/userOrg',
+        path: '/icons',
         component: Layout,
-        title: "editor",
         meta: { roles: ['admin', 'editor'] },
+        hidden: true,
         children: [{
-            path: "",
-            name: "userOrg",
+            path: "icons",
+            name: "Icons",
             meta: {
-                title: "editor",
+                title: "图标",
             },
-            component: () => import('@/views/userOrg')
+            component: () => import('@/views/icons')
         }]
     },
 
-
-    // {
-    //     path: '/other',
-    //     component: Layout,
-    //     title: "其它",
-    //     children: [{
-    //         path: "",
-    //         name: "other",
-    //         meta: {
-    //             title: "other",
-    //         },
-    //         component: () => import('@/views/other')
-    //     },
-    //     {
-    //         path: "page1",
-    //         name: "page1",
-    //         meta: {
-    //             title: "page1",
-    //         },
-    //         component: () => import('@/views/other/page1')
-    //     },
-    //     {
-    //         path: "page2",
-    //         name: "page2",
-    //         meta: {
-    //             title: "page2",
-    //         },
-    //         component: () => import('@/views/other/page1/sele')
-    //     }
-    //     ]
-    // },
-
-    // {
-    //     path: '/course',
-    //     component: Layout,
-    //     children: [{
-    //         path: "",
-    //         name: "course",
-    //         meta: {
-    //             title: "课程管理",
-    //         },
-    //         component: () => import('@/views/course')
-    //     }]
-    // },
-    // {
-    //     path: '/dataFactory',
-    //     component: Layout,
-    //     meta: { roles: ['editor'] },
-    //     children: [{
-    //         path: "",
-    //         name: "dataFactory",
-    //         meta: {
-    //             title: "数据工厂",
-    //         },
-    //         component: () => import('@/views/dataFactory')
-    //     }]
-    // }
     {
         path: '*',
         name: '404',

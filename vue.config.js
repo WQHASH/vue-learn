@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-29 17:29:56
- * @LastEditTime: 2020-06-27 10:21:54
+ * @LastEditTime: 2020-06-28 19:37:45
  */
 
 const path = require('path')
@@ -128,6 +128,9 @@ module.exports = {
                 }
             ])
         }
+        /**
+         * 断点调试
+         */
         config.when(!IS_PROD, config => config.devtool('cheap-source-map'))
         config.when(IS_PROD, config => {
             config

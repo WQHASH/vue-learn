@@ -2,7 +2,7 @@
  * @Description: 页面头部
  * @Author: wangqi
  * @Date: 2020-06-04 14:28:00
- * @LastEditTime: 2020-06-27 11:30:28
+ * @LastEditTime: 2020-06-28 20:42:45
 --> 
 
 <style lang="scss">
@@ -44,7 +44,10 @@
         >
           <template v-for="(route, index) in permissionRoutes">
             <template v-if="!route.hidden && route.children.length>1">
-              <el-submenu :index="route.path" :key="index">
+              <el-submenu
+                :index="route.path"
+                :key="index"
+              >
                 <template slot="title">{{route.title}}</template>
                 <template v-for="(item, itemIndex) in route.children">
                   <el-menu-item
@@ -57,16 +60,22 @@
 
             <template v-else>
               <template v-if="!route.hidden">
-                <el-menu-item :index="route.path" :key="index">{{route.children[0].meta.title}}</el-menu-item>
+                <el-menu-item
+                  :index="route.redirect"
+                  :key="index"
+                >{{route.children[0].meta.title}}</el-menu-item>
               </template>
             </template>
           </template>
 
-          <el-menu-item index="7" disabled>消息中心</el-menu-item>
         </el-menu>
       </el-col>
 
-      <el-col :span="2" class="sign-out" @click.native="signOut">
+      <el-col
+        :span="2"
+        class="sign-out"
+        @click.native="signOut"
+      >
         <i class="el-icon-user"></i>
         <div class="grid-content bg-purple">退出</div>
       </el-col>
@@ -89,14 +98,12 @@ export default {
     };
   },
   created() {},
+
   computed: {
     ...mapGetters(["permissionRoutes"]),
     activeMenu() {
       const route = this.$route;
       const { meta, path } = route;
-      if (meta.activeMenu) {
-        return meta.activeMenu;
-      }
       return path;
     }
   },

@@ -2,7 +2,7 @@
  * @Description: 设置动态路由权限
  * @Author: wangqi
  * @Date: 2020-06-01 14:16:17
- * @LastEditTime: 2020-06-26 16:40:55
+ * @LastEditTime: 2020-06-28 19:48:09
  */
 
 import router from './router';
@@ -16,25 +16,6 @@ import 'nprogress/nprogress';
 
 NProgress.configure({ showSpinner: false });
 
-function getRoutes(data) {
-    let result = [];
-    let children = [];
-    // 权限路由
-    children.push(...(asyncRoutes[data]));
-    result.push(...children);
-    // children.push({
-    //     path: '*',
-    //     name: '404',
-    //     meta: {
-    //         title: "找不到页面",
-    //         requireAuth: false,
-    //         roles: []
-    //     },
-    //     hidden: true,
-    //     component: () => import('@/views/errorPage/index.vue')
-    // });
-    return result;
-}
 // 白名单
 const whiteList = ['/login'];
 // 全局前置守卫
