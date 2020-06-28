@@ -4031,6 +4031,11 @@ globby@^9.2.0:
     pify "^4.0.1"
     slash "^2.0.0"
 
+gojs@^2.1.19:
+  version "2.1.19"
+  resolved "https://registry.yarnpkg.com/gojs/-/gojs-2.1.19.tgz#b0a929d1774b02b2dc4ca9188ad2dbbbf0fa6706"
+  integrity sha512-K2sJlmNdU5PacFQTPK4QMMaxjl+MSNlM3Nr5Okh7cI37EAFHZ/XVccNojYOV6v7Q9RSDDGFZbExfgniqS5kTww==
+
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.2:
   version "4.2.4"
   resolved "https://registry.npm.taobao.org/graceful-fs/download/graceful-fs-4.2.4.tgz?cache=0&sync_timestamp=1588086905523&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fgraceful-fs%2Fdownload%2Fgraceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
