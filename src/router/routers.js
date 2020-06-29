@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-01 14:10:16
- * @LastEditTime: 2020-06-29 14:23:00
+ * @LastEditTime: 2020-06-30 01:27:31
  */
 
 import Layout from '@/views/layout';
@@ -82,10 +82,9 @@ const asyncRoutes = [
     {
         path: '/userManager',
         component: Layout,
-        title: "admin",
         // hidden: true,
         redirect: '/userManager/index',
-        meta: { title: "userManager", roles: ['admin'] },
+        meta: { title: "管理", roles: ['admin'] },
         children: [{
             path: "index",
             name: "userManager",
@@ -94,22 +93,22 @@ const asyncRoutes = [
                 roles: ['admin'],
             },
             component: () => import('@/views/userManager'),
-            children: [{
-                path: "core",
-                name: "core",
-                meta: {
-                    title: "个人中心",
-                    roles: ['admin'],
-                },
-                component: () => import('@/views/userManager/core')
-            }]
+            // children: [{
+            //     path: "core",
+            //     name: "core",
+            //     meta: {
+            //         title: "个人中心",
+            //         roles: ['admin'],
+            //     },
+            //     component: () => import('@/views/userManager/core')
+            // }]
         },
         {
             path: "core",
             name: "core",
             // hidden: true,
             meta: {
-                title: "个人中心",
+                title: "个人中心1",
                 roles: ['admin'],
             },
             component: () => import('@/views/userManager/core')
