@@ -2,7 +2,7 @@
  * @Description: 导航栏
  * @Author: wangqi
  * @Date: 2020-06-30 00:32:54
- * @LastEditTime: 2020-06-30 20:47:02
+ * @LastEditTime: 2020-06-30 22:22:53
 --> 
 
 <style lang="scss">
@@ -17,7 +17,9 @@
     <el-submenu v-else :index="resolvePath(item.path)">
         <template slot="title">
             <!-- <el-menu-item v-if="item.meta" :icon="item.meta && item.meta.icon">{{item.meta.title}}</el-menu-item> -->
-             {{item.meta.title}}
+            <!-- <i class="el-icon-eleme"></i> -->
+             <svg-icon icon-class="edit" class-name />
+            <span>{{item.meta.title}}</span>
         </template>
         <navbar-item v-for="child in item.children" :key="child.path" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />
     </el-submenu>
