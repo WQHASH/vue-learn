@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-01 14:10:16
- * @LastEditTime: 2020-06-30 01:27:31
+ * @LastEditTime: 2020-06-30 20:48:50
  */
 
 import Layout from '@/views/layout';
@@ -81,6 +81,7 @@ const commonRoutes = [{
 const asyncRoutes = [
     {
         path: '/userManager',
+        // name: "userManager",
         component: Layout,
         // hidden: true,
         redirect: '/userManager/index',
@@ -92,27 +93,27 @@ const asyncRoutes = [
                 title: "admin",
                 roles: ['admin'],
             },
+            redirect: '/userManager/core',
+            // alwaysShow: true,
             component: () => import('@/views/userManager'),
-            // children: [{
-            //     path: "core",
-            //     name: "core",
-            //     meta: {
-            //         title: "个人中心",
-            //         roles: ['admin'],
-            //     },
-            //     component: () => import('@/views/userManager/core')
-            // }]
+            children: [{
+                path: "core",
+                name: "core",
+                meta: {
+                    title: "个人中心",
+                    roles: ['admin'],
+                },
+                component: () => import('@/views/userManager/core')
+            }, {
+                name: "menu",
+                path: "menu",
+                meta: {
+                    title: "测试菜单",
+                },
+                component: () => import('@/views/userManager/menu1-1')
+            }]
         },
-        {
-            path: "core",
-            name: "core",
-            // hidden: true,
-            meta: {
-                title: "个人中心1",
-                roles: ['admin'],
-            },
-            component: () => import('@/views/userManager/core')
-        }]
+        ]
     },
 
     {

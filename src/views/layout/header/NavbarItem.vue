@@ -2,7 +2,7 @@
  * @Description: 导航栏
  * @Author: wangqi
  * @Date: 2020-06-30 00:32:54
- * @LastEditTime: 2020-06-30 01:26:58
+ * @LastEditTime: 2020-06-30 20:47:02
 --> 
 
 <style lang="scss">
@@ -14,9 +14,10 @@
         <el-menu-item :index="resolvePath(onlyOneChild.path)">{{onlyOneChild.meta.title}}</el-menu-item>
     </template>
 
-    <el-submenu v-else :index="resolvePath(item.path)" popper-append-to-body>
+    <el-submenu v-else :index="resolvePath(item.path)">
         <template slot="title">
-            <el-menu-item v-if="item.meta" :icon="item.meta && item.meta.icon">{{item.meta.title}}</el-menu-item>
+            <!-- <el-menu-item v-if="item.meta" :icon="item.meta && item.meta.icon">{{item.meta.title}}</el-menu-item> -->
+             {{item.meta.title}}
         </template>
         <navbar-item v-for="child in item.children" :key="child.path" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />
     </el-submenu>
@@ -32,6 +33,7 @@ export default {
         return {};
     },
     props: {
+        // 路由属性
         item: {
             type: Object,
             required: true
