@@ -2,10 +2,47 @@
  * @Description: 导航栏
  * @Author: wangqi
  * @Date: 2020-06-30 00:32:54
- * @LastEditTime: 2020-06-30 22:22:53
+ * @LastEditTime: 2020-07-01 14:46:05
 --> 
 
 <style lang="scss">
+* {
+    outline: none;
+}
+
+.nav-bar-wrap {
+
+    /* 水平样式 */
+    .el-menu--horizontal>div>.el-submenu {
+        float: left;
+    }
+
+    /* 一级菜单的样式 */
+    .el-menu--horizontal>div>.el-menu-item {
+        float: left;
+        height: 60px;
+        line-height: 60px;
+        margin: 0;
+        border-bottom: 2px solid transparent;
+        color: #909399;
+    }
+
+    /* 解决下图1 下拉三角图标 */
+    .el-menu--horizontal>div>.el-submenu .el-submenu__icon-arrow {
+        position: static;
+        vertical-align: middle;
+        margin-left: 8px;
+        margin-top: -3px;
+    }
+
+    /* 解决下图2 无下拉菜单时 不对齐问题 */
+    .el-menu--horizontal>div>.el-submenu .el-submenu__title {
+        height: 60px;
+        line-height: 60px;
+        border-bottom: 2px solid transparent;
+        color: #909399;
+    }
+}
 </style>
 
 <template>
@@ -18,7 +55,7 @@
         <template slot="title">
             <!-- <el-menu-item v-if="item.meta" :icon="item.meta && item.meta.icon">{{item.meta.title}}</el-menu-item> -->
             <!-- <i class="el-icon-eleme"></i> -->
-             <svg-icon icon-class="edit" class-name />
+            <svg-icon icon-class="edit" class-name />
             <span>{{item.meta.title}}</span>
         </template>
         <navbar-item v-for="child in item.children" :key="child.path" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />

@@ -2,48 +2,50 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-28 19:25:58
- * @LastEditTime: 2020-06-28 20:51:01
+ * @LastEditTime: 2020-07-01 17:20:36
 --> 
 <template>
-<div>
-    <div id="myDiagramDiv" style="width:600px; height:350px; background-color: #DAE4E4;"></div>
-</div>
+  <div class="goDemo">
+    <div
+      id="myDiagramDiv"
+      style="border: solid 1px blue; width:1000px; height:500px"
+    ></div>
+  </div>
 </template>
 
 <script>
-import gojs from "gojs";
+
+const go = require("../../vendor/go-debug.js");
+// const go = require("../../vendor/go.js");
+const $ = go.GraphObject.make;
 
 export default {
-    data() {
-        return {};
-    },
-    created() {
-        console.log(gojs);
-    },
-    methods: {
-        init() {
+  data() {
+    return {};
+  },
+  created() {
+    console.log(go, "go");
+  },
+  mounted() {
+    this.init();
+  },
 
-            var $ = go.GraphObject.make;
-            var myDiagram =
-                $(go.Diagram, "myDiagramDiv", { // enable Ctrl-Z to undo and Ctrl-Y to redo
-                    "undoManager.isEnabled": true
-                });
+  methods: {
+    init() {
+      const diagramWrap = document.getElementById("myDiagramDiv");
+      var myDiagram = $(go.Diagram, "myDiagramDiv", {
+        "undoManager.isEnabled": true
+      });
 
-            var myModel = $(go.Model);
-            // for each object in this Array, the Diagram creates a Node to represent it
-            myModel.nodeDataArray = [{
-                    key: "Alpha"
-                },
-                {
-                    key: "Beta"
-                },
-                {
-                    key: "Gamma"
-                }
-            ];
-            myDiagram.model = myModel;
-
-        }
+      var myModel = $(go.Model);
+      // for each object in this Array, the Diagram creates a Node to represent it
+      myModel.nodeDataArray = [
+        { key: "Alpha" },
+        { key: "Beta" },
+        { key: "Gamma" }
+      ];
+      myDiagram.model = myModel;
     }
+  }
 };
 </script>

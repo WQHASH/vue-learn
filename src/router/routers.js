@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-01 14:10:16
- * @LastEditTime: 2020-06-30 20:48:50
+ * @LastEditTime: 2020-07-01 14:51:19
  */
 
 import Layout from '@/views/layout';
@@ -65,6 +65,7 @@ const commonRoutes = [{
     path: '/map',
     component: Layout,
     redirect: '/map/index',
+    hidden: true,
     children: [{
         path: "index",
         name: "Map",
