@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-07-01 16:43:32
+ * @LastEditTime: 2020-07-07 22:16:00
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -22,8 +22,9 @@ import './icons'
 import '@/permission';
 import '@/registerServiceWorker'
 
-new Vue({
+const vm = new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
+console.log(vm, "vm");
