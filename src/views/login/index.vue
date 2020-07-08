@@ -2,7 +2,7 @@
  * @Description: 登录页
  * @Author: wangqi
  * @Date: 2020-06-01 14:18:50
- * @LastEditTime: 2020-06-26 16:23:35
+ * @LastEditTime: 2020-07-08 16:28:24
 -->
 <template>
   <div class="login-page" :style="bgBanner">
@@ -152,7 +152,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login-page {
   height: 100%;
   display: flex;

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhaodong
  * @Date: 2020-06-03 13:26:33
- * @LastEditTime: 2020-07-07 23:51:18
+ * @LastEditTime: 2020-07-08 17:56:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \yswb\src\views\home\home.vue
@@ -35,7 +35,10 @@
 <template>
   <div class="dashboard">
     <el-container class="container">
-      <Vcharts :styleConfig="lineChart.styleConfig" :option="lineChart.option"></Vcharts>
+      <Vcharts
+        :styleConfig="lineChart.styleConfig"
+        :option="lineChart.option"
+      ></Vcharts>
       <h1>权限说明: {{name}}</h1>
 
       <h2>dashboard</h2>
@@ -46,13 +49,17 @@
       <el-button @click.native="handleAddAsync">异步增量</el-button>
 
       <div class="shadow-wrap">
-        <button :disabled="bool">Button</button>
+        <button @click="hanleClick">Button</button>
         <p>Using mustaches: {{ rawHtml }}</p>
         <p>
           Using v-html directive:
           <span v-html="rawHtml"></span>
         </p>
-        <div class="demo-shadow" v-for="(item, index) in obj" :key="index">{{item['sname']}}</div>
+        <div
+          class="demo-shadow"
+          v-for="(item, index) in obj"
+          :key="index"
+        >{{item['sname']}}</div>
         <!-- <el-input v-model="sname" placeholder="请输入内容"></el-input> -->
       </div>
     </el-container>
@@ -158,6 +165,12 @@ export default {
         .then(data => {
           console.log(data, "data-Async");
         });
+    },
+
+    hanleClick() {
+      console.log("hanleClick");
+      // this.$router.push({ path: this.$route.path, query: { t: +new Date() } });
+        this.$router.go({ path: this.$route.path, force: true });
     }
   }
 };

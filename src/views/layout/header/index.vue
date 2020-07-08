@@ -2,10 +2,10 @@
  * @Description: 页面头部
  * @Author: wangqi
  * @Date: 2020-06-04 14:28:00
- * @LastEditTime: 2020-07-01 14:42:30
+ * @LastEditTime: 2020-07-08 16:27:14
 --> 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .head-nav {
   .el-menu {
     display: flex;

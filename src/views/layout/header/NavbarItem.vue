@@ -2,10 +2,10 @@
  * @Description: 导航栏
  * @Author: wangqi
  * @Date: 2020-06-30 00:32:54
- * @LastEditTime: 2020-07-01 14:46:05
+ * @LastEditTime: 2020-07-08 16:27:41
 --> 
 
-<style lang="scss">
+<style lang="scss" scoped>
 * {
     outline: none;
 }

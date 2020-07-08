@@ -2,9 +2,9 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-07-06 14:38:02
- * @LastEditTime: 2020-07-06 22:57:16
+ * @LastEditTime: 2020-07-08 16:30:32
 --> 
-<style lang="scss">
+<style lang="scss" scoped>
 .topologyNavBar {
   .el-row {
     margin: 10px 0px;

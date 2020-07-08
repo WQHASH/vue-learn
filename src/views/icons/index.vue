@@ -2,10 +2,10 @@
  * @Description: icons
  * @Author: wangqi
  * @Date: 2020-06-26 16:56:19
- * @LastEditTime: 2020-06-28 15:25:05
+ * @LastEditTime: 2020-07-08 16:31:05
 --> 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .icons-wrap {
     height: 100%;
     width: 100%;

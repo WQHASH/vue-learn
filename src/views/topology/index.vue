@@ -2,9 +2,9 @@
  * @Description: 流程图
  * @Author: wangqi
  * @Date: 2020-07-05 22:50:30
- * @LastEditTime: 2020-07-06 23:16:15
+ * @LastEditTime: 2020-07-08 16:28:48
 --> 
-<style lang="scss">
+<style lang="scss" scoped>
 .topology-wrap {
   width: 100%;
   display: flex;
