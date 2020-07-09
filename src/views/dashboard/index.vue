@@ -1,7 +1,7 @@
 <!--
  * @Author: zhaodong
  * @Date: 2020-06-03 13:26:33
- * @LastEditTime: 2020-07-08 17:56:17
+ * @LastEditTime: 2020-07-09 23:29:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \yswb\src\views\home\home.vue
@@ -169,8 +169,8 @@ export default {
 
     hanleClick() {
       console.log("hanleClick");
-      // this.$router.push({ path: this.$route.path, query: { t: +new Date() } });
-        this.$router.go({ path: this.$route.path, force: true });
+      this.$router.push({ path: this.$route.path, query: { t: +new Date() } });
+        // this.$router.go({ path: this.$route.path, force: true });
     }
   }
 };

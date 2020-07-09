@@ -2,7 +2,7 @@
  * @Description: 流程图
  * @Author: wangqi
  * @Date: 2020-07-05 22:50:30
- * @LastEditTime: 2020-07-08 16:28:48
+ * @LastEditTime: 2020-07-10 00:34:07
 --> 
 <style lang="scss" scoped>
 .topology-wrap {
@@ -33,8 +33,8 @@
 </template>
 
 <script>
-const go = require("../../vendor/go-debug.js");
-// const go = require("../../vendor/go.js");
+const go = require("../../../vendor/go-debug.js");
+// const go = require("../../../vendor/go.js");
 const $ = go.GraphObject.make;
 import cat from "@/assets/images/topology/cat.png";
 

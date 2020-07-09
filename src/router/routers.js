@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-01 14:10:16
- * @LastEditTime: 2020-07-05 23:37:42
+ * @LastEditTime: 2020-07-10 00:38:30
  */
 
 import Layout from '@/views/layout';
@@ -49,15 +49,24 @@ const commonRoutes = [{
 {
     path: '/topology',
     component: Layout,
-    redirect: '/topology/index',
-    title: "网络拓扑",
+    redirect: '/topology/list',
+    meta: { title: "网络拓扑" },
     children: [{
-        path: "index",
+        path: "list",
         name: "Topology",
         meta: {
             title: "网络拓扑",
         },
-        component: () => import('@/views/topology')
+        component: () => import('@/views/topology/list')
+    }, {
+        name: "TopologyDetails",
+        path: 'edit/:id(\\d+)',
+        hidden: true,
+        meta: {
+            title: "编辑拓扑",
+            activeMenu: "/topology/list"
+        },
+        component: () => import('@/views/topology/components/topologyDetails'),
     }]
 },
 
