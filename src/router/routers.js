@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-01 14:10:16
- * @LastEditTime: 2020-07-10 00:38:30
+ * @LastEditTime: 2020-07-12 00:06:24
  */
 
 import Layout from '@/views/layout';
@@ -130,7 +130,7 @@ const asyncRoutes = [
         path: '/icons',
         component: Layout,
         meta: { roles: ['admin', 'editor'] },
-        hidden: true,
+        // hidden: true,
         children: [{
             path: "icons",
             name: "Icons",

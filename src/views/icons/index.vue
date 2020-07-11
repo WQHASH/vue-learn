@@ -2,7 +2,7 @@
  * @Description: icons
  * @Author: wangqi
  * @Date: 2020-06-26 16:56:19
- * @LastEditTime: 2020-07-08 16:31:05
+ * @LastEditTime: 2020-07-12 00:13:54
 --> 
 
 <style lang="scss" scoped>
@@ -37,6 +37,9 @@
     .disabled {
         pointer-events: none;
     }
+    .active{
+        color: red;
+    }
 }
 </style>
 
@@ -50,7 +53,7 @@
                         <div slot="content">{{ generateIconCode(item) }}</div>
 
                         <div class="icon-item">
-                            <svg-icon :icon-class="item" class-name />
+                            <svg-icon :icon-class="item" class-name="active" />
                             <span>{{item}}</span>
                         </div>
                     </el-tooltip>
@@ -62,7 +65,7 @@
                 <el-tooltip class="item" effect="dark" placement="top">
                     <div slot="content">{{ generateElementIconCode(item) }}</div>
                     <div class="icon-item">
-                        <i :class="'el-icon-' + item "></i>
+                        <i :class="'el-icon-' + item  + ' active'"></i>
                         <span>{{item}}</span>
                     </div>
                 </el-tooltip>
@@ -81,7 +84,7 @@ export default {
     data() {
         return {
             svgIcons,
-            elemntIcons
+            elemntIcons,
         };
     },
     created() {},

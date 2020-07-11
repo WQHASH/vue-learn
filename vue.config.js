@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-29 17:29:56
- * @LastEditTime: 2020-06-28 19:37:45
+ * @LastEditTime: 2020-07-11 23:14:16
  */
 
 const path = require('path')
@@ -17,14 +17,14 @@ const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
 
 module.exports = {
     publicPath: '/',
-    outputDir: 'dist', //  生产环境构建文件的目录
-    assetsDir: 'static', //  outputDir的静态资源(js、css、img、fonts)目录
-    lintOnSave: false,
+    outputDir: 'dist',      //  生产环境构建文件的目录
+    assetsDir: 'static',    //  outputDir的静态资源(js、css、img、fonts)目录
+    lintOnSave: false,      // 取消 ESLint 校验
     productionSourceMap: !IS_PROD, // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
     devServer: {
         host: '0.0.0.0',
-        port: 8088, // 端口
-        open: false, // 启动后打开浏览器
+        port: 8088,         // 端口
+        open: false,        // 启动后打开浏览器
         overlay: {
             //  当出现编译器错误或警告时，在浏览器中显示全屏覆盖层
             warnings: false,
