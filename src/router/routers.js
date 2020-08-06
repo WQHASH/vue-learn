@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-01 14:10:16
- * @LastEditTime: 2020-07-12 00:06:24
+ * @LastEditTime: 2020-08-06 13:46:58
  */
 
 import Layout from '@/views/layout';
@@ -58,6 +58,13 @@ const commonRoutes = [{
             title: "网络拓扑",
         },
         component: () => import('@/views/topology/list')
+    }, {
+        path: "dynamicPorts",
+        name: "TopologyDynamicPorts",
+        meta: {
+            title: "动态拓扑端口",
+        },
+        component: () => import('@/views/topology/components/topologyDynamicPorts')
     }, {
         name: "TopologyDetails",
         path: 'edit/:id(\\d+)',
