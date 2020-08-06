@@ -2,7 +2,7 @@
  * @Description: 拓扑图动态端口图
  * @Author: wangqi
  * @Date: 2020-08-06 13:37:21
- * @LastEditTime: 2020-08-06 15:12:21
+ * @LastEditTime: 2020-08-06 23:24:14
 -->
 
 <style lang="scss" scoped>
@@ -25,6 +25,7 @@
 <script>
 const go = require("../../../vendor/go-debug.js");
 const $ = go.GraphObject.make;
+import CustomLink from "../utils/CustomLink";
 import Store from "@/tools/Store";
 import {
     mapGetters
@@ -35,6 +36,172 @@ export default {
         return {
             go: go,
             myDiagram: {},
+            topologyData: {
+                class: "go.GraphLinksModel",
+                copiesArrays: true,
+                copiesArrayObjects: true,
+                linkFromPortIdProperty: "fromPort",
+                linkToPortIdProperty: "toPort",
+                nodeDataArray: [{
+                        key: 1,
+                        name: "Unit One",
+                        loc: "101 204",
+                        leftArray: [{
+                            portColor: "#fae3d7",
+                            portId: "left0"
+                        }],
+                        topArray: [{
+                            portColor: "#d6effc",
+                            portId: "top0"
+                        }],
+                        bottomArray: [{
+                            portColor: "#ebe3fc",
+                            portId: "bottom0"
+                        }],
+                        rightArray: [{
+                                portColor: "#eaeef8",
+                                portId: "right0"
+                            },
+                            {
+                                portColor: "#fadfe5",
+                                portId: "right1"
+                            }
+                        ]
+                    },
+                    {
+                        key: 2,
+                        name: "Unit Two",
+                        loc: "320 152",
+                        leftArray: [{
+                                portColor: "#6cafdb",
+                                portId: "left0"
+                            },
+                            {
+                                portColor: "#66d6d1",
+                                portId: "left1"
+                            },
+                            {
+                                portColor: "#fae3d7",
+                                portId: "left2"
+                            }
+                        ],
+                        topArray: [{
+                            portColor: "#d6effc",
+                            portId: "top0"
+                        }],
+                        bottomArray: [{
+                                portColor: "#eaeef8",
+                                portId: "bottom0"
+                            },
+                            {
+                                portColor: "#eaeef8",
+                                portId: "bottom1"
+                            },
+                            {
+                                portColor: "#6cafdb",
+                                portId: "bottom2"
+                            }
+                        ],
+                        rightArray: []
+                    },
+                    {
+                        key: 3,
+                        name: "Unit Three",
+                        loc: "384 319",
+                        leftArray: [{
+                                portColor: "#66d6d1",
+                                portId: "left0"
+                            },
+                            {
+                                portColor: "#fadfe5",
+                                portId: "left1"
+                            },
+                            {
+                                portColor: "#6cafdb",
+                                portId: "left2"
+                            }
+                        ],
+                        topArray: [{
+                            portColor: "#66d6d1",
+                            portId: "top0"
+                        }],
+                        bottomArray: [{
+                            portColor: "#6cafdb",
+                            portId: "bottom0"
+                        }],
+                        rightArray: []
+                    },
+                    {
+                        key: 4,
+                        name: "Unit Four",
+                        loc: "138 351",
+                        leftArray: [{
+                            portColor: "#fae3d7",
+                            portId: "left0"
+                        }],
+                        topArray: [{
+                            portColor: "#6cafdb",
+                            portId: "top0"
+                        }],
+                        bottomArray: [{
+                            portColor: "#6cafdb",
+                            portId: "bottom0"
+                        }],
+                        rightArray: [{
+                                portColor: "#6cafdb",
+                                portId: "right0"
+                            },
+                            {
+                                portColor: "#66d6d1",
+                                portId: "right1"
+                            }
+                        ]
+                    }
+                ],
+                linkDataArray: [{
+                        from: 4,
+                        to: 2,
+                        fromPort: "top0",
+                        toPort: "bottom0"
+                    },
+                    {
+                        from: 4,
+                        to: 2,
+                        fromPort: "top0",
+                        toPort: "bottom0"
+                    },
+                    {
+                        from: 3,
+                        to: 2,
+                        fromPort: "top0",
+                        toPort: "bottom1"
+                    },
+                    {
+                        from: 4,
+                        to: 3,
+                        fromPort: "right0",
+                        toPort: "left0"
+                    },
+                    {
+                        from: 4,
+                        to: 3,
+                        fromPort: "right1",
+                        toPort: "left2"
+                    },
+                    {
+                        from: 1,
+                        to: 2,
+                        fromPort: "right0",
+                        toPort: "left1"
+                    },
+                    {
+                        from: 1,
+                        to: 2,
+                        fromPort: "right1",
+                        toPort: "left2"
+                    }
+                ]
+            }
         };
     },
 
@@ -43,8 +210,12 @@ export default {
     },
     methods: {
         init() {
+            let self = this;
+            go.Diagram.inherit(CustomLink, go.Link);
+            let portSize = new go.Size(8, 8);
+
             this.myDiagram = $(go.Diagram, "dynamic-ports-wrap", {
-                "undoManager.isEnabled": true,
+                "undoManager.isEnabled": true
             });
 
             this.myDiagram.nodeTemplate = $(
@@ -53,7 +224,7 @@ export default {
                     locationObjectName: "BODY",
                     locationSpot: go.Spot.Center,
                     selectionObjectName: "BODY",
-                    contextMenu: nodeMenu,
+                    contextMenu: self.nodeMenu()
                 },
                 new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
                     go.Point.stringify
@@ -66,13 +237,13 @@ export default {
                         row: 1,
                         column: 1,
                         name: "BODY",
-                        stretch: go.GraphObject.Fill,
+                        stretch: go.GraphObject.Fill
                     },
                     $(go.Shape, "Rectangle", {
                         fill: "#dbf6cb",
                         stroke: null,
                         strokeWidth: 0,
-                        minSize: new go.Size(60, 60),
+                        minSize: new go.Size(60, 60)
                     }),
                     $(
                         go.TextBlock, {
@@ -80,7 +251,7 @@ export default {
                             textAlign: "center",
                             font: "bold 14px Segoe UI,sans-serif",
                             stroke: "#484848",
-                            editable: true,
+                            editable: true
                         },
                         new go.Binding("text", "name").makeTwoWay()
                     )
@@ -99,7 +270,7 @@ export default {
                             fromLinkable: true,
                             toLinkable: true,
                             cursor: "pointer",
-                            contextMenu: portMenu,
+                            contextMenu: self.portMenu()
                         },
                         new go.Binding("portId", "portId"),
                         $(
@@ -108,11 +279,11 @@ export default {
                                 stroke: null,
                                 strokeWidth: 0,
                                 desiredSize: portSize,
-                                margin: new go.Margin(1, 0),
+                                margin: new go.Margin(1, 0)
                             },
                             new go.Binding("fill", "portColor")
                         )
-                    ), // end itemTemplate
+                    ) // end itemTemplate
                 }), // end Vertical Panel
 
                 // the Panel holding the top port elements, which are themselves Panels,
@@ -128,7 +299,7 @@ export default {
                             fromLinkable: true,
                             toLinkable: true,
                             cursor: "pointer",
-                            contextMenu: portMenu,
+                            contextMenu: self.portMenu()
                         },
                         new go.Binding("portId", "portId"),
                         $(
@@ -137,11 +308,11 @@ export default {
                                 stroke: null,
                                 strokeWidth: 0,
                                 desiredSize: portSize,
-                                margin: new go.Margin(0, 1),
+                                margin: new go.Margin(0, 1)
                             },
                             new go.Binding("fill", "portColor")
                         )
-                    ), // end itemTemplate
+                    ) // end itemTemplate
                 }), // end Horizontal Panel
 
                 // the Panel holding the right port elements, which are themselves Panels,
@@ -157,7 +328,7 @@ export default {
                             fromLinkable: true,
                             toLinkable: true,
                             cursor: "pointer",
-                            contextMenu: portMenu,
+                            contextMenu: self.portMenu()
                         },
                         new go.Binding("portId", "portId"),
                         $(
@@ -166,11 +337,11 @@ export default {
                                 stroke: null,
                                 strokeWidth: 0,
                                 desiredSize: portSize,
-                                margin: new go.Margin(1, 0),
+                                margin: new go.Margin(1, 0)
                             },
                             new go.Binding("fill", "portColor")
                         )
-                    ), // end itemTemplate
+                    ) // end itemTemplate
                 }), // end Vertical Panel
 
                 // the Panel holding the bottom port elements, which are themselves Panels,
@@ -186,7 +357,7 @@ export default {
                             fromLinkable: true,
                             toLinkable: true,
                             cursor: "pointer",
-                            contextMenu: portMenu,
+                            contextMenu: self.portMenu()
                         },
                         new go.Binding("portId", "portId"),
                         $(
@@ -195,13 +366,44 @@ export default {
                                 stroke: null,
                                 strokeWidth: 0,
                                 desiredSize: portSize,
-                                margin: new go.Margin(0, 1),
+                                margin: new go.Margin(0, 1)
                             },
                             new go.Binding("fill", "portColor")
                         )
-                    ), // end itemTemplate
+                    ) // end itemTemplate
                 }) // end Horizontal Panel
             );
+
+            this.myDiagram.linkTemplate = $(
+                CustomLink, // defined below
+                {
+                    routing: go.Link.AvoidsNodes,
+                    corner: 4,
+                    curve: go.Link.JumpGap,
+                    reshapable: true,
+                    resegmentable: true,
+                    relinkableFrom: true,
+                    relinkableTo: true
+                },
+                new go.Binding("points").makeTwoWay(),
+                $(go.Shape, {
+                    stroke: "#2F4F4F",
+                    strokeWidth: 2
+                })
+            );
+
+            //   this.toolManager.clickCreatingTool.archetypeNodeData = {
+            //       name: "Unit",
+            //       leftArray: [],
+            //       rightArray: [],
+            //       topArray: [],
+            //       bottomArray: []
+            //   };
+            this.load();
+        },
+
+        load() {
+            this.myDiagram.model = go.Model.fromJson(JSON.stringify(this.topologyData));
         },
 
         /**
@@ -213,7 +415,7 @@ export default {
             return $(
                 "ContextMenuButton",
                 $(go.TextBlock, text), {
-                    click: action,
+                    click: action
                 },
                 // don't bother with binding GraphObject.visible if there's no predicate
                 visiblePredicate ?
@@ -229,30 +431,31 @@ export default {
          * @return {type}
          */
         nodeMenu() {
-            $(
+            let self = this;
+            return $(
                 "ContextMenu",
-                makeButton("Copy", function (e, obj) {
+                this.makeButton("Copy", function (e, obj) {
                     e.diagram.commandHandler.copySelection();
                 }),
-                makeButton("Delete", function (e, obj) {
+                this.makeButton("Delete", function (e, obj) {
                     e.diagram.commandHandler.deleteSelection();
                 }),
                 $(go.Shape, "LineH", {
                     strokeWidth: 2,
                     height: 1,
-                    stretch: go.GraphObject.Horizontal,
+                    stretch: go.GraphObject.Horizontal
                 }),
-                makeButton("Add top port", function (e, obj) {
-                    addPort("top");
+                this.makeButton("Add top port", function (e, obj) {
+                    self.addPort("top");
                 }),
-                makeButton("Add left port", function (e, obj) {
-                    addPort("left");
+                this.makeButton("Add left port", function (e, obj) {
+                    self.addPort("left");
                 }),
-                makeButton("Add right port", function (e, obj) {
-                    addPort("right");
+                this.makeButton("Add right port", function (e, obj) {
+                    self.addPort("right");
                 }),
-                makeButton("Add bottom port", function (e, obj) {
-                    addPort("bottom");
+                this.makeButton("Add bottom port", function (e, obj) {
+                    self.addPort("bottom");
                 })
             );
         },
@@ -262,7 +465,120 @@ export default {
          * @param {type}
          * @return {type}
          */
-        portMenu() {},
-    },
+        portMenu() {
+            let self = this;
+            return $(
+                "ContextMenu",
+                this.makeButton("Swap order", function (e, obj) {
+                    self.swapOrder(obj.part.adornedObject);
+                }),
+                this.makeButton(
+                    "Remove port",
+                    // in the click event handler, the obj.part is the Adornment;
+                    // its adornedObject is the port
+                    function (e, obj) {
+                        self.removePort(obj.part.adornedObject);
+                    }
+                ),
+                this.makeButton("Change color", function (e, obj) {
+                    self.changeColor(obj.part.adornedObject);
+                }),
+                this.makeButton("Remove side ports", function (e, obj) {
+                    self.removeAll(obj.part.adornedObject);
+                })
+            );
+        },
+
+        addPort(side) {
+            this.myDiagram.startTransaction("addPort");
+            this.myDiagram.selection.each(function (node) {
+                // skip any selected Links
+                if (!(node instanceof go.Node)) return;
+                // compute the next available index number for the side
+                var i = 0;
+                while (node.findPort(side + i.toString()) !== node) i++;
+                // now this new port name is unique within the whole Node because of the side prefix
+                var name = side + i.toString();
+                // get the Array of port data to be modified
+                var arr = node.data[side + "Array"];
+                if (arr) {
+                    // create a new port data object
+                    var newportdata = {
+                        portId: name,
+                        portColor: getPortColor()
+                        // if you add port data properties here, you should copy them in copyPortData above
+                    };
+                    // and add it to the Array of port data
+                    this.myDiagram.model.insertArrayItem(arr, -1, newportdata);
+                }
+            });
+            this.myDiagram.commitTransaction("addPort");
+        },
+
+        swapOrder(port) {
+            var arr = port.panel.itemArray;
+            if (arr.length >= 2) {
+                // only if there are at least two ports!
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].portId === port.portId) {
+                        this.myDiagram.startTransaction("swap ports");
+                        if (i >= arr.length - 1) i--; // now can swap I and I+1, even if it's the last port
+                        var newarr = arr.slice(0); // copy Array
+                        newarr[i] = arr[i + 1]; // swap items
+                        newarr[i + 1] = arr[i];
+                        // remember the new Array in the model
+                        this.myDiagram.model.setDataProperty(
+                            port.part.data,
+                            port._side + "Array",
+                            newarr
+                        );
+                        this.myDiagram.commitTransaction("swap ports");
+                        break;
+                    }
+                }
+            }
+        },
+
+        removePort(port) {
+            this.myDiagram.startTransaction("removePort");
+            var pid = port.portId;
+            var arr = port.panel.itemArray;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].portId === pid) {
+                    this.myDiagram.model.removeArrayItem(arr, i);
+                    break;
+                }
+            }
+            this.myDiagram.commitTransaction("removePort");
+        },
+
+        removeAll(port) {
+            this.myDiagram.startTransaction("removePorts");
+            var nodedata = port.part.data;
+            var side = port._side; // there are four property names, all ending in "Array"
+            this.myDiagram.model.setDataProperty(nodedata, side + "Array", []); // an empty Array
+            this.myDiagram.commitTransaction("removePorts");
+        },
+
+        changeColor(port) {
+            this.myDiagram.startTransaction("colorPort");
+            var data = port.data;
+            this.myDiagram.model.setDataProperty(data, "portColor", getPortColor());
+            this.myDiagram.commitTransaction("colorPort");
+        },
+
+        getPortColor() {
+            var portColors = [
+                "#fae3d7",
+                "#d6effc",
+                "#ebe3fc",
+                "#eaeef8",
+                "#fadfe5",
+                "#6cafdb",
+                "#66d6d1"
+            ];
+            return portColors[Math.floor(Math.random() * portColors.length)];
+        }
+    }
 };
 </script>

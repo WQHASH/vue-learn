@@ -2,7 +2,7 @@
  * @Description: 流程图
  * @Author: wangqi
  * @Date: 2020-07-05 22:50:30
- * @LastEditTime: 2020-07-10 00:34:07
+ * @LastEditTime: 2020-08-06 23:17:13
 --> 
 <style lang="scss" scoped>
 .topology-wrap {
@@ -64,6 +64,8 @@ export default {
   components: { TopologyNavBar },
   methods: {
     init() {
+      let self = this;
+
       this.myDiagram = $(go.Diagram, "myDiagramDiv", {
         "draggingTool.dragsLink": true,
         "draggingTool.isGridSnapEnabled": true,
@@ -100,8 +102,7 @@ export default {
           text: "new node"
         }
       });
-
-      let self = this;
+     
       this.myDiagram.nodeTemplate = $(
         go.Node,
         "Spot",
