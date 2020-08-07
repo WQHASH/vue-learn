@@ -2,22 +2,30 @@
  * @Description: 拓扑图动态端口图
  * @Author: wangqi
  * @Date: 2020-08-06 13:37:21
- * @LastEditTime: 2020-08-06 23:24:14
+ * @LastEditTime: 2020-08-07 16:47:12
 -->
 
 <style lang="scss" scoped>
 .topology-dynamic-ports {
     display: flex;
-    flex-direction: row;
-
+    flex-direction: column;
+    .el-row{
+        text-align: right;
+    }
     #dynamic-ports-wrap {
         width: 100%;
         height: 600px;
+        border: 1px solid #333;
+        margin: 10px 0px;
     }
 }
 </style>
 <template>
 <div class="topology-dynamic-ports">
+    <el-row>
+        <el-button @click.native="save">保存</el-button>
+        <el-button @click.native="load">加载</el-button>
+    </el-row>
     <div id="dynamic-ports-wrap"></div>
 </div>
 </template>
@@ -32,6 +40,7 @@ import {
 } from "vuex";
 
 export default {
+    name:"topologyDynamicPorts",
     data() {
         return {
             go: go,
@@ -402,8 +411,28 @@ export default {
             this.load();
         },
 
+        /**
+         * @description: 加载拓扑图数据
+         * @param {type} 
+         * @return {type} 
+         */
         load() {
-            this.myDiagram.model = go.Model.fromJson(JSON.stringify(this.topologyData));
+            let data = Store.get("topologyDynamicPortsData");
+            if (data) {
+                this.myDiagram.model = go.Model.fromJson(data);
+            }else{
+                this.myDiagram.model = go.Model.fromJson(JSON.stringify(this.topologyData));
+            }
+        },
+
+        /**
+         * @description: 保存
+         * @param {type} 
+         * @return {type} 
+         */
+        save() {
+            this.topologyData = JSON.parse(this.myDiagram.model.toJson());
+            Store.set("topologyDynamicPortsData", this.myDiagram.model.toJson());
         },
 
         /**
@@ -490,6 +519,7 @@ export default {
         },
 
         addPort(side) {
+            let self = this;
             this.myDiagram.startTransaction("addPort");
             this.myDiagram.selection.each(function (node) {
                 // skip any selected Links
@@ -505,11 +535,11 @@ export default {
                     // create a new port data object
                     var newportdata = {
                         portId: name,
-                        portColor: getPortColor()
+                        portColor: self.getPortColor()
                         // if you add port data properties here, you should copy them in copyPortData above
                     };
                     // and add it to the Array of port data
-                    this.myDiagram.model.insertArrayItem(arr, -1, newportdata);
+                    self.myDiagram.model.insertArrayItem(arr, -1, newportdata);
                 }
             });
             this.myDiagram.commitTransaction("addPort");
@@ -563,7 +593,7 @@ export default {
         changeColor(port) {
             this.myDiagram.startTransaction("colorPort");
             var data = port.data;
-            this.myDiagram.model.setDataProperty(data, "portColor", getPortColor());
+            this.myDiagram.model.setDataProperty(data, "portColor", this.getPortColor());
             this.myDiagram.commitTransaction("colorPort");
         },
 

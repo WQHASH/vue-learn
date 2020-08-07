@@ -2,7 +2,7 @@
  * @Description: 流程图
  * @Author: wangqi
  * @Date: 2020-07-05 22:50:30
- * @LastEditTime: 2020-08-06 23:17:13
+ * @LastEditTime: 2020-08-07 16:28:50
 --> 
 <style lang="scss" scoped>
 .topology-wrap {
@@ -42,6 +42,7 @@ import Store from "@/tools/Store";
 import TopologyNavBar from "./topologyNavBar";
 import { mapGetters } from "vuex";
 export default {
+  name:"topologyDetails",
   data() {
     return {
       myDiagram: {},
