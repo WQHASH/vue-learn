@@ -2,16 +2,18 @@
  * @Description: 拓扑图动态端口图
  * @Author: wangqi
  * @Date: 2020-08-06 13:37:21
- * @LastEditTime: 2020-08-07 16:47:12
+ * @LastEditTime: 2020-08-10 17:55:36
 -->
 
 <style lang="scss" scoped>
 .topology-dynamic-ports {
     display: flex;
     flex-direction: column;
-    .el-row{
+
+    .el-row {
         text-align: right;
     }
+
     #dynamic-ports-wrap {
         width: 100%;
         height: 600px;
@@ -40,7 +42,7 @@ import {
 } from "vuex";
 
 export default {
-    name:"topologyDynamicPorts",
+    name: "topologyDynamicPorts",
     data() {
         return {
             go: go,
@@ -53,26 +55,26 @@ export default {
                 linkToPortIdProperty: "toPort",
                 nodeDataArray: [{
                         key: 1,
-                        name: "Unit One",
+                        name: "wqwqwqw",
                         loc: "101 204",
                         leftArray: [{
-                            portColor: "#fae3d7",
+                            portColor: "red",
                             portId: "left0"
                         }],
                         topArray: [{
-                            portColor: "#d6effc",
+                            portColor: "#545c64",
                             portId: "top0"
                         }],
                         bottomArray: [{
-                            portColor: "#ebe3fc",
+                            portColor: "#545c64",
                             portId: "bottom0"
                         }],
                         rightArray: [{
-                                portColor: "#eaeef8",
+                                portColor: "#545c64",
                                 portId: "right0"
                             },
                             {
-                                portColor: "#fadfe5",
+                                portColor: "#545c64",
                                 portId: "right1"
                             }
                         ]
@@ -82,32 +84,32 @@ export default {
                         name: "Unit Two",
                         loc: "320 152",
                         leftArray: [{
-                                portColor: "#6cafdb",
+                                portColor: "#545c64",
                                 portId: "left0"
                             },
                             {
-                                portColor: "#66d6d1",
+                                portColor: "#545c64",
                                 portId: "left1"
                             },
                             {
-                                portColor: "#fae3d7",
+                                portColor: "#545c64",
                                 portId: "left2"
                             }
                         ],
                         topArray: [{
-                            portColor: "#d6effc",
+                            portColor: "#545c64",
                             portId: "top0"
                         }],
                         bottomArray: [{
-                                portColor: "#eaeef8",
+                                portColor: "#545c64",
                                 portId: "bottom0"
                             },
                             {
-                                portColor: "#eaeef8",
+                                portColor: "#545c64",
                                 portId: "bottom1"
                             },
                             {
-                                portColor: "#6cafdb",
+                                portColor: "#545c64",
                                 portId: "bottom2"
                             }
                         ],
@@ -118,54 +120,29 @@ export default {
                         name: "Unit Three",
                         loc: "384 319",
                         leftArray: [{
-                                portColor: "#66d6d1",
+                                portColor: "#545c64",
                                 portId: "left0"
                             },
                             {
-                                portColor: "#fadfe5",
+                                portColor: "#545c64",
                                 portId: "left1"
                             },
                             {
-                                portColor: "#6cafdb",
+                                portColor: "#545c64",
                                 portId: "left2"
                             }
                         ],
                         topArray: [{
-                            portColor: "#66d6d1",
+                            portColor: "#545c64",
                             portId: "top0"
                         }],
                         bottomArray: [{
-                            portColor: "#6cafdb",
+                            portColor: "#545c64",
                             portId: "bottom0"
                         }],
                         rightArray: []
                     },
-                    {
-                        key: 4,
-                        name: "Unit Four",
-                        loc: "138 351",
-                        leftArray: [{
-                            portColor: "#fae3d7",
-                            portId: "left0"
-                        }],
-                        topArray: [{
-                            portColor: "#6cafdb",
-                            portId: "top0"
-                        }],
-                        bottomArray: [{
-                            portColor: "#6cafdb",
-                            portId: "bottom0"
-                        }],
-                        rightArray: [{
-                                portColor: "#6cafdb",
-                                portId: "right0"
-                            },
-                            {
-                                portColor: "#66d6d1",
-                                portId: "right1"
-                            }
-                        ]
-                    }
+
                 ],
                 linkDataArray: [{
                         from: 4,
@@ -224,6 +201,13 @@ export default {
             let portSize = new go.Size(8, 8);
 
             this.myDiagram = $(go.Diagram, "dynamic-ports-wrap", {
+                "draggingTool.dragsLink": true,
+                "draggingTool.isGridSnapEnabled": true,
+                "linkingTool.isUnconnectedLinkValid": true,
+                "linkingTool.portGravity": 20,
+                "relinkingTool.isUnconnectedLinkValid": true,
+                "relinkingTool.portGravity": 20,
+
                 "undoManager.isEnabled": true
             });
 
@@ -252,7 +236,8 @@ export default {
                         fill: "#dbf6cb",
                         stroke: null,
                         strokeWidth: 0,
-                        minSize: new go.Size(60, 60)
+                        cursor: "pointer",
+                        minSize: new go.Size(80, 80)
                     }),
                     $(
                         go.TextBlock, {
@@ -420,7 +405,7 @@ export default {
             let data = Store.get("topologyDynamicPortsData");
             if (data) {
                 this.myDiagram.model = go.Model.fromJson(data);
-            }else{
+            } else {
                 this.myDiagram.model = go.Model.fromJson(JSON.stringify(this.topologyData));
             }
         },
@@ -597,6 +582,11 @@ export default {
             this.myDiagram.commitTransaction("colorPort");
         },
 
+        /**
+         * @description: 生成端口的颜色
+         * @param {type} 
+         * @return {type} 
+         */
         getPortColor() {
             var portColors = [
                 "#fae3d7",
@@ -607,7 +597,8 @@ export default {
                 "#6cafdb",
                 "#66d6d1"
             ];
-            return portColors[Math.floor(Math.random() * portColors.length)];
+            // return portColors[Math.floor(Math.random() * portColors.length)];
+            return "#545c64";
         }
     }
 };
