@@ -2,7 +2,7 @@
  * @Description: 拓扑图动态端口图
  * @Author: wangqi
  * @Date: 2020-08-06 13:37:21
- * @LastEditTime: 2020-08-10 17:55:36
+ * @LastEditTime: 2020-08-13 23:51:29
 -->
 
 <style lang="scss" scoped>
@@ -194,6 +194,9 @@ export default {
     mounted() {
         this.init();
     },
+    watch: {
+
+    },
     methods: {
         init() {
             let self = this;
@@ -351,7 +354,10 @@ export default {
                             fromLinkable: true,
                             toLinkable: true,
                             cursor: "pointer",
-                            contextMenu: self.portMenu()
+                            // contextMenu: self.portMenu()
+                            contextMenu: $("ContextMenu", this.makeButton("Swap order", function (e, obj) {
+                                self.swapOrder(obj.part.adornedObject);
+                            })),
                         },
                         new go.Binding("portId", "portId"),
                         $(
@@ -377,9 +383,12 @@ export default {
                     reshapable: true,
                     resegmentable: true,
                     relinkableFrom: true,
-                    relinkableTo: true
+                    relinkableTo: true,
+                    // 禁止线或节点拖拽
+                    movable:false,
                 },
-                new go.Binding("points").makeTwoWay(),
+                // 未连接的先是否能保存
+                // new go.Binding("points").makeTwoWay(),
                 $(go.Shape, {
                     stroke: "#2F4F4F",
                     strokeWidth: 2
@@ -394,6 +403,9 @@ export default {
             //       bottomArray: []
             //   };
             this.load();
+
+            // 连线事件
+            this.linkDrawnEvent();
         },
 
         /**
@@ -418,6 +430,17 @@ export default {
         save() {
             this.topologyData = JSON.parse(this.myDiagram.model.toJson());
             Store.set("topologyDynamicPortsData", this.myDiagram.model.toJson());
+        },
+
+        /**
+         * @description: 连线事件
+         * @param {type} 
+         * @return {type} 
+         */
+        linkDrawnEvent() {
+            this.myDiagram.addDiagramListener("LinkDrawn", function (e) {
+                console.log(e.subject.data, "xxxx") //这是这个线条的数据
+            });
         },
 
         /**

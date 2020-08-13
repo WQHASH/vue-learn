@@ -2,7 +2,7 @@
  * @Description: CustomLink类
  * @Author: wangqi
  * @Date: 2020-08-06 22:13:46
- * @LastEditTime: 2020-08-06 23:25:01
+ * @LastEditTime: 2020-08-13 23:01:09
  */
 class CustomLink {
     constructor() {
@@ -24,7 +24,6 @@ class CustomLink {
     }
 
     computeEndSegmentLength(node, port, spot, from) {
-        console.log(this, "computeEndSegmentLength");
         var esl = go.Link.prototype.computeEndSegmentLength.call(this, node, port, spot, from);
         var other = this.getOtherPort(port);
         if (port !== null && other !== null) {
