@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:26
- * @LastEditTime: 2020-06-26 15:44:48
+ * @LastEditTime: 2020-11-10 00:05:18
  */
 import axios from 'axios';
 import store from '@/store';
@@ -14,7 +14,7 @@ import { getToken } from '@/tools/auth';
 // 创建axios实例
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_API,
-    timeout: 15000,
+    // timeout: 15000,
     // 请求头处理，设置传给后台的参数格式
     // form: application/x-www-form-urlencoded;charset=utf-8    
     //          1. 配合qs使用
@@ -31,14 +31,17 @@ const service = axios.create({
 let LoadingTip;
 // 添加请求拦截器
 service.interceptors.request.use((config) => {
+
     LoadingTip = Loading.service({
         fullscreen: true
     });
-    if (store.getters.token) {
-        config.headers = {
-            'Authorization': getToken(),    //"Bearer KhkXjzSfrx5zLmbOOfRE7m-El-L3wps8",
-        };
-    }
+
+    config.headers.authorization = `Bearer ${getToken()}`;
+    // if (store.getters.token) {
+    //     config.headers = {
+    //         'Authorization': getToken(),
+    //     };
+    // }
 
     // 配置根据上传资源确定 contentType
     // 在请求之前对data传参进行格式转换

@@ -2,13 +2,10 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 12:42:24
- * @LastEditTime: 2020-06-02 13:11:00
+ * @LastEditTime: 2020-11-10 00:47:30
 -->
 <template>
-  <div
-    class="register-page"
-    :style="bgBanner"
-  >
+  <div class="register-page" :style="bgBanner">
     <div class="container">
       <p class="title">注册</p>
       <el-form
@@ -19,11 +16,7 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-
-        <el-form-item
-          label="用户名"
-          prop="user"
-        >
+        <el-form-item label="用户名" prop="user">
           <el-input
             type=""
             v-model="ruleForm.user"
@@ -31,10 +24,7 @@
           ></el-input>
         </el-form-item>
 
-        <el-form-item
-          label="密码"
-          prop="pass"
-        >
+        <el-form-item label="密码" prop="pass">
           <el-input
             type="password"
             v-model="ruleForm.pass"
@@ -42,35 +32,29 @@
           ></el-input>
         </el-form-item>
 
-        <el-form-item
-          label="确认密码"
-          prop="checkPass"
-        >
+        <el-form-item label="确认密码" prop="checkPass">
           <el-input
             type="password"
             v-model="ruleForm.checkPass"
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item
-          label="年龄"
-          prop="age"
-        >
+        <el-form-item label="年龄" prop="age">
           <el-input v-model.number="ruleForm.age"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="submitForm('ruleForm')"
-          >提交</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')"
+            >提交</el-button
+          >
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
   </div>
 </template>
+
 <script>
-import { api_signup } from '@/api/index.js';
+import { registerUser } from "@/api/index.js";
 export default {
   data() {
     var userName = (rule, value, callback) => {
@@ -121,36 +105,36 @@ export default {
         user: "",
         pass: "",
         checkPass: "",
-        age: ""
+        age: "",
       },
       rules: {
         user: [
           {
             validator: userName,
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         pass: [
           {
             validator: validatePass,
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         checkPass: [
           {
             validator: validatePass2,
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         age: [
           {
             validator: checkAge,
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
       // 背景图属性
-      bgBanner: {}
+      bgBanner: {},
     };
   },
   created() {
@@ -160,32 +144,41 @@ export default {
       "url(" + require("@/assets/images/login/bg0" + day + ".jpg") + ")";
   },
   methods: {
+    /**
+     * @description: 提交
+     * @param {*} formName
+     * @return {*}
+     */
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
-          var form = {};
-          form.username = this.ruleForm.user
-          form.password = this.ruleForm.pass
-          form.password2 = this.ruleForm.checkPass
-          api_signup(JSON.stringify(form)).then(function(res){
-            console.log(res)
-          }).catch((error) => {
-
-          });
+          let form = {};          
+          form.name = this.ruleForm.user;
+          form.password = this.ruleForm.pass;
+          form.age = this.ruleForm.age;
+          registerUser(form)
+            .then(function (res) {
+              console.log(res);
+            })
+            .catch((error) => {
+              console.log("注册失败!");
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
+    
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    submit() {}
-  }
+    submit() {},
+  },
 };
 </script>
-<style lang="scss" scope>
+
+<style lang="scss">
 .register-page {
   height: 100%;
   display: flex;
@@ -201,6 +194,7 @@ export default {
   text-align: center;
   border-radius: 10px;
   padding: 30px;
+
   p {
     font-size: 25px;
   }

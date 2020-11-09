@@ -2,16 +2,25 @@
  * @Description: axios请求配置列表
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:14
- * @LastEditTime: 2020-06-22 23:36:00
+ * @LastEditTime: 2020-11-10 00:05:08
  */
 
 import service from '@/api/request.js';
 
 
 // 登录接口
-export function login(data) {
+export function loginUser(data) {
     return service({
-        url: `/user/login`,
+        url: `/user/signin`,
+        method: 'post',
+        data
+    })
+}
+
+// 注册接口
+export function registerUser(data) {
+    return service({
+        url: `/user/signup`,
         method: 'post',
         data
     })

@@ -2,7 +2,7 @@
  * @Description: 设置动态路由权限
  * @Author: wangqi
  * @Date: 2020-06-01 14:16:17
- * @LastEditTime: 2020-06-28 19:48:09
+ * @LastEditTime: 2020-11-09 21:47:22
  */
 
 import router from './router';
@@ -17,7 +17,7 @@ import 'nprogress/nprogress';
 NProgress.configure({ showSpinner: false });
 
 // 白名单
-const whiteList = ['/login'];
+const whiteList = ['/login', '/register'];
 // 全局前置守卫
 router.beforeEach(async (to, from, next) => {
     NProgress.start();
