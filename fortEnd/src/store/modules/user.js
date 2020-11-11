@@ -2,12 +2,12 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-06-21 14:49:06
- * @LastEditTime: 2020-06-26 15:31:43
+ * @LastEditTime: 2020-11-11 11:40:15
  */
 
 import { getToken, setToken, removeToken } from '@/tools/auth';
 import router, { resetRouter } from '@/router';
-import { login, logout, getInfo } from '@/api';
+import { loginUser, logout, getInfo } from '@/api';
 
 const state = {
     token: getToken(),
@@ -43,11 +43,11 @@ const actions = {
      * @param {type} 
      * @return: 
      */
-    login(context, userInfo) {
-        const { username, password } = userInfo;
+    loginUserSubmit(context, userInfo) {
+        const { name, password } = userInfo;
         return new Promise((resolve, reject) => {
             // 登录成功后获取token
-            login({ username, password }).then((response) => {
+            loginUser({ name, password }).then((response) => {
                 const { data } = response;
                 //设置tokent到状态
                 context.commit("SET_TOKEN", data.token);

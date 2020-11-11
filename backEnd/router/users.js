@@ -2,13 +2,62 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-11-08 23:08:27
- * @LastEditTime: 2020-11-10 00:59:17
+ * @LastEditTime: 2020-11-11 11:44:10
  */
 const jwt = require('jwt-simple');
 const jwtConfig = require('../config/jwt');
 const express = require('express');
 const User = require('../models/user');
 const router = express.Router();
+
+// 登录接口
+router.post('/signin', (req, res) => {
+    // 取参数
+    // 从数据库中比较参数
+    // 确定是否存在
+    let { name, password, age } = req.body;
+
+    User.findOne({ name: name }, (err, user) => {
+        if (err) { throw Error }
+        if (!user) {
+            res.json({
+                errno: 1,
+                data: '用户名不存在'
+            });
+        } else {
+            if (!!password) {
+                user.comparePassword(password, (err, isMatch) => {
+                    if (err) { global.logger.error(err) }
+                    if (isMatch) {
+                        let userInfo = {
+                            name,
+                            id: user.id
+                        };
+                        res.json({
+                            erron: 0,
+                            data: '登录成功',
+                            user: userInfo,
+                            token: jwt.encode(userInfo, jwtConfig.secret)
+                        });
+                    } else {
+                        res.json({
+                            erron: 1,
+                            data: '密码不正确'
+                        });
+                        global.logger.info('密码不正确');
+                    }
+                });
+            } else {
+                res.json({
+                    errno: 1,
+                    data: '登录失败'
+                })
+            }
+        }
+    });
+
+
+});
 
 // 注册接口
 router.post('/signup', (req, res) => {
@@ -22,9 +71,7 @@ router.post('/signup', (req, res) => {
     }
 
     User.findOne({ name }, (err, user) => {
-        if (err) {
-            throw Error;
-        }
+        if (err) { throw Error }
         if (user) {
             res.json({
                 errno: 1,
@@ -45,8 +92,8 @@ router.post('/signup', (req, res) => {
                 }
                 let userInfo = {
                     name: name,
-                    id: userItem.id,
-                    age: userItem.age
+                    id: user.id,
+                    age: user.age
                 };
                 res.json({
                     erron: 0,

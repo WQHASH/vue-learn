@@ -1,3 +1,9 @@
+/*
+ * @Description: 用户集合表结构
+ * @Author: wangqi
+ * @Date: 2020-11-09 22:02:53
+ * @LastEditTime: 2020-11-11 11:29:32
+ */
 var mongoose = require('mongoose')
 //用于md5加密
 var bcrypt = require('bcryptjs')
@@ -9,6 +15,7 @@ var UserSchema = new mongoose.Schema({
         type: String
     },
     password: String,
+    age: String,
     meta: {
         createAt: {
             type: Date,
@@ -45,7 +52,7 @@ UserSchema.methods = {
     comparePassword: function (_password, cb) {
         bcrypt.compare(_password, this.password, function (err, isMatch) {
             if (err) return cb(err)
-            cb(null, isMatch)
+            cb(null, isMatch);
         })
     }
 }

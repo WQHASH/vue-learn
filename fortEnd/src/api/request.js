@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:26
- * @LastEditTime: 2020-11-10 00:05:18
+ * @LastEditTime: 2020-11-11 10:19:28
  */
 import axios from 'axios';
 import store from '@/store';
@@ -32,9 +32,9 @@ let LoadingTip;
 // 添加请求拦截器
 service.interceptors.request.use((config) => {
 
-    LoadingTip = Loading.service({
-        fullscreen: true
-    });
+    // LoadingTip = Loading.service({
+    //     fullscreen: true
+    // });
 
     config.headers.authorization = `Bearer ${getToken()}`;
     // if (store.getters.token) {
@@ -69,9 +69,9 @@ service.interceptors.response.use((response) => {
         // 这时候就要重置tokent了 store.dispatch('user/resetToken')
         return Promise.reject(response.data);
     } else {
-        setTimeout(() => {
-            LoadingTip.close();
-        }, 300)
+        // setTimeout(() => {
+        //     LoadingTip.close();
+        // }, 300)
         return Promise.resolve(response.data);
     }
 }, (err) => {

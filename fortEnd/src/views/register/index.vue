@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 12:42:24
- * @LastEditTime: 2020-11-10 00:47:30
+ * @LastEditTime: 2020-11-11 10:37:15
 -->
 <template>
   <div class="register-page" :style="bgBanner">
@@ -152,16 +152,26 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let form = {};          
+          let form = {};
           form.name = this.ruleForm.user;
           form.password = this.ruleForm.pass;
           form.age = this.ruleForm.age;
           registerUser(form)
-            .then(function (res) {
-              console.log(res);
+            .then((res) => {
+              let type = res["erron"] ? "warning" : "success";
+              this.$message({
+                type,
+                showClose: true,
+                message: res.data,
+              });
+              this.$router.push({path:"login"});
             })
             .catch((error) => {
-              console.log("注册失败!");
+              this.$message({
+                showClose: true,
+                message: "注册失败!",
+                type: "warning",
+              });
             });
         } else {
           console.log("error submit!!");
@@ -169,7 +179,7 @@ export default {
         }
       });
     },
-    
+
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },

@@ -2,7 +2,7 @@
  * @Description: 登录页
  * @Author: wangqi
  * @Date: 2020-06-01 14:18:50
- * @LastEditTime: 2020-07-08 16:28:24
+ * @LastEditTime: 2020-11-11 11:45:11
 -->
 <template>
   <div class="login-page" :style="bgBanner">
@@ -108,14 +108,14 @@ export default {
      */
     submit(e) {
       var form = {};
-      form.username = this.accountInfo;
+      form.name = this.accountInfo;
       form.password = this.pwdInfo;
       let auth = {
-        username: this.accountInfo,
+        name: this.accountInfo,
         password: this.pwdInfo
       };
       this.$store
-        .dispatch("user/login", auth)
+        .dispatch("user/loginUserSubmit", auth)
         .then(() => {
           this.$router.push({
             // path: this.redirect || "/"
