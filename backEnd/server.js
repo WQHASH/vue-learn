@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-11-10 00:15:24
+ * @LastEditTime: 2020-11-12 16:29:39
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -13,6 +13,37 @@ const express = require('express');
 const jwt = require('jwt-simple');
 const jwtConfig = require('./config/jwt');
 let bodyParser = require('body-parser');
+
+const log4js = require("log4js");
+log4js.configure({
+    appenders: {
+        out: { type: 'stdout' },
+        app: { type: 'file', filename: 'application.log' }
+    },
+    categories: {
+        default: { appenders: ['out', 'app'], level: 'debug' }
+    }
+});
+
+const logger = log4js.getLogger();
+logger.trace("追踪-trace");
+logger.debug("断点-debug.");
+logger.info("信息-info.");
+logger.warn("警告-warn.");
+logger.error("报错-error");
+logger.fatal("毁灭错-fatal");
+
+
+
+// let log4js = require('./server_modules/log').log4js;
+// let logger = require('./server_modules/log').logger;
+
+// logger.trace("Entering cheese testing");
+// logger.debug("Got cheese.");
+// logger.info("Cheese is Comté.");
+// logger.warn("Cheese is quite smelly.");
+// logger.error("Cheese is too ripe!");
+// logger.fatal("Cheese was breeding ground for listeria.");
 
 let mongoose = require('./server_modules/mongodb');
 

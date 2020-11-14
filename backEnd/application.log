@@ -1,0 +1,73 @@
+[2020-11-12T16:23:56.031] [DEBUG] cheese - Got cheese.
+[2020-11-12T16:23:56.040] [INFO] cheese - Cheese is Comté.
+[2020-11-12T16:23:56.041] [WARN] cheese - Cheese is quite smelly.
+[2020-11-12T16:23:56.042] [ERROR] cheese - Cheese is too ripe!
+[2020-11-12T16:23:56.043] [FATAL] cheese - Cheese was breeding ground for listeria.
+[2020-11-12T16:25:02.872] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:25:02.878] [INFO] cheese - Cheese is Comté.
+[2020-11-12T16:25:02.879] [WARN] cheese - Cheese is quite smelly.
+[2020-11-12T16:25:02.880] [ERROR] cheese - Cheese is too ripe!
+[2020-11-12T16:25:02.881] [FATAL] cheese - Cheese was breeding ground for listeria.
+[2020-11-12T16:25:11.068] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:25:11.077] [INFO] cheese - 信息-info.
+[2020-11-12T16:25:11.078] [WARN] cheese - Cheese is quite smelly.
+[2020-11-12T16:25:11.079] [ERROR] cheese - Cheese is too ripe!
+[2020-11-12T16:25:11.081] [FATAL] cheese - Cheese was breeding ground for listeria.
+[2020-11-12T16:25:22.684] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:25:22.692] [INFO] cheese - 信息-info.
+[2020-11-12T16:25:22.693] [WARN] cheese - 警告-warn.
+[2020-11-12T16:25:22.694] [ERROR] cheese - Cheese is too ripe!
+[2020-11-12T16:25:22.695] [FATAL] cheese - Cheese was breeding ground for listeria.
+[2020-11-12T16:25:34.848] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:25:34.854] [INFO] cheese - 信息-info.
+[2020-11-12T16:25:34.855] [WARN] cheese - 警告-warn.
+[2020-11-12T16:25:34.855] [ERROR] cheese - 报错-error
+[2020-11-12T16:25:34.856] [FATAL] cheese - Cheese was breeding ground for listeria.
+[2020-11-12T16:25:57.813] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:25:57.820] [INFO] cheese - 信息-info.
+[2020-11-12T16:25:57.821] [WARN] cheese - 警告-warn.
+[2020-11-12T16:25:57.822] [ERROR] cheese - 报错-error
+[2020-11-12T16:25:57.823] [FATAL] cheese - 毁灭错-
+[2020-11-12T16:25:59.613] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:25:59.618] [INFO] cheese - 信息-info.
+[2020-11-12T16:25:59.619] [WARN] cheese - 警告-warn.
+[2020-11-12T16:25:59.620] [ERROR] cheese - 报错-error
+[2020-11-12T16:25:59.621] [FATAL] cheese - 毁灭错-fatal
+[2020-11-12T16:26:05.287] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:26:05.293] [INFO] cheese - 信息-info.
+[2020-11-12T16:26:05.294] [WARN] cheese - 警告-warn.
+[2020-11-12T16:26:05.299] [ERROR] cheese - 报错-error
+[2020-11-12T16:26:05.300] [FATAL] cheese - 毁灭错-fatal
+[2020-11-12T16:26:08.613] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:26:08.620] [INFO] cheese - 信息-info.
+[2020-11-12T16:26:08.621] [WARN] cheese - 警告-warn.
+[2020-11-12T16:26:08.623] [ERROR] cheese - 报错-error
+[2020-11-12T16:26:08.624] [FATAL] cheese - 毁灭错-fatal
+[2020-11-12T16:27:57.887] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:27:57.895] [INFO] cheese - 信息-info.
+[2020-11-12T16:27:57.897] [WARN] cheese - 警告-warn.
+[2020-11-12T16:27:57.900] [ERROR] cheese - 报错-error
+[2020-11-12T16:27:57.901] [FATAL] cheese - 毁灭错-fatal
+[2020-11-12T16:28:17.626] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:28:17.632] [INFO] cheese - 信息-info.
+[2020-11-12T16:28:17.632] [WARN] cheese - 警告-warn.
+[2020-11-12T16:28:19.136] [DEBUG] cheese - 断点-debug.
+[2020-11-12T16:28:19.142] [INFO] cheese - 信息-info.
+[2020-11-12T16:28:19.143] [WARN] cheese - 警告-warn.
+[2020-11-12T16:28:19.145] [ERROR] cheese - 报错-error
+[2020-11-12T16:28:19.146] [FATAL] cheese - 毁灭错-fatal
+[2020-11-12T16:29:41.071] [DEBUG] default - 断点-debug.
+[2020-11-12T16:29:41.076] [INFO] default - 信息-info.
+[2020-11-12T16:29:41.077] [WARN] default - 警告-warn.
+[2020-11-12T16:29:41.078] [ERROR] default - 报错-error
+[2020-11-12T16:29:41.079] [FATAL] default - 毁灭错-fatal
+[2020-11-12T16:29:48.883] [DEBUG] default - 断点-debug.
+[2020-11-12T16:29:48.894] [INFO] default - 信息-info.
+[2020-11-12T16:29:48.895] [WARN] default - 警告-warn.
+[2020-11-12T16:29:48.896] [ERROR] default - 报错-error
+[2020-11-12T16:29:48.897] [FATAL] default - 毁灭错-fatal
+[2020-11-12T16:32:41.375] [DEBUG] default - 断点-debug.
+[2020-11-12T16:32:41.383] [INFO] default - 信息-info.
+[2020-11-12T16:32:41.384] [WARN] default - 警告-warn.
+[2020-11-12T16:32:41.386] [ERROR] default - 报错-error
+[2020-11-12T16:32:41.387] [FATAL] default - 毁灭错-fatal
