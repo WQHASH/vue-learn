@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-11-12 16:29:39
+ * @LastEditTime: 2020-11-14 21:51:51
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -17,22 +17,43 @@ let bodyParser = require('body-parser');
 const log4js = require("log4js");
 log4js.configure({
     appenders: {
-        out: { type: 'stdout' },
-        app: { type: 'file', filename: 'application.log' }
+        // stdout
+        out: { type: 'console' },   
+        app: { type: 'file', filename: 'application.log' },
+        resLogger: {     
+            type: 'dateFile',
+            filename: path.join(__dirname, 'logs/log'),
+            pattern: '-yyyy-MM-dd.log',
+            alwaysIncludePattern: true,
+            // encoding: 'utf-8',
+            // maxLogSize: 1000,
+        },
     },
-    categories: {
-        default: { appenders: ['out', 'app'], level: 'debug' }
+    categories: {  
+        default: { 
+            appenders: ['out', 'app'], 
+            level: 'all'
+        },
+        resLogger: { 
+            appenders: ['out', 'resLogger'],
+            level: 'debug'  
+        }
     }
 });
 
-const logger = log4js.getLogger();
+const logger = log4js.getLogger('resLogger');
+logger.all("所有-all");
 logger.trace("追踪-trace");
+
 logger.debug("断点-debug.");
 logger.info("信息-info.");
 logger.warn("警告-warn.");
 logger.error("报错-error");
 logger.fatal("毁灭错-fatal");
 
+let obj = {sname:"wq",sage:12,sex:1,city:"beijingbeijingbeijingbeijing",form:"xxxxxxxxxx",to:"xssssdsds"};
+
+logger.info(obj, "信息222xx12");
 
 
 // let log4js = require('./server_modules/log').log4js;
