@@ -2,7 +2,7 @@
  * @Description: 登录页
  * @Author: wangqi
  * @Date: 2020-06-01 14:18:50
- * @LastEditTime: 2020-11-11 11:45:11
+ * @LastEditTime: 2020-11-15 22:36:17
 -->
 <template>
   <div class="login-page" :style="bgBanner">
@@ -16,7 +16,7 @@
           v-model="accountInfo"
           @blur="verifyAccount"
         ></el-input>
-        <p class="error">{{accountError}}</p>
+        <p class="error">{{ accountError }}</p>
       </div>
 
       <div class="password-ipt">
@@ -28,7 +28,7 @@
           v-model="pwdInfo"
           @blur="verifyPwd"
         ></el-input>
-        <p class="error">{{pwdError}}</p>
+        <p class="error">{{ pwdError }}</p>
       </div>
 
       <el-button type="primary" @click="submit">登录</el-button>
@@ -61,7 +61,7 @@ export default {
       pwdError: "",
       // 背景图属性
       bgBanner: {},
-      redirect: undefined
+      redirect: undefined,
     };
   },
   created() {
@@ -72,11 +72,11 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     /**
@@ -112,20 +112,27 @@ export default {
       form.password = this.pwdInfo;
       let auth = {
         name: this.accountInfo,
-        password: this.pwdInfo
+        password: this.pwdInfo,
       };
       this.$store
         .dispatch("user/loginUserSubmit", auth)
-        .then(() => {
-          this.$router.push({
-            // path: this.redirect || "/"
-            path: "/"
-          });
+        .then((data) => {
+          if (data["errno"] == 0) {
+            this.$router.push({
+              // path: this.redirect || "/"
+              path: "/",
+            });
+          } else {
+            Notification.error({
+              title: "提示",
+              message: data.data,
+            });
+          }
         })
-        .catch(() => {
+        .catch((err) => {
           Notification.error({
             title: "提示",
-            message: "登录失败!"
+            message: err.data,
           });
         });
     },
@@ -136,7 +143,7 @@ export default {
      */
     register() {
       this.$router.push({
-        path: `/register`
+        path: `/register`,
       });
     },
 
@@ -147,8 +154,8 @@ export default {
      */
     forgetPwd() {
       console.log("忘记密码");
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -2,7 +2,7 @@
  * @Description: 页面头部
  * @Author: wangqi
  * @Date: 2020-06-04 14:28:00
- * @LastEditTime: 2020-07-08 16:27:14
+ * @LastEditTime: 2020-11-15 22:52:29
 --> 
 
 <style lang="scss" scoped>
@@ -112,7 +112,6 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      // console.log(key, keyPath);
     },
 
     /**
@@ -121,7 +120,7 @@ export default {
      * @return:
      */
     async signOut() {
-      await this.$store.dispatch("user/logout");
+      this.$store.commit('user/SET_LOGOUT');
       this.$router.push({
         // path: `/login?redirect=${this.$route.fullPath}`
         path: `/login`

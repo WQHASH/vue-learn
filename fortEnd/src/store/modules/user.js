@@ -2,12 +2,12 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-06-21 14:49:06
- * @LastEditTime: 2020-11-11 11:40:15
+ * @LastEditTime: 2020-11-15 22:53:58
  */
 
 import { getToken, setToken, removeToken } from '@/tools/auth';
 import router, { resetRouter } from '@/router';
-import { loginUser, logout, getInfo } from '@/api';
+import { loginUser, registerUser, logout, getInfo } from '@/api';
 
 const state = {
     token: getToken(),
@@ -18,26 +18,38 @@ const state = {
 };
 
 const mutations = {
-    SET_TOKEN: (state, token) => {
+    SET_TOKEN(state, token) {
         state.token = token;
     },
-    SET_NAME: (state, name) => {
+    SET_NAME(state, name) {
         state.name = name;
     },
-    SET_AVATAR: (state, avatar) => {
+    SET_AVATAR(state, avatar) {
         state.avatar = avatar;
     },
-    SET_INTRODUCTION: (state, avatar) => {
-        state.avatar = avatar;
+    SET_INTRODUCTION(state, avatar) {
+        state.introduction = avatar;
     },
-    SET_ROLES: (state, roles) => {
+    SET_ROLES(state, roles) {
         state.roles = roles;
+    },
+
+    // 用户退出
+    SET_LOGOUT(state) {
+        state.token = '';
+        state.roles = [];
+        state.name = '';
+        state.avatar = '';
+        state.introduction = '';
+        // 清除token
+        removeToken();
+        //重置路由
+        resetRouter();
     }
 
 };
 
 const actions = {
-
     /**
      * @description: 登录
      * @param {type} 
@@ -48,17 +60,40 @@ const actions = {
         return new Promise((resolve, reject) => {
             // 登录成功后获取token
             loginUser({ name, password }).then((response) => {
-                const { data } = response;
+                const { errno, token } = response;
+                if (errno) { return resolve(response) };
+
                 //设置tokent到状态
-                context.commit("SET_TOKEN", data.token);
+                context.commit("SET_TOKEN", token);
                 // 保存tokent到Cookie
-                setToken(data.token);
-                resolve();
+                setToken(token);
+                resolve(response);
             }).catch((err) => {
                 reject(err);
             });
         });
     },
+
+    /**
+     * @description: 注册
+     * @param {store对象} context
+     * @param {注册用户信息} userInfo
+     * @return {*}
+     */
+    registerUserSubmit(context, userInfo) {
+        return new Promise((resolve, reject) => {
+            registerUser(userInfo).then((response) => {
+                const { errno, token } = response;
+                if (errno) { return resolve(response) };
+
+                setToken(token);
+                resolve(response);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
+
 
     /**
      * @description: 获取用户信息
@@ -96,14 +131,13 @@ const actions = {
      */
     logout(context) {
         return new Promise((resolve, reject) => {
-            logout(context.state.token).then(() => {
+            logout(context.state.token).then((data) => {
                 context.commit('SET_TOKEN', '');
                 context.commit('SET_ROLES', []);
 
                 context.commit('SET_NAME', '');
                 context.commit('SET_AVATAR', '');
                 context.commit('SET_INTRODUCTION', '');
-
 
                 // 清除token
                 removeToken();

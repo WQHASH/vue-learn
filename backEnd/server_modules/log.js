@@ -2,23 +2,37 @@
  * @Description: log4.js配置
  * @Author: wangqi
  * @Date: 2020-11-12 16:05:43
- * @LastEditors: your name
- * @LastEditTime: 2020-11-12 16:28:16
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-15 15:59:41
  */
-
+const path = require('path');
 const log4js = require('log4js');
+
 log4js.configure({
     appenders: {
-        out: { type: 'stdout' },
-        app: { type: 'file', filename: 'application.log' }
+        out: { type: 'console' },
+        app: { type: 'file', filename: 'application.log' },
+        resLogger: {
+            type: 'dateFile',
+            filename: path.resolve('logs/log'),
+            pattern: '-yyyy-MM-dd.log',
+            alwaysIncludePattern: true,
+        },
     },
     categories: {
-        default: { appenders: ['out', 'app'], level: 'debug' }
+        default: {
+            appenders: ['out', 'app'],
+            level: 'all'
+        },
+        resLogger: {
+            appenders: ['out', 'resLogger'],
+            level: 'debug'
+        }
     }
 });
 
 
-global.logger = log4js.getLogger();
+let logger = global.logger = log4js.getLogger('resLogger');
 
 exports.log4js = log4js;
 exports.logger = global.logger;

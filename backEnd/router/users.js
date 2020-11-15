@@ -2,7 +2,7 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-11-08 23:08:27
- * @LastEditTime: 2020-11-11 11:44:10
+ * @LastEditTime: 2020-11-15 22:35:46
  */
 const jwt = require('jwt-simple');
 const jwtConfig = require('../config/jwt');
@@ -10,7 +10,7 @@ const express = require('express');
 const User = require('../models/user');
 const router = express.Router();
 
-// 登录接口
+// 登录
 router.post('/signin', (req, res) => {
     // 取参数
     // 从数据库中比较参数
@@ -34,14 +34,14 @@ router.post('/signin', (req, res) => {
                             id: user.id
                         };
                         res.json({
-                            erron: 0,
+                            errno: 0,
                             data: '登录成功',
                             user: userInfo,
                             token: jwt.encode(userInfo, jwtConfig.secret)
                         });
                     } else {
                         res.json({
-                            erron: 1,
+                            errno: 1,
                             data: '密码不正确'
                         });
                         global.logger.info('密码不正确');
@@ -59,7 +59,7 @@ router.post('/signin', (req, res) => {
 
 });
 
-// 注册接口
+// 注册
 router.post('/signup', (req, res) => {
     let { name, password, age } = req.body;
     if (name.length > 15) {
@@ -96,7 +96,7 @@ router.post('/signup', (req, res) => {
                     age: user.age
                 };
                 res.json({
-                    erron: 0,
+                    errno: 0,
                     userInfo,
                     token: jwt.encode(userInfo, jwtConfig.secret),
                     data: '注册成功'
@@ -107,11 +107,16 @@ router.post('/signup', (req, res) => {
 
 });
 
+// 获取权限用户信息
 router.get('/info', (res, req) => {
     req.json({
         code: 200,
         data: {
-            sname: "wq",
+            // admin || editor
+            roles: ['admin'],
+            introduction: '我是admin 呀',
+            avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+            name: "超级管理员",
         }
     })
 });

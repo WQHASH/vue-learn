@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-02 12:42:24
- * @LastEditTime: 2020-11-11 10:37:15
+ * @LastEditTime: 2020-11-15 21:51:40
 -->
 <template>
   <div class="register-page" :style="bgBanner">
@@ -156,7 +156,9 @@ export default {
           form.name = this.ruleForm.user;
           form.password = this.ruleForm.pass;
           form.age = this.ruleForm.age;
-          registerUser(form)
+
+          this.$store
+            .dispatch("user/registerUserSubmit", form)
             .then((res) => {
               let type = res["erron"] ? "warning" : "success";
               this.$message({
@@ -164,7 +166,9 @@ export default {
                 showClose: true,
                 message: res.data,
               });
-              this.$router.push({path:"login"});
+              this.$router.push({
+                path: "login",
+              });
             })
             .catch((error) => {
               this.$message({

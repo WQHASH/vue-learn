@@ -2,7 +2,7 @@
  * @Description: 设置动态路由权限
  * @Author: wangqi
  * @Date: 2020-06-01 14:16:17
- * @LastEditTime: 2020-11-11 11:46:57
+ * @LastEditTime: 2020-11-15 22:43:35
  */
 
 import router from './router';
@@ -25,7 +25,7 @@ router.beforeEach(async (to, from, next) => {
         document.title = to.meta.title
     }
     let hasToken = getToken();
-    if (hasToken) {
+    if (hasToken && hasToken != 'undefined') {
         if (to.path == '/login') {
             // next("/");
             next({ path: '/' })
