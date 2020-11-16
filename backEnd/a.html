@@ -1,0 +1,30 @@
+<!--
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2020-11-16 21:30:58
+ * @LastEditTime: 2020-11-16 22:53:33
+-->
+
+<script>
+    fetch("http://127.0.0.1:3000/user/info", {
+        method: 'post',
+        credentials: 'omit', // include same-origin  omit
+        mode: 'cors',
+        cache: 'default',
+        headers: new Headers({
+            'Content-type': 'application/json;charset=utf-8'
+        })
+    }).then((response) => {
+        if (response.ok) {
+            console.log(response, "response")
+            // return response.json();
+        }
+
+    }).then((data) => {
+        // console.log(data, "data");
+        // let {
+        //     code
+        // } = data;
+
+    });
+</script>

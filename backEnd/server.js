@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-11-16 21:15:32
+ * @LastEditTime: 2020-11-16 22:24:47
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -79,7 +79,7 @@ app.all('*', function(req, response, next) {
     //设置允许跨域的域名，*代表允许任意域名跨域
     response.header("Access-Control-Allow-Origin", "*");
     //允许的header类型
-    response.header("Access-Control-Allow-Headers", "X-Requested-With");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     //跨域允许的请求方式
     response.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
     //设置响应头信息
