@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-11-16 17:36:36
+ * @LastEditTime: 2020-11-16 21:15:32
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -18,7 +18,6 @@ const log4js = require('./server_modules/log').log4js;
 const logger = require('./server_modules/log').logger; 
 
 let mongoose = require('./server_modules/mongodb');
-
 // 服务启动
 let app = express();
 let router = express.Router();

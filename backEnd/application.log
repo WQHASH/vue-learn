@@ -1,5 +1,0 @@
-[2020-11-14T20:57:56.268] [DEBUG] default - 断点-debug.
-[2020-11-14T20:57:56.278] [INFO] default - 信息-info.
-[2020-11-14T20:57:56.280] [WARN] default - 警告-warn.
-[2020-11-14T20:57:56.283] [ERROR] default - 报错-error
-[2020-11-14T20:57:56.285] [FATAL] default - 毁灭错-fatal

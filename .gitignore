@@ -1,7 +1,10 @@
 .DS_Store
 node_modules
-/dist
+/fortEnd/dist
 package-lock.json
+
+# 自定义些需要忽略的文件或文件夹
+backEnd/applicationLogs/*
 
 # local env files
 .env.local
@@ -23,5 +26,4 @@ pnpm-debug.log*
 *.sw?
 
 
-# 自定义些需要忽略的文件或文件夹
-logs/*
+
