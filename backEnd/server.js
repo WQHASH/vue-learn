@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-11-15 16:05:26
+ * @LastEditTime: 2020-11-16 17:36:36
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -73,6 +73,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //         }
 //     }
 // });
+
+
+//设置跨域访问
+app.all('*', function(req, response, next) {
+    //设置允许跨域的域名，*代表允许任意域名跨域
+    response.header("Access-Control-Allow-Origin", "*");
+    //允许的header类型
+    response.header("Access-Control-Allow-Headers", "X-Requested-With");
+    //跨域允许的请求方式
+    response.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    //设置响应头信息
+    response.header("X-Powered-By",' 3.2.1')
+    response.header("Content-Type", "application/json;charset=utf-8");
+    
+    next();
+});
+    
 
 // 路由
 app.use('/user', require('./router/users'));
