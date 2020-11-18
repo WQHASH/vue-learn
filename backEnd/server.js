@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-11-16 22:24:47
+ * @LastEditTime: 2020-11-18 17:57:40
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -15,7 +15,7 @@ const jwtConfig = require('./config/jwt');
 let bodyParser = require('body-parser');
 // 引入日志
 const log4js = require('./server_modules/log').log4js;
-const logger = require('./server_modules/log').logger; 
+const logger = require('./server_modules/log').logger;
 
 let mongoose = require('./server_modules/mongodb');
 // 服务启动
@@ -75,20 +75,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //设置跨域访问
-app.all('*', function(req, response, next) {
+app.all('*', function (req, response, next) {
     //设置允许跨域的域名，*代表允许任意域名跨域
     response.header("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
     //允许的header类型
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,Appid,Secret,Authorization");
     //跨域允许的请求方式
-    response.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    response.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
     //设置响应头信息
-    response.header("X-Powered-By",' 3.2.1')
+    response.header("X-Powered-By", ' 3.2.1')
     response.header("Content-Type", "application/json;charset=utf-8");
-    
+
     next();
 });
-    
+
 
 // 路由
 app.use('/user', require('./router/users'));
