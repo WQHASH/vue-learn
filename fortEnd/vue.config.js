@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-29 17:29:56
- * @LastEditTime: 2020-11-09 23:51:57
+ * @LastEditTime: 2020-11-24 00:58:37
  */
 
 const path = require('path')
@@ -14,9 +14,8 @@ const resolve = dir => path.join(__dirname, dir)
 // const name = defaultSettings.title || 'vue mobile template'
 
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
-
 module.exports = {
-    publicPath: '/',
+    publicPath: IS_PROD ? './' : '/',
     outputDir: 'dist',      //  生产环境构建文件的目录
     assetsDir: 'static',    //  outputDir的静态资源(js、css、img、fonts)目录
     lintOnSave: false,      // 取消 ESLint 校验
