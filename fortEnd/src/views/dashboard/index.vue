@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-11-23 23:35:42
- * @LastEditTime: 2020-11-23 23:49:19
+ * @LastEditTime: 2020-11-23 23:56:40
 -->
 
 
@@ -25,7 +25,7 @@
           rgba(0, 0, 0, 0.04) 0px 0px 6px;
       }
 
-      .el-input {
+      .el-input { 
         display: block;
         width: 30%;
       }
