@@ -2,8 +2,9 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-11-08 23:08:27
- * @LastEditTime: 2020-11-18 17:43:18
+ * @LastEditTime: 2020-11-23 23:52:37
  */
+ 
 const jwt = require('jwt-simple');
 const jwtConfig = require('../config/jwt');
 const express = require('express');
@@ -108,7 +109,7 @@ router.post('/signup', (req, res) => {
 });
 
 // 获取权限用户信息
-router.post('/info', (req, res) => {
+router.get('/info', (req, res) => {
     res.json({
         code: 200,
         data: {
