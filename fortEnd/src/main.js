@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-07-08 17:56:08
+ * @LastEditTime: 2020-11-24 23:08:25
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -10,17 +10,34 @@ import App from './App.vue'
 import 'element-ui/lib/theme-chalk/index.css';
 import Element from 'element-ui';
 
-import router from './router'
-import store from './store'
+import router from './router';
+import store from './store';
+
+import socket from './socket';
 
 Vue.use(Element, {
   size: 'small',
   zIndex: 3000
 });
 Vue.config.productionTip = false;
-import './icons'
+import './icons';
 import '@/permission';
-import '@/registerServiceWorker'
+import '@/registerServiceWorker';
+
+socket.on('connect', async () => {
+  console.log('socket连接成功');
+});
+
+socket.on('message', (data) => {
+  console.log(data, "data")
+})
+socket.emit('message', { "sname": "wq12", });
+
+// socket.on("disconnect", () => {
+//   console.log('socket销毁'); // false
+// });
+
+
 
 const vm = new Vue({
   router,

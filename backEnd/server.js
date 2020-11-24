@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-11-18 18:04:35
+ * @LastEditTime: 2020-11-24 22:48:02
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -34,44 +34,42 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(log4js.connectLogger(logger));
 
 // token处理
-// app.use((req, res, next) => {
-//     console.log(req.body, "body");
-//     let tokent;
-//     let pathUrl = req.url.split('?')[0];
-//     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-//         tokent = req.headers.authorization.split(' ')[1];
-//     } else if (req.query && req.query.tokent) {
-//         tokent = req.query.tokent;
-//     }
+app.use((req, res, next) => {
+    let tokent;
+    let pathUrl = req.url.split('?')[0];
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        tokent = req.headers.authorization.split(' ')[1];
+    } else if (req.query && req.query.tokent) {
+        tokent = req.query.tokent;
+    }
 
-//     let apiUrl = ['/user/signup'];
-
-//     let isCludes = apiUrl.includes(pathUrl);
-//     if (isCludes) {
-//         try {
-//             const decoded = jwt.decode(tokent, jwtConfig.secret);
-//             return next();
-//         } catch (error) {
-//             return next();
-//         }
-//     } else {
-//         if (!tokent) {
-//             res.status(401).json({
-//                 msg: '请先登录',
-//             });
-//             return next();
-//         }
-//         try {
-//             const decoded = jwt.decode(tokent, jwtConfig.secret);
-//             return next();
-//         } catch (error) {
-//             res.status(401).json({
-//                 msg: "token 校验错误"
-//             });
-//             return next();
-//         }
-//     }
-// });
+    let apiUrl = ['/user/signup', '/user/signin', '/user/info'];
+    let isCludes = apiUrl.includes(pathUrl);
+    if (isCludes) {
+        try {
+            const decoded = jwt.decode(tokent, jwtConfig.secret);
+            return next();
+        } catch (error) {
+            return next();
+        }
+    } else {
+        if (!tokent) {
+            res.status(401).json({
+                msg: '请先登录',
+            });
+            return next();
+        }
+        try {
+            const decoded = jwt.decode(tokent, jwtConfig.secret);
+            return next();
+        } catch (error) {
+            res.status(401).json({
+                msg: "token 校验错误"
+            });
+            return next();
+        }
+    }
+});
 
 
 //设置跨域访问
@@ -80,7 +78,7 @@ app.all('*', function (req, response, next) {
     response.header("Access-Control-Allow-Origin", "*");
     response.setHeader("Access-Control-Allow-Credentials", "true");
     //允许的header类型
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Appid, Secret, Authorization");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Appid, Secret, Authorization, X-HTTP-Method-Override");
     //跨域允许的请求方式
     response.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
     //设置响应头信息
@@ -94,6 +92,7 @@ app.all('*', function (req, response, next) {
 // 路由
 app.use('/user', require('./router/users'));
 let server = app.listen(port);
+require('./server_modules/websocket')(server);
 
 
 

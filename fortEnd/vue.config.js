@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-29 17:29:56
- * @LastEditTime: 2020-11-24 00:58:37
+ * @LastEditTime: 2020-11-24 22:57:18
  */
 
 const path = require('path')
@@ -33,6 +33,16 @@ module.exports = {
         // before: require('./mock/mock-server.js'),
         proxy: {
             //配置跨域
+            '/socket.io': {
+                target: 'http://127.0.0.1:3000',
+                ws: true,
+                changeOrigin: true,
+            },
+            'sockjs-node': {
+                target: 'http://127.0.0.1:3000',
+                ws: false,
+                changeOrigin: true
+            },
             '/api': {
                 target: 'http://127.0.0.1:3000/',
                 // ws:true,
