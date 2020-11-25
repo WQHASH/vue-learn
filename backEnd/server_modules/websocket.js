@@ -2,7 +2,7 @@
  * @Description: socket.io入口
  * @Author: wangqi
  * @Date: 2020-11-24 20:42:21
- * @LastEditTime: 2020-11-24 23:08:45
+ * @LastEditTime: 2020-11-25 23:50:06
  */
 
 
@@ -11,7 +11,6 @@ function websocket(server) {
     io.on('connection', (socket) => {
         // test
         socket.on('message', (data) => {
-            console.log(data,"data");
             socket.emit('message', {
                 username: socket.username,
                 message: data

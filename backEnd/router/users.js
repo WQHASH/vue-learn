@@ -2,9 +2,9 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-11-08 23:08:27
- * @LastEditTime: 2020-11-23 23:52:37
+ * @LastEditTime: 2020-11-26 00:05:30
  */
- 
+
 const jwt = require('jwt-simple');
 const jwtConfig = require('../config/jwt');
 const express = require('express');
@@ -110,15 +110,22 @@ router.post('/signup', (req, res) => {
 
 // 获取权限用户信息
 router.get('/info', (req, res) => {
+    let { token } = req.query;
+    let userInfo = jwt.decode(token, jwtConfig.secret);
+    userInfo['roles'] = ['admin'];
+    userInfo['avatar'] = ['xxx'];
+    userInfo['introduction'] = ['我是admin 呀'];
+
     res.json({
         code: 200,
-        data: {
-            // admin || editor
-            roles: ['admin'],
-            introduction: '我是admin 呀',
-            avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-            name: "超级管理员",
-        }
+        data: userInfo
+        // data: {
+        //     // admin || editor
+        //     roles: ['admin'],
+        //     introduction: '我是admin 呀',
+        //     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+        //     name: "超级管理员",
+        // }
     })
 });
 module.exports = router;

@@ -2,13 +2,17 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-11-24 23:08:25
+ * @LastEditTime: 2020-11-26 00:06:06
  */
 import Vue from 'vue'
 import App from './App.vue'
 
 import 'element-ui/lib/theme-chalk/index.css';
 import Element from 'element-ui';
+
+import './style/common.scss';
+// import './style/scrollBar.scss';
+// import './style/variables.scss';
 
 import router from './router';
 import store from './store';
@@ -29,7 +33,7 @@ socket.on('connect', async () => {
 });
 
 socket.on('message', (data) => {
-  console.log(data, "data")
+  // console.log(data, "data")
 })
 socket.emit('message', { "sname": "wq12", });
 
@@ -44,4 +48,3 @@ const vm = new Vue({
   store,
   render: h => h(App)
 }).$mount('#app');
-console.log(vm, "vm");

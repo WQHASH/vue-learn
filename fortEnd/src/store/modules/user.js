@@ -2,7 +2,7 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-06-21 14:49:06
- * @LastEditTime: 2020-11-15 22:53:58
+ * @LastEditTime: 2020-11-26 00:04:07
  */
 
 import { getToken, setToken, removeToken } from '@/tools/auth';

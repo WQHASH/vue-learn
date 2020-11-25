@@ -2,9 +2,8 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-11-23 23:35:42
- * @LastEditTime: 2020-11-23 23:56:40
+ * @LastEditTime: 2020-11-25 21:40:46
 -->
-
 
 <style lang="scss">
 .dashboard {
@@ -25,7 +24,7 @@
           rgba(0, 0, 0, 0.04) 0px 0px 6px;
       }
 
-      .el-input { 
+      .el-input {
         display: block;
         width: 30%;
       }
@@ -36,17 +35,23 @@
 
 <template>
   <div class="dashboard">
-    <el-container class="container"> chat </el-container>
+    <el-container class="container">
+      <chat></chat>
+    </el-container>
   </div>
 </template>
 
 <script>
+import Chat from "../chat/index";
+
 export default {
   name: "dashboard",
   data() {
     return {};
   },
-  components: {},
+  components: {
+    Chat,
+  },
   created() {},
   mounted() {},
   computed: {},
