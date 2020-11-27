@@ -2,7 +2,7 @@
  * @Description: 创建数据库
  * @Author: wangqi
  * @Date: 2020-11-09 22:53:33
- * @LastEditTime: 2020-11-15 16:28:38
+ * @LastEditTime: 2020-11-27 17:45:35
  */
 const mongoose = require('mongoose');
 // 用于异步回调
@@ -13,12 +13,15 @@ let config = {
     DATABASE: 'vuenode'
 }
 let pathUrl = `mongodb://${config.servername}:${config.port}/${config.DATABASE}`;
-global.db = mongoose.connect(pathUrl, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+let options = { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true };
+let callBack = (err) => {
     if (err) {
         throw err;
     } else {
         console.log("服务器链接成功！！！")
     }
-});
+};
+
+global.db = mongoose.connect(pathUrl, options, callBack);
 
 module.exports = mongoose;

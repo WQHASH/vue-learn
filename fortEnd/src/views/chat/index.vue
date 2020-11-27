@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2020-11-26 00:39:18
+ * @LastEditTime: 2020-11-27 14:16:26
 -->
 <template>
   <div class="chat-module">
@@ -11,10 +11,10 @@
       <el-main>
         <ul class="msg-list">
           <li class="msg" v-for="(msg, index) in msgList" :key="index">
-            <span class="username">{{
-              msg.username ? ` ${msg.username}: ` : msg.username
-            }}</span>
-            <p class="msg-body">{{ msg.msgIpt }}</p>
+            <span class="username">
+              {{ msg.username ? ` ${msg.username}: ` : msg.username }}
+            </span>
+            <p class="msg-body">{{ msg.msg }}</p>
           </li>
         </ul>
       </el-main>
@@ -33,7 +33,8 @@
 
 <script>
 import { getToken } from "@/tools/auth";
-
+// import socket from "@/views/socket.js";
+import socket from "../../socket";
 export default {
   data() {
     return {
@@ -63,16 +64,18 @@ export default {
      * @return {*}
      */
     sendMsg() {
-      this.msgList.push({
+      let msg = {
         username: this.username,
-        msgIpt: this.msgIpt,
-      });
+        msg: this.msgIpt,
+        time: new Date()
+      };
+      this.msgList.push(msg);
+      socket.emit("message", msg);
       this.msgIpt = "";
     },
   },
 };
 </script>
-
 
 <style lang="scss">
 .chat-module {
