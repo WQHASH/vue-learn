@@ -2,7 +2,7 @@
  * @Description: socket.io入口
  * @Author: wangqi
  * @Date: 2020-11-24 20:42:21
- * @LastEditTime: 2020-11-27 17:22:50
+ * @LastEditTime: 2020-11-27 22:36:17
  */
 
 const Message = require('../models/message');
@@ -14,12 +14,6 @@ function websocket(server) {
             let { username, msg } = data;
             // 存数据库
             let message = new Message({ username, msg });
-            message.findTemp(1,2,3, function(){
-                global.logger.info(this, "实例回调")
-            });
-            // message.findTempStatic(function(){
-            //     global.logger.info(this, "静态的")
-            // });
             message.save((err) => {
                 if (err) throw new Error('消息存失败了!');
                 socket.emit('message', { username, msg });

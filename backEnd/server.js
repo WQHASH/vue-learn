@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-11-24 22:48:02
+ * @LastEditTime: 2020-11-27 22:55:35
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -43,7 +43,7 @@ app.use((req, res, next) => {
         tokent = req.query.tokent;
     }
 
-    let apiUrl = ['/user/signup', '/user/signin', '/user/info'];
+    let apiUrl = ['/user/signup', '/user/signin', '/user/info', '/message/history'];
     let isCludes = apiUrl.includes(pathUrl);
     if (isCludes) {
         try {
@@ -91,6 +91,8 @@ app.all('*', function (req, response, next) {
 
 // 路由
 app.use('/user', require('./router/users'));
+app.use('/message', require('./router/messages'));
+
 let server = app.listen(port);
 require('./server_modules/websocket')(server);
 

@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2020-11-27 14:16:26
+ * @LastEditTime: 2020-11-27 23:28:12
 -->
 <template>
   <div class="chat-module">
@@ -20,7 +20,7 @@
       </el-main>
       <el-footer>
         <el-input
-          v-model="msgIpt"
+          v-model="msg"
           clearable
           placeholder="请输入内容"
           class="msg-ipt"
@@ -32,29 +32,32 @@
 </template>
 
 <script>
-import { getToken } from "@/tools/auth";
-// import socket from "@/views/socket.js";
 import socket from "../../socket";
+import { getToken } from "@/tools/auth";
+import { getMsgHistory } from "@/api/index";
 export default {
   data() {
     return {
       //当前用户
       username: "",
       //输入框内容
-      msgIpt: "",
+      msg: "",
       //存储消息列表
       msgList: [
         {
           username: "",
-          msgIpt: undefined,
+          msg: undefined,
         },
       ],
     };
   },
-  mounted() {
-    this.$store.dispatch("user/getInfo").then((data) => {
-      let { name } = data;
-      this.username = name;
+  async mounted() {
+    let userInfo = await this.$store.dispatch("user/getInfo");
+    this.username = userInfo.name;
+    let msgHistory = await getMsgHistory(this.username);
+    let { data } = msgHistory;
+    this.msgList = data.map((val) => {
+      return { username: val.username, msg: val.msg };
     });
   },
   methods: {
@@ -66,12 +69,12 @@ export default {
     sendMsg() {
       let msg = {
         username: this.username,
-        msg: this.msgIpt,
-        time: new Date()
+        msg: this.msg,
+        time: new Date(),
       };
       this.msgList.push(msg);
       socket.emit("message", msg);
-      this.msgIpt = "";
+      this.msg = "";
     },
   },
 };
