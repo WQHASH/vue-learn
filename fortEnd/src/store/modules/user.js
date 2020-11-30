@@ -2,12 +2,12 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-06-21 14:49:06
- * @LastEditTime: 2020-11-26 00:04:07
+ * @LastEditTime: 2020-11-30 21:15:15
  */
 
 import { getToken, setToken, removeToken } from '@/tools/auth';
 import router, { resetRouter } from '@/router';
-import { loginUser, registerUser, logout, getInfo } from '@/api';
+import { loginUser, registerUser, logout, getInfo, getMsgHistory } from '@/api';
 
 const state = {
     token: getToken(),
@@ -15,6 +15,8 @@ const state = {
     name: '',
     avatar: '',
     introduction: '',
+    // 聊天历史记录
+    roomdetail: [],
 };
 
 const mutations = {
@@ -32,6 +34,11 @@ const mutations = {
     },
     SET_ROLES(state, roles) {
         state.roles = roles;
+    },
+
+    // 设置消息记录
+    SET_ROOMDETAIL(state, messages) {
+        state.roomdetail = messages;
     },
 
     // 用户退出
@@ -86,6 +93,8 @@ const actions = {
                 const { errno, token } = response;
                 if (errno) { return resolve(response) };
 
+                //设置tokent到状态
+                context.commit("SET_TOKEN", token);
                 setToken(token);
                 resolve(response);
             }).catch((err) => {
@@ -116,7 +125,6 @@ const actions = {
                 context.commit('SET_NAME', name);
                 context.commit('SET_AVATAR', avatar);
                 context.commit('SET_INTRODUCTION', introduction);
-
                 resolve(data);
             }).catch((err) => {
                 reject(err);
@@ -163,7 +171,25 @@ const actions = {
             removeToken();
             resolve();
         });
-    }
+    },
+
+    /**
+     * @description: 获取消息历史记录
+     * @param {*}
+     * @return {*}
+     */
+    getMsgHistory(context) {
+        return new Promise((resolve, reject) => {
+            getMsgHistory(context.state.name).then((res) => {
+                let { errno, data } = res;
+                if (errno) { return reject("获取消息历史记录失败") };
+                context.commit("SET_ROOMDETAIL", data);
+                resolve(data);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
 
 
 

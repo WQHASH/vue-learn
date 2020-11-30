@@ -2,7 +2,7 @@
  * @Description: socket.io入口
  * @Author: wangqi
  * @Date: 2020-11-24 20:42:21
- * @LastEditTime: 2020-11-27 22:36:17
+ * @LastEditTime: 2020-11-30 20:50:32
  */
 
 const Message = require('../models/message');
@@ -16,7 +16,7 @@ function websocket(server) {
             let message = new Message({ username, msg });
             message.save((err) => {
                 if (err) throw new Error('消息存失败了!');
-                socket.emit('message', { username, msg });
+                socket.broadcast.emit('message', { username, msg });
             });
 
         });

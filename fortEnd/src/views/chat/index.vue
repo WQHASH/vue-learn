@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2020-11-27 23:28:12
+ * @LastEditTime: 2020-11-30 21:18:46
 -->
 <template>
   <div class="chat-module">
@@ -54,11 +54,18 @@ export default {
   async mounted() {
     let userInfo = await this.$store.dispatch("user/getInfo");
     this.username = userInfo.name;
-    let msgHistory = await getMsgHistory(this.username);
-    let { data } = msgHistory;
-    this.msgList = data.map((val) => {
+    // 获取用户聊天记录
+    let msgHistory = await this.$store.dispatch("user/getMsgHistory");
+    this.msgList = msgHistory.map((val) => {
       return { username: val.username, msg: val.msg };
     });
+
+    socket.on("message", (data) => {
+      // 将消息存储store, 下次回显列表
+      this.msgList.push(data);
+      this.$store.commit("user/SET_ROOMDETAIL", this.msgList);
+    });
+    
   },
   methods: {
     /**
@@ -70,7 +77,6 @@ export default {
       let msg = {
         username: this.username,
         msg: this.msg,
-        time: new Date(),
       };
       this.msgList.push(msg);
       socket.emit("message", msg);

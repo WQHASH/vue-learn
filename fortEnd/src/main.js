@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-11-27 13:50:01
+ * @LastEditTime: 2020-11-30 20:27:17
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -32,10 +32,7 @@ socket.on('connect', async () => {
   console.log('socket连接成功');
 });
 
-socket.on('message', (data) => {
-  console.log(data, "data");
-  // 将消息存储store, 下次回显列表
-})
+
 // socket.emit('message', { "sname": "wq12", });
 
 // socket.on("disconnect", () => {

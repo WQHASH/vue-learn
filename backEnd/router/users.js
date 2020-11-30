@@ -2,7 +2,7 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-11-08 23:08:27
- * @LastEditTime: 2020-11-26 00:05:30
+ * @LastEditTime: 2020-11-30 16:30:12
  */
 
 const jwt = require('jwt-simple');
@@ -128,4 +128,5 @@ router.get('/info', (req, res) => {
         // }
     })
 });
+
 module.exports = router;
