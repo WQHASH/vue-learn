@@ -2,7 +2,7 @@
  * @Description: 路由配置
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-06-27 20:29:07
+ * @LastEditTime: 2020-12-01 16:09:20
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -21,8 +21,10 @@ routerMethods.forEach(method => {
 })
 
 const createRouter = () => new VueRouter({
+  // history || hash
   mode: "history",
-  // base: process.env.BASE_URL,
+  //BASE_URL 和 vue.config.js 中的 publicPath 选项相符; 目的可用于nginx中使用 history模式
+  base: process.env.BASE_URL,
   // 检查点击浏览器“前进/后退”按钮时，页面滚动条记录上一次的位置
   scrollBehavior: (to, from, savePosition) => {
     return { y: 0 }

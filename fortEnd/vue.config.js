@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-29 17:29:56
- * @LastEditTime: 2020-11-24 22:57:18
+ * @LastEditTime: 2020-12-01 18:13:28
  */
 
 const path = require('path')
@@ -47,9 +47,9 @@ module.exports = {
                 target: 'http://127.0.0.1:3000/',
                 // ws:true,
                 changeOrigin: process.env.NODE_ENV === 'development',
-                pathRewrite: {
-                    '^/api': ''
-                }
+                // pathRewrite: {
+                //     '^/api': ''
+                // }
             }
         }
     },
