@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-29 17:29:56
- * @LastEditTime: 2020-12-01 18:13:28
+ * @LastEditTime: 2020-12-02 13:47:54
  */
 
 const path = require('path')
@@ -13,17 +13,23 @@ const resolve = dir => path.join(__dirname, dir)
 // page title
 // const name = defaultSettings.title || 'vue mobile template'
 
-const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
+const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 module.exports = {
+    // 需要注意的是nginx代理history是需要使用根目录
     publicPath: IS_PROD ? './' : '/',
-    outputDir: 'dist',      //  生产环境构建文件的目录
-    assetsDir: 'static',    //  outputDir的静态资源(js、css、img、fonts)目录
-    lintOnSave: false,      // 取消 ESLint 校验
-    productionSourceMap: !IS_PROD, // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
+    // 生产环境构建文件的目录
+    outputDir: 'dist',
+    // outputDir的静态资源(js、css、img、fonts)目录
+    assetsDir: 'static',
+    // 取消 ESLint 校验
+    lintOnSave: false,
+    // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
+    productionSourceMap: !IS_PROD,
     devServer: {
         host: '0.0.0.0',
-        port: 8088,         // 端口
-        open: false,        // 启动后打开浏览器
+        port: 8088,
+        // 启动后打开浏览器
+        open: false,
         overlay: {
             //  当出现编译器错误或警告时，在浏览器中显示全屏覆盖层
             warnings: false,
@@ -44,12 +50,12 @@ module.exports = {
                 changeOrigin: true
             },
             '/api': {
-                target: 'http://127.0.0.1:3000/',
+                target: 'http://127.0.0.1:3000',
                 // ws:true,
                 changeOrigin: process.env.NODE_ENV === 'development',
-                // pathRewrite: {
-                //     '^/api': ''
-                // }
+                pathRewrite: {
+                    '^/api': ''
+                }
             }
         }
     },
