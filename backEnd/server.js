@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-12-02 13:25:43
+ * @LastEditTime: 2020-12-09 00:04:48
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -43,11 +43,13 @@ app.use((req, res, next) => {
         tokent = req.query.tokent;
     }
 
-    let apiUrl = ['/user/signup', '/user/signin', '/user/info', '/message/history'];
+    // let apiUrl = ['/user/signup', '/user/signin', '/user/info', '/message/history'];
+    let apiUrl = ['/user/signin'];
     let isCludes = apiUrl.includes(pathUrl);
     if (isCludes) {
         try {
             const decoded = jwt.decode(tokent, jwtConfig.secret);
+            req.user = decoded;
             return next();
         } catch (error) {
             return next();
@@ -61,6 +63,7 @@ app.use((req, res, next) => {
         }
         try {
             const decoded = jwt.decode(tokent, jwtConfig.secret);
+            res.user = decoded;
             return next();
         } catch (error) {
             res.status(401).json({
