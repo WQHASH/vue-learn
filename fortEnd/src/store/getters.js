@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-17 17:37:24
- * @LastEditTime: 2020-11-30 17:50:32
+ * @LastEditTime: 2020-12-13 21:09:26
  */
 const getters = {
     filterCounts: (state, gettersRoot) => { return state.app.counts.filter((val) => val >= 3) },
@@ -11,6 +11,7 @@ const getters = {
     token: (state) => { return state.user.token },
     roles: (state) => { return state.user.roles },
     name: (state) => { return state.user.name },
+    userId: (state) => { return state.user.userId },
     avatar: (state) => { return state.user.avatar },
     introduction: (state) => { return state.user.introduction },
 

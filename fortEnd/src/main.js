@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-11-30 20:27:17
+ * @LastEditTime: 2020-12-13 21:57:44
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -27,9 +27,26 @@ Vue.config.productionTip = false;
 import './icons';
 import '@/permission';
 import '@/registerServiceWorker';
+import { handleInit } from './socket-handle';
+
 
 socket.on('connect', async () => {
   console.log('socket连接成功');
+  let name = store.getters.name;
+  let userId = store.getters.userId;
+  let avatar = store.getters.avatar;
+  console.log(store.getters.name + "-" + store.getters.userId + "-");
+  if (userId) {
+    await handleInit({
+      socket,
+      store,
+      name,
+      userId,
+      avatar,
+      roomList: ['room1', 'room2']
+    });
+  }
+
 });
 
 
