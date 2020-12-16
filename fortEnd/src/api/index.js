@@ -2,7 +2,7 @@
  * @Description: axios请求配置列表
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:14
- * @LastEditTime: 2020-12-01 18:18:00
+ * @LastEditTime: 2020-12-16 22:58:34
  */
 
 import service from '@/api/request.js';
@@ -44,11 +44,11 @@ export function logout() {
 }
 
 // 获取历史消息
-export function getMsgHistory(username){
+export function getMsgHistory(roomid){
     return service({
         url: `/message/history`,
         method: 'get',
-        params: { username }
+        params: { roomid }
     })
 }
 

@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-12-13 21:57:44
+ * @LastEditTime: 2020-12-16 17:50:46
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -35,7 +35,6 @@ socket.on('connect', async () => {
   let name = store.getters.name;
   let userId = store.getters.userId;
   let avatar = store.getters.avatar;
-  console.log(store.getters.name + "-" + store.getters.userId + "-");
   if (userId) {
     await handleInit({
       socket,

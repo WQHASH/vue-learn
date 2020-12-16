@@ -3,17 +3,21 @@
  * @Author: wangqi
  * @Date: 2020-11-27 13:48:46
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-11-27 22:35:49
+ * @LastEditTime: 2020-12-16 18:00:10
  */
 
 const mongoose = require('mongoose');
 
 let MessageSchema = new mongoose.Schema({
     username: String,
+    src: String,
     msg: {
         type: String,
         default: "",
     },
+    roomid: String,
+    roomType: String,
+    type: String,
     time: {
         type: Date,
         default: Date.now()

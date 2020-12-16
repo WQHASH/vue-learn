@@ -2,7 +2,7 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-06-21 14:49:06
- * @LastEditTime: 2020-12-13 22:37:32
+ * @LastEditTime: 2020-12-16 23:03:01
  */
 
 import { getToken, setToken, removeToken } from '@/tools/auth';
@@ -13,12 +13,12 @@ import { loginUser, registerUser, logout, getInfo, getMsgHistory } from '@/api';
 const state = {
     token: getToken(),
     roles: [],
-    // name: getItem('name'),
-    // userId: getItem('userId'),
-    // avatar: getItem('avatar'),
-    name:"",
-    userId:"",
-    avatar:"",
+    name: getItem('name'),
+    userId: getItem('userId'),
+    avatar: getItem('avatar'),
+    // name:"",
+    // userId:"",
+    // avatar:"",
     introduction: '',
     // 聊天历史记录
     roomdetail: [],
@@ -76,7 +76,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             // 登录成功后获取token
             loginUser({ name, password }).then((response) => {
-                const { errno, token, user} = response;
+                const { errno, token, user } = response;
                 if (errno) { return resolve(response) };
 
                 //设置tokent到状态
@@ -85,9 +85,9 @@ const actions = {
                 context.commit("SET_USERID", user.id);
                 // 保存tokent到Cookie
                 setToken(token);
-                // setItem('name', user.name);
-                // setItem('userId', user.id);
-               
+                setItem('name', user.name);
+                setItem('userId', user.id);
+
                 resolve(response);
             }).catch((err) => {
                 reject(err);
@@ -104,15 +104,15 @@ const actions = {
     registerUserSubmit(context, userInfo) {
         return new Promise((resolve, reject) => {
             registerUser(userInfo).then((response) => {
-                const { errno, token, user} = response;
+                const { errno, token, user } = response;
                 if (errno) { return resolve(response) };
 
                 //设置tokent到状态
                 context.commit("SET_TOKEN", token);
                 context.commit("SET_USERID", user.id);
                 setToken(token);
-                // setItem('name', user.name);
-                // setItem('userId', user.id);
+                setItem('name', user.name);
+                setItem('userId', user.id);
 
                 resolve(response);
             }).catch((err) => {
@@ -197,9 +197,9 @@ const actions = {
      * @param {*}
      * @return {*}
      */
-    getMsgHistory(context) {
+    getMsgHistory(context, roomid) {
         return new Promise((resolve, reject) => {
-            getMsgHistory(context.state.name).then((res) => {
+            getMsgHistory(roomid).then((res) => {
                 let { errno, data } = res;
                 if (errno) { return reject("获取消息历史记录失败") };
                 context.commit("SET_ROOMDETAIL", data);

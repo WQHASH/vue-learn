@@ -2,94 +2,141 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-12-07 21:43:00
- * @LastEditTime: 2020-12-07 23:36:21
+ * @LastEditTime: 2020-12-16 23:15:37
 -->
 <template>
-  <div class="chat-aside">
-    <ul class="chat-list">
-      <li v-for="(item, index) in friendList" :key="index" class="list-info">
-        <img :src="imgUrl" alt="" class="user-portrait" />
-        <span class="user-name">{{ item.name }}</span>
-      </li>
-    </ul>
-    <div class="chat-add">
-      <p><i class="el-icon-plus"></i></p>
-    </div>
-  </div>
+	<div class="chat-aside">
+		<ul class="chat-list">
+			<li v-for="(item, index) in friendList" :key="index" @click="enterRoom(item)" class="list-info">
+				<img :src="imgUrl" alt="" class="user-portrait" />
+				<span class="user-name">{{ item.name }}</span>
+			</li>
+		</ul>
+		<div class="chat-add">
+			<p><i class="el-icon-plus"></i></p>
+		</div>
+	</div>
 </template>
 
 <script>
-import imgUrl from "@/assets/images/chat/user.png";
+import { mapState } from 'vuex'
+import socket from '@/socket'
+import imgUrl from '@/assets/images/chat/user.png'
 export default {
-  name: "ChatAside",
-  data() {
-    return {
-      msg: "群聊",
-      imgUrl: imgUrl,
-      friendList: [
-        {
-          id: "123",
-          name: "wq1",
-        },
-        {
-          id: "456",
-          name: "wq2",
-        },
-      ],
-    };
-  },
-};
+	name: 'ChatAside',
+	data() {
+		return {
+			msg: '群聊',
+			imgUrl: imgUrl,
+			friendList: [
+				{
+					roomid: 'room1',
+					name: '群聊1',
+				},
+				{
+					roomid: 'room2',
+					name: '群聊2',
+				},
+			],
+			//存储消息列表
+			msgList: [
+				{
+					username: '',
+					msg: undefined,
+				},
+			],
+		}
+	},
+
+	created() {},
+	computed: {
+		...mapState({
+			roomInfo: (state) => state.message.roomInfo,
+			name: (state) => state.user.name,
+		}),
+	},
+	methods: {
+		/**
+		 * @description: 进入房间列表
+		 * @param {*}
+		 * @return {*}
+		 */
+		async enterRoom(item) {
+			let type = item.roomid.includes('&') ? 'single' : 'group'
+			let roomInfo = {
+				name: this.name,
+				roomId: item.roomid,
+				roomType: type,
+			}
+			this.$store.commit('message/setRoomInfo', roomInfo)
+			// 进入房间
+			socket.emit('room', { name: this.name, roomid: item.roomid })
+
+			// 切换用户聊天记录
+			let msgHistory = await this.$store.dispatch(
+				'user/getMsgHistory',
+				this.roomInfo.roomId
+			)
+			this.msgList = msgHistory.map((val) => {
+				return { username: val.username, msg: val.msg }
+			})
+
+			//向父组件中传递数据
+			this.$emit('subMsgList', this.msgList)
+		},
+	},
+}
 </script>
 
 <style lang="scss">
 .chat-aside {
-  position: relative;
-  height: 100%;
+	position: relative;
+	height: 100%;
 
-  .chat-list {
-    max-height: 560px;
-    overflow: auto;
+	.chat-list {
+		max-height: 560px;
+		overflow: auto;
 
-    .list-info {
-      height: 60px;
-      line-height: 60px;
-      display: flex;
+		.list-info {
+			height: 60px;
+			line-height: 60px;
+			display: flex;
 
-      &:hover {
-        cursor: pointer;
-        background: #e9f4fd;
-      }
+			&:hover {
+				cursor: pointer;
+				background: #e9f4fd;
+			}
 
-      .user-portrait {
-        width: 38px;
-        height: 38px;
-        margin: 5px;
-        border-radius: 5px;
-      }
+			.user-portrait {
+				width: 38px;
+				height: 38px;
+				margin: 5px;
+				border-radius: 5px;
+			}
 
-      .user-name {
-        margin: 0px 4px;
-      }
-    }
-  }
+			.user-name {
+				margin: 0px 4px;
+			}
+		}
+	}
 
-  .chat-add {
-    text-align: center;
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
-    border-top: 1px solid #dadada;
-    cursor: pointer;
+	.chat-add {
+		text-align: center;
+		position: absolute;
+		bottom: 0px;
+		width: 100%;
+		border-top: 1px solid #dadada;
+		cursor: pointer;
 
-    p {
-      text-align: center;
+		p {
+			text-align: center;
 
-      .el-icon-plus {
-        font-size: 28px;
-        font-weight: 700;
-        color: #279bf1;
-      }
-    }
-  }
+			.el-icon-plus {
+				font-size: 28px;
+				font-weight: 700;
+				color: #279bf1;
+			}
+		}
+	}
 }
 </style>

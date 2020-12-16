@@ -2,26 +2,28 @@
  * @Description: socket.io入口
  * @Author: wangqi
  * @Date: 2020-11-24 20:42:21
- * @LastEditTime: 2020-12-15 17:57:34
+ * @LastEditTime: 2020-12-17 00:16:42
  */
 
 const Message = require('../models/message');
 const Socket = require('../models/Socket');
 const roomList = ['room1', 'room2'];
-
+let io;
 function websocket(server) {
     const users = {};
-    const io = require('socket.io')(server);
+    io = require('socket.io')(server);
 
     io.on('connection', async (socket) => {
         // 监听用户聊天内容
         socket.on('message', (data) => {
-            let { username, msg } = data;
+            console.log(data,"data")
+            let { username, src, msg, roomid, roomType, type, time } = data;
             // 存数据库
-            let message = new Message({ username, msg });
+            let message = new Message({ username, src, msg, roomid, roomType, type, time });
             message.save((err) => {
                 if (err) throw new Error('消息存失败了!');
-                socket.broadcast.emit('message', { username, msg });
+                console.log(roomid,"roomidxxxcsaca")
+                io.to(roomid).emit('message', { username, src, msg, roomid, roomType, type, time });
             });
 
         });
@@ -36,27 +38,17 @@ function websocket(server) {
                 return;
             }
             let socketRes = await Socket.findOne({ ip, browser, os, userId }).exec();
-            let obj = new Socket({
-                ip,
-                userId,
-                os,
-                browser,
-                ua,
-                socketId: socket.id,
-            });
+
+            let obj = new Socket({ ip, userId, os, browser, ua, socketId: socket.id });
+
             if (!socketRes) {
-                let socketData = {
-                    ip,
-                    userId,
-                    os,
-                    browser,
-                    ua,
-                    socketId: socket.id,
-                };
+
+                let socketData = { ip, userId, os, browser, ua, socketId: socket.id, };
+
                 const addSocket = await new Socket(socketData).save();
             } else {
-                // 更新 socketId
-                let updataRes = await Socket.update({ _id: socketRes._id }, { socketId: socket.id }).exec();
+                // 更新 socketId [因为socket每次都会生成一个随机的唯一标识]
+                let updataRes = await Socket.updateOne({ _id: socketRes._id }, { socketId: socket.id }).exec();
             }
 
             if (!name) { return };
@@ -86,13 +78,39 @@ function websocket(server) {
         });
 
         // 退出房间
+        socket.on('roomout', async (user) => {
+            handleLogoutRoom(socket, users);
+        });
 
         // socket销毁
+        socket.on('disconnect', async () => {
+            handleLogoutRoom(socket, users);
+        });
 
     });
-
 };
 
+let handleLogoutRoom = async (socket, users) => {
+    try {
+        ['room1', 'room2'].forEach(async (item) => {
+            const roomid = item;
+            const name = socket.name;
+            if (users[roomid] && users[roomid].hasOwnProperty(name)) {
+                delete users[roomid][name];
+
+                let onlineUsers = {};
+                for (let item in users[roomid]) {
+                    onlineUsers[item] = {};
+                    onlineUsers[item].src = users[roomid][item].src;
+                };
+                io.to(roomid).emit('roomout', { onlineUsers, roomid });
+                socket.leave(roomid);
+            }
+        });
+    } catch (error) {
+        global.logger.info('断开socket连接失败!')
+    }
+};
 
 module.exports = websocket;
 
