@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-12-09 00:04:48
+ * @LastEditTime: 2020-12-18 14:15:25
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -44,7 +44,7 @@ app.use((req, res, next) => {
     }
 
     // let apiUrl = ['/user/signup', '/user/signin', '/user/info', '/message/history'];
-    let apiUrl = ['/user/signin'];
+    let apiUrl = ['/user/signin', '/user/signup'];
     let isCludes = apiUrl.includes(pathUrl);
     if (isCludes) {
         try {

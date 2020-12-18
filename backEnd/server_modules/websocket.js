@@ -2,7 +2,7 @@
  * @Description: socket.io入口
  * @Author: wangqi
  * @Date: 2020-11-24 20:42:21
- * @LastEditTime: 2020-12-17 00:16:42
+ * @LastEditTime: 2020-12-18 17:23:59
  */
 
 const Message = require('../models/message');
@@ -11,20 +11,25 @@ const roomList = ['room1', 'room2'];
 let io;
 function websocket(server) {
     const users = {};
+    const roomLink = {};
     io = require('socket.io')(server);
 
     io.on('connection', async (socket) => {
         // 监听用户聊天内容
-        socket.on('message', (data) => {
-            console.log(data,"data")
+        socket.on('message', async (data) => {
+            console.log(data, "data")
             let { username, src, msg, roomid, roomType, type, time } = data;
             // 存数据库
             let message = new Message({ username, src, msg, roomid, roomType, type, time });
-            message.save((err) => {
-                if (err) throw new Error('消息存失败了!');
-                console.log(roomid,"roomidxxxcsaca")
-                io.to(roomid).emit('message', { username, src, msg, roomid, roomType, type, time });
-            });
+            // message.save((err) => {
+            //     if (err) throw new Error('消息存失败了!');
+            //     console.log(roomid,"roomidxxxcsaca")
+            //     io.to(roomid).emit('message', { username, src, msg, roomid, roomType, type, time });
+            // });
+
+            let msgRes = await message.save();
+            console.log(socket.rooms, "rooms")
+            io.to(roomid).emit('message', msgRes);
 
         });
 
@@ -39,7 +44,7 @@ function websocket(server) {
             }
             let socketRes = await Socket.findOne({ ip, browser, os, userId }).exec();
 
-            let obj = new Socket({ ip, userId, os, browser, ua, socketId: socket.id });
+            // let obj = new Socket({ ip, userId, os, browser, ua, socketId: socket.id });
 
             if (!socketRes) {
 
@@ -64,7 +69,7 @@ function websocket(server) {
             };
             // users[roomid][name] = Object.assign({}, { socketid: socket.id }, user);
             users[roomid][name] = Object.assign(user, { socketid: socket.id });
-
+            // roomLink[name] = socket.id;
             // 进行群聊会话
             socket.join(roomid);
             let onlineUsers = {};

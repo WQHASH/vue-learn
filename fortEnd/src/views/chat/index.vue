@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2020-12-17 00:16:08
+ * @LastEditTime: 2020-12-18 16:01:35
 -->
 <template>
 	<div class="chat-module">
@@ -102,7 +102,8 @@ export default {
 				type: 'text',
 				time: new Date(),
 			}
-			// this.msgList.push(msg)
+			console.log(msg, "msg");
+			this.msgList.push(msg)
 			socket.emit('message', msg)
 			this.msg = ''
 		},

@@ -2,7 +2,7 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-06-21 14:49:06
- * @LastEditTime: 2020-12-16 23:03:01
+ * @LastEditTime: 2020-12-18 14:22:54
  */
 
 import { getToken, setToken, removeToken } from '@/tools/auth';
@@ -104,7 +104,7 @@ const actions = {
     registerUserSubmit(context, userInfo) {
         return new Promise((resolve, reject) => {
             registerUser(userInfo).then((response) => {
-                const { errno, token, user } = response;
+                const { errno, token, userInfo: user } = response;
                 if (errno) { return resolve(response) };
 
                 //设置tokent到状态
