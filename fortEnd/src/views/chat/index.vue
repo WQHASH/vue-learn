@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2020-12-18 16:01:35
+ * @LastEditTime: 2020-12-19 21:08:09
 -->
 <template>
 	<div class="chat-module">
@@ -37,12 +37,12 @@
 </template>
 
 <script>
-import socket from '@/socket'
-import { mapState } from 'vuex'
-import { getToken } from '@/tools/auth'
-import { getMsgHistory } from '@/api/index'
+import socket from '@/socket';
+import { mapGetters, mapState } from 'vuex';
+import { getToken } from '@/tools/auth';
+import { getMsgHistory } from '@/api/index';
 
-import ChatAside from './ChatAside'
+import ChatAside from './ChatAside';
 export default {
 	data() {
 		return {
@@ -57,34 +57,52 @@ export default {
 					msg: undefined,
 				},
 			],
-		}
+		};
 	},
 	computed: {
 		...mapState({
 			roomInfo: (state) => state.message.roomInfo,
+			roomDetail: (state) => state.message.roomDetail,
 		}),
+		...mapGetters(['msgLen']),
 	},
-	components: {
-		ChatAside,
+
+	watch: {
+		// roomDetail: {
+		// 	handler(newV, oldV) {
+		// 		console.log(newV, oldV, 'handler')
+		// 	},
+		// 	deep: true,
+		// 	immediate: true,
+		// },
+		msgLen(newV, oldV) {
+			console.log(this.roomInfo.roomId, 'roomId');
+			this.msgList = this.$store.state.message.roomDetail[
+				this.roomInfo.roomId
+			];
+		},
 	},
 	async mounted() {
-		let userInfo = await this.$store.dispatch('user/getInfo')
-		this.username = userInfo.name
+		let userInfo = await this.$store.dispatch('user/getInfo');
+		this.username = userInfo.name;
 		// 获取用户聊天记录
 		let msgHistory = await this.$store.dispatch(
-			'user/getMsgHistory',
+			'message/getMsgHistory',
 			this.roomInfo.roomId
-		)
+		);
 
 		this.msgList = msgHistory.map((val) => {
-			return { username: val.username, msg: val.msg }
-		})
+			return {
+				username: val.username,
+				msg: val.msg,
+				roomid: this.roomInfo.roomId,
+			};
+		});
 
-		socket.on('message', (data) => {
-			// 将消息存储store, 下次回显列表
-			this.msgList.push(data)
-			this.$store.commit('user/SET_ROOMDETAIL', this.msgList)
-		})
+		// this.$store.commit('message/setRoomDetailAfter', {
+		// 	roomid: this.roomInfo.roomId,
+		// 	msgs: this.msgList,
+		// });
 	},
 	methods: {
 		/**
@@ -101,11 +119,9 @@ export default {
 				roomType: this.roomInfo.roomType,
 				type: 'text',
 				time: new Date(),
-			}
-			console.log(msg, "msg");
-			this.msgList.push(msg)
-			socket.emit('message', msg)
-			this.msg = ''
+			};
+			socket.emit('message', msg);
+			this.msg = '';
 		},
 
 		/**
@@ -114,10 +130,14 @@ export default {
 		 * @return {*}
 		 */
 		recMsgList(data) {
-			this.msgList = data
+			this.msgList = data;
 		},
 	},
-}
+
+	components: {
+		ChatAside,
+	},
+};
 </script>
 
 <style lang="scss">

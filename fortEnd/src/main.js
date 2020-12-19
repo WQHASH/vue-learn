@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-12-16 17:50:46
+ * @LastEditTime: 2020-12-19 19:42:52
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -45,6 +45,23 @@ socket.on('connect', async () => {
       roomList: ['room1', 'room2']
     });
   }
+
+});
+
+socket.on('message', (obj) => {
+  // 当前登录用户
+  let userName = store.state.user.name;
+  const { username, msg, roomid } = obj;
+  //  当前登录用户 和 发消息的用户 是否是同一个
+  // if (userName === username) {
+  //   console.log("自己");
+
+  // } else {
+  //   store.commit('message/setRoomDetailAfter', { roomid, msgs: [obj] });
+  //   console.log("他人");
+
+  // }
+  store.commit('message/setRoomDetailAfter', { roomid, msgs: [obj] });
 
 });
 

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-12-07 21:43:00
- * @LastEditTime: 2020-12-16 23:15:37
+ * @LastEditTime: 2020-12-19 21:14:21
 -->
 <template>
 	<div class="chat-aside">
@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import socket from '@/socket'
-import imgUrl from '@/assets/images/chat/user.png'
+import { mapGetters, mapState } from 'vuex';
+import socket from '@/socket';
+import imgUrl from '@/assets/images/chat/user.png';
 export default {
 	name: 'ChatAside',
 	data() {
@@ -45,14 +45,15 @@ export default {
 					msg: undefined,
 				},
 			],
-		}
+		};
 	},
 
 	created() {},
 	computed: {
 		...mapState({
-			roomInfo: (state) => state.message.roomInfo,
 			name: (state) => state.user.name,
+			roomInfo: (state) => state.message.roomInfo,
+			roomDetail: (state) => state.message.roomDetail,
 		}),
 	},
 	methods: {
@@ -62,30 +63,34 @@ export default {
 		 * @return {*}
 		 */
 		async enterRoom(item) {
-			let type = item.roomid.includes('&') ? 'single' : 'group'
+			let type = item.roomid.includes('&') ? 'single' : 'group';
 			let roomInfo = {
 				name: this.name,
 				roomId: item.roomid,
 				roomType: type,
-			}
-			this.$store.commit('message/setRoomInfo', roomInfo)
+			};
+			this.$store.commit('message/setRoomInfo', roomInfo);
 			// 进入房间
-			socket.emit('room', { name: this.name, roomid: item.roomid })
+			socket.emit('room', { name: this.name, roomid: item.roomid });
 
 			// 切换用户聊天记录
 			let msgHistory = await this.$store.dispatch(
-				'user/getMsgHistory',
+				'message/getMsgHistory',
 				this.roomInfo.roomId
-			)
+			);
 			this.msgList = msgHistory.map((val) => {
-				return { username: val.username, msg: val.msg }
-			})
+				return {
+					username: val.username,
+					msg: val.msg,
+					roomid: this.roomInfo.roomId,
+				};
+			});
 
 			//向父组件中传递数据
-			this.$emit('subMsgList', this.msgList)
+			this.$emit('subMsgList', this.msgList);
 		},
 	},
-}
+};
 </script>
 
 <style lang="scss">

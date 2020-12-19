@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-06-17 17:37:24
- * @LastEditTime: 2020-12-13 21:09:26
+ * @LastEditTime: 2020-12-19 18:12:22
  */
 const getters = {
     filterCounts: (state, gettersRoot) => { return state.app.counts.filter((val) => val >= 3) },
@@ -17,11 +17,13 @@ const getters = {
 
     // 聊天历史记录
     roomdetail: state => state.user.roomdetail,
-
+    msgLen: state => { 
+        return Object.values(state.message.roomDetail).flat().length
+    },
     permissionRoutes: (state) => { return state.permission.routes },
     // topology
     topologyDiagram: state => state.topology.topologyDiagram,
-   
+
 
 }
 

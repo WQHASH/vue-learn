@@ -2,7 +2,7 @@
  * @Description: socket.io入口
  * @Author: wangqi
  * @Date: 2020-11-24 20:42:21
- * @LastEditTime: 2020-12-18 17:23:59
+ * @LastEditTime: 2020-12-19 18:53:09
  */
 
 const Message = require('../models/message');
@@ -28,7 +28,6 @@ function websocket(server) {
             // });
 
             let msgRes = await message.save();
-            console.log(socket.rooms, "rooms")
             io.to(roomid).emit('message', msgRes);
 
         });

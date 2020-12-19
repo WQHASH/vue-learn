@@ -2,7 +2,7 @@
  * @Description: 用户信息
  * @Author: wangqi
  * @Date: 2020-06-21 14:49:06
- * @LastEditTime: 2020-12-18 14:22:54
+ * @LastEditTime: 2020-12-19 21:03:47
  */
 
 import { getToken, setToken, removeToken } from '@/tools/auth';
@@ -42,11 +42,6 @@ const mutations = {
     },
     SET_ROLES(state, roles) {
         state.roles = roles;
-    },
-
-    // 设置消息记录
-    SET_ROOMDETAIL(state, messages) {
-        state.roomdetail = messages;
     },
 
     // 用户退出
@@ -191,26 +186,6 @@ const actions = {
             resolve();
         });
     },
-
-    /**
-     * @description: 获取消息历史记录
-     * @param {*}
-     * @return {*}
-     */
-    getMsgHistory(context, roomid) {
-        return new Promise((resolve, reject) => {
-            getMsgHistory(roomid).then((res) => {
-                let { errno, data } = res;
-                if (errno) { return reject("获取消息历史记录失败") };
-                context.commit("SET_ROOMDETAIL", data);
-                resolve(data);
-            }).catch((err) => {
-                reject(err);
-            });
-        });
-    },
-
-
 
 };
 
