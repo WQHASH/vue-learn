@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2020-12-19 21:08:09
+ * @LastEditTime: 2020-12-19 23:56:21
 -->
 <template>
 	<div class="chat-module">
@@ -76,7 +76,6 @@ export default {
 		// 	immediate: true,
 		// },
 		msgLen(newV, oldV) {
-			console.log(this.roomInfo.roomId, 'roomId');
 			this.msgList = this.$store.state.message.roomDetail[
 				this.roomInfo.roomId
 			];

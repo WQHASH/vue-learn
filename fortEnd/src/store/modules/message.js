@@ -2,7 +2,7 @@
  * @Description: 消息模块
  * @Author: wangqi
  * @Date: 2020-12-16 21:28:47
- * @LastEditTime: 2020-12-19 21:39:49
+ * @LastEditTime: 2020-12-19 23:56:02
  */
 import { getMsgHistory } from '@/api';
 
@@ -38,7 +38,6 @@ const mutations = {
     },
 
     setRoomDetailBefore(state, { roomid, data }) {
-        console.log(roomid, data, "before");
         // let list = state.roomDetail[roomid] || [];
         let list = [];
         let newData = data.concat(list);
