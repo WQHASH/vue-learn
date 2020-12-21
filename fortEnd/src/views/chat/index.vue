@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2020-12-19 23:56:21
+ * @LastEditTime: 2020-12-21 17:15:14
 -->
 <template>
 	<div class="chat-module">
@@ -64,21 +64,17 @@ export default {
 			roomInfo: (state) => state.message.roomInfo,
 			roomDetail: (state) => state.message.roomDetail,
 		}),
-		...mapGetters(['msgLen']),
 	},
 
 	watch: {
-		// roomDetail: {
-		// 	handler(newV, oldV) {
-		// 		console.log(newV, oldV, 'handler')
-		// 	},
-		// 	deep: true,
-		// 	immediate: true,
-		// },
-		msgLen(newV, oldV) {
-			this.msgList = this.$store.state.message.roomDetail[
-				this.roomInfo.roomId
-			];
+		roomDetail: {
+			deep: true,
+			immediate: true,
+			handler(newV, oldV) {
+				this.msgList = this.$store.state.message.roomDetail[
+					this.roomInfo.roomId
+				];
+			},
 		},
 	},
 	async mounted() {

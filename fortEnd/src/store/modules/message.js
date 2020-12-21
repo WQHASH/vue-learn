@@ -2,7 +2,7 @@
  * @Description: 消息模块
  * @Author: wangqi
  * @Date: 2020-12-16 21:28:47
- * @LastEditTime: 2020-12-19 23:56:02
+ * @LastEditTime: 2020-12-21 17:37:10
  */
 import { getMsgHistory } from '@/api';
 
@@ -17,8 +17,8 @@ const state = {
     },
     //存放聊天记录
     roomDetail: {
-        "room1": [],
-        "room2": [],
+        // "room1": [],
+        // "room2": [],
     }
 
 }

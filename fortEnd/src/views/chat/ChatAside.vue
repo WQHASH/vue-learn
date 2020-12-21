@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-12-07 21:43:00
- * @LastEditTime: 2020-12-19 21:14:21
+ * @LastEditTime: 2020-12-21 16:48:39
 -->
 <template>
 	<div class="chat-aside">
 		<ul class="chat-list">
 			<li v-for="(item, index) in friendList" :key="index" @click="enterRoom(item)" class="list-info">
-				<img :src="imgUrl" alt="" class="user-portrait" />
+				<img :src="imgs['imgUrl']" alt="" class="user-portrait" />
 				<span class="user-name">{{ item.name }}</span>
 			</li>
 		</ul>
@@ -21,13 +21,14 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 import socket from '@/socket';
-import imgUrl from '@/assets/images/chat/user.png';
 export default {
 	name: 'ChatAside',
 	data() {
 		return {
 			msg: '群聊',
-			imgUrl: imgUrl,
+			imgs: {
+				imgUrl: 'user.png',
+			},
 			friendList: [
 				{
 					roomid: 'room1',
@@ -47,7 +48,10 @@ export default {
 			],
 		};
 	},
-
+	mounted() {
+		//  批量引入图片
+		this.introduceImgs();
+	},
 	created() {},
 	computed: {
 		...mapState({
@@ -88,6 +92,17 @@ export default {
 
 			//向父组件中传递数据
 			this.$emit('subMsgList', this.msgList);
+		},
+
+		/**
+		 * @description: 批量引入图片
+		 * @param {*}
+		 * @return {*}
+		 */
+		introduceImgs() {
+			for (let [key, val] of Object.entries(this.imgs)) {
+				this.imgs[key] = require(`@/assets/images/chat/${val}`);
+			}
 		},
 	},
 };
