@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2020-12-21 17:15:14
+ * @LastEditTime: 2020-12-22 17:29:59
 -->
 <template>
 	<div class="chat-module">
@@ -26,10 +26,25 @@
 							</li>
 						</ul>
 					</el-main>
-					<el-footer style="height: 40px; line-height: 40px">
-						<el-input v-model="msg" clearable placeholder="请输入内容" class="msg-ipt"></el-input>
-						<el-button class="msg-send" @click="sendMsg">发送消息</el-button>
+					<el-footer style="height:80px;">
+						<div class="not-words-msg">
+							<span @click="imgupload">
+								<i class="el-icon-camera-solid"></i>
+							</span>
+							<span>
+								<svg-icon icon-class="smile" class-name="active" />
+							</span>
+						</div>
+						<div class="hide-area">
+							<input id="inputFile" name="inputFile" type="file" @change="fileup" multiple="mutiple" accept="image/gif,image/jpeg,image/png,image/webp,image/jpg;capture=camera" />
+						</div>
+
+						<div class="msg-send-wrap">
+							<el-input v-model="msg" clearable placeholder="请输入内容" class="msg-ipt"></el-input>
+							<el-button class="msg-send" @click="sendMsg">发送消息</el-button>
+						</div>
 					</el-footer>
+
 				</el-container>
 			</el-container>
 		</el-container>
@@ -61,6 +76,7 @@ export default {
 	},
 	computed: {
 		...mapState({
+			userId: (state) => state.user.userId,
 			roomInfo: (state) => state.message.roomInfo,
 			roomDetail: (state) => state.message.roomDetail,
 		}),
@@ -127,6 +143,69 @@ export default {
 		recMsgList(data) {
 			this.msgList = data;
 		},
+
+		/**
+		 * @description: 文件上传点击
+		 * @param {*}
+		 * @return {*}
+		 */
+		imgupload() {
+			const file = document.getElementById('inputFile');
+			file.click();
+		},
+
+		/**
+		 * @description: 文件上传
+		 * @param {*}
+		 * @return {*}
+		 */
+		async fileup() {
+			const fileContext = document.getElementById('inputFile').files[0];
+			console.log(fileContext, '图片上传');
+			if (!fileContext) {
+				this.$message({
+					message: '警告哦，这是一条警告消息',
+					type: 'warning',
+				});
+				return;
+			}
+
+			let formData = new window.FormData();
+			formData.append('file', fileContext);
+
+			let fileReader = new window.FileReader();
+			fileReader.readAsDataURL(fileContext);
+			fileReader.onload = () => {
+				let img = new Image();
+				img.src = fileReader.result;
+				img.onload = async () => {
+					let obj = {
+						username: this.username,
+						src: '',
+						msg: '',
+						img: `${fileReader.result}?width=${img.width}&height=${img.height}`,
+						roomid: this.roomInfo.roomId,
+						roomType: this.roomInfo.roomType,
+						type: 'img',
+						time: new Date(),
+					};
+
+					this.$store.commit('message/setRoomDetailAfter', {
+						roomid: this.roomInfo.roomId,
+						msgs: [obj],
+					});
+
+					// 接口的发送
+					let imgurl = await this.$store.dispatch(
+						'message/uploadImg',
+						formData
+					);
+					console.log(imgurl, 'imgurlxx');
+
+					// socket.emit('message')发送
+				};
+			};
+		},
 	},
 
 	components: {
@@ -137,7 +216,7 @@ export default {
 
 <style lang="scss">
 .chat-module {
-	width: 1000px;
+	width: 500px;
 	border: 1px solid;
 	margin: auto;
 
@@ -168,12 +247,28 @@ export default {
 			}
 
 			.el-footer {
-				display: flex;
-
-				.msg-send {
-					height: 30px;
-					position: relative;
-					top: 5px;
+				.not-words-msg {
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-start;
+					span {
+						margin: 5px 10px;
+						font-size: 22px;
+					}
+				}
+				.hide-area {
+					display: none;
+				}
+				.msg-send-wrap {
+					.msg-ipt {
+						width: calc(100% - 100px);
+					}
+					.msg-send {
+						height: 30px;
+						position: relative;
+						left: 2px;
+						top: 1px;
+					}
 				}
 			}
 		}

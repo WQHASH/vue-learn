@@ -2,7 +2,7 @@
  * @Description: axios请求配置列表
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:14
- * @LastEditTime: 2020-12-16 22:58:34
+ * @LastEditTime: 2020-12-22 17:22:06
  */
 
 import service from '@/api/request.js';
@@ -44,11 +44,21 @@ export function logout() {
 }
 
 // 获取历史消息
-export function getMsgHistory(roomid){
+export function getMsgHistory(roomid) {
     return service({
         url: `/message/history`,
         method: 'get',
         params: { roomid }
+    })
+}
+
+// 上传图片
+export function uploadImg(data) {
+    return service({
+        url: `/message/uploadImg`,
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        data
     })
 }
 
