@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-12-07 21:43:00
- * @LastEditTime: 2020-12-21 16:48:39
+ * @LastEditTime: 2021-01-03 21:44:04
 -->
 <template>
 	<div class="chat-aside">
@@ -86,6 +86,7 @@ export default {
 				return {
 					username: val.username,
 					msg: val.msg,
+					img: val.img,
 					roomid: this.roomInfo.roomId,
 				};
 			});

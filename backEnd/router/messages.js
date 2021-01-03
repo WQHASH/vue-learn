@@ -2,7 +2,7 @@
  * @Description: 获取消息
  * @Author: wangqi
  * @Date: 2020-11-27 22:42:38
- * @LastEditTime: 2020-12-24 12:37:09
+ * @LastEditTime: 2021-01-03 21:19:02
  */
 const express = require('express');
 const path = require('path');
@@ -11,6 +11,8 @@ const { rmDirFiles } = require('../utils/cmd');
 const multer = require('multer');
 const Message = require('../models/message');
 const router = express.Router();
+
+const urlPath = './public/files';
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -71,14 +73,34 @@ router.post('/uploadImgs', (req, res) => {
 
 
 router.post('/uploadImg', upload.single('file'), function (req, res, next) {
-    global.logger.info(req, "req111");
-    global.logger.info(res, "res222");
     // req.file 是 `avatar` 文件的信息
     // req.body 将具有文本域数据，如果存在的话
-    res.json({
-        errno: 0,
-        data: { "name": "wq" }
-    })
+    let file = req.file;
+    if (file) {
+        let img;
+        let { filename, size, path: localPath } = file;
+        let staticUrl = path.join('./static_temp', filename);
+        if (process.env.NODE_ENV === 'production') {
+            global.logger.info('生产环境下');
+        } else {
+            fse.copySync('./static_temp', urlPath);
+            img = path.join(urlPath, filename);
+            img = img.split(path.sep).join('/');
+            rmDirFiles('./static_temp');
+        }
+        res.json({
+            errno: 0,
+            data: img,
+            msg: "上传成功!"
+        });
+    } else {
+        res.json({
+            errno: 500,
+            msg: '上传文件失败!'
+        });
+    }
+
+
 })
 
 module.exports = router;

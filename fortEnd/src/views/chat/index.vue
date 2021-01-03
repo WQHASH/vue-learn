@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2020-12-22 17:29:59
+ * @LastEditTime: 2021-01-03 21:41:51
 -->
 <template>
 	<div class="chat-module">
@@ -22,7 +22,9 @@
 								<span class="username">
 									{{ msg.username ? ` ${msg.username}: ` : msg.username }}
 								</span>
-								<p class="msg-body">{{ msg.msg }}</p>
+
+								<p class="msg-body" v-if="msg.msg">{{ msg.msg }}</p>
+								<img :src="msg.img" v-else>
 							</li>
 						</ul>
 					</el-main>
@@ -87,9 +89,10 @@ export default {
 			deep: true,
 			immediate: true,
 			handler(newV, oldV) {
-				this.msgList = this.$store.state.message.roomDetail[
-					this.roomInfo.roomId
-				];
+				// this.msgList = this.$store.state.message.roomDetail[
+				// 	this.roomInfo.roomId
+				// ];
+				this.msgList = newV[this.roomInfo.roomId];
 			},
 		},
 	},
@@ -106,6 +109,7 @@ export default {
 			return {
 				username: val.username,
 				msg: val.msg,
+				img: val.img,
 				roomid: this.roomInfo.roomId,
 			};
 		});
@@ -161,7 +165,7 @@ export default {
 		 */
 		async fileup() {
 			const fileContext = document.getElementById('inputFile').files[0];
-			console.log(fileContext, '图片上传');
+			// console.log(fileContext, '图片上传');
 			if (!fileContext) {
 				this.$message({
 					message: '警告哦，这是一条警告消息',
@@ -183,7 +187,8 @@ export default {
 						username: this.username,
 						src: '',
 						msg: '',
-						img: `${fileReader.result}?width=${img.width}&height=${img.height}`,
+						// img: `${fileReader.result}?width=${img.width}&height=${img.height}`,
+						img: '',
 						roomid: this.roomInfo.roomId,
 						roomType: this.roomInfo.roomType,
 						type: 'img',
@@ -200,9 +205,11 @@ export default {
 						'message/uploadImg',
 						formData
 					);
-					console.log(imgurl, 'imgurlxx');
-
-					// socket.emit('message')发送
+					// imgurl.code == 500另外处理
+					// console.log(imgurl, 'imgurlxx');
+					obj.img = `${imgurl.data}`;
+					// 发送
+					socket.emit('message', obj);
 				};
 			};
 		},
@@ -243,6 +250,10 @@ export default {
 					font-size: 18px;
 					font-weight: 700;
 					display: inline-block;
+				}
+				img {
+					width: 200px;
+					height: 200px;
 				}
 			}
 

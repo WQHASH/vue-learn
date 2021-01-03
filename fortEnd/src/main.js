@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2020-12-19 19:42:52
+ * @LastEditTime: 2021-01-03 20:56:24
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -51,7 +51,7 @@ socket.on('connect', async () => {
 socket.on('message', (obj) => {
   // 当前登录用户
   let userName = store.state.user.name;
-  const { username, msg, roomid } = obj;
+  const { username, msg, img, roomid } = obj;
   //  当前登录用户 和 发消息的用户 是否是同一个
   // if (userName === username) {
   //   console.log("自己");
