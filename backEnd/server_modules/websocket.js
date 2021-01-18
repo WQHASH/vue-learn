@@ -2,7 +2,7 @@
  * @Description: socket.io入口
  * @Author: wangqi
  * @Date: 2020-11-24 20:42:21
- * @LastEditTime: 2021-01-03 21:40:51
+ * @LastEditTime: 2021-01-18 17:37:35
  */
 
 const Message = require('../models/message');
@@ -17,11 +17,10 @@ function websocket(server) {
     io.on('connection', async (socket) => {
         // 监听用户聊天内容
         socket.on('message', async (data) => {
-            global.logger.info(data,"ffffggggg")
             let { username, src, msg, img, roomid, roomType, type, time } = data;
             // 存数据库
             let message = new Message({ username, src, msg, img, roomid, roomType, type, time });
-            message.img = `http://localhost:3000/${img}`;
+            // message.img = `http://localhost:3000/${img}`;
             // message.save((err) => {
             //     if (err) throw new Error('消息存失败了!');
             //     console.log(roomid,"roomidxxxcsaca")

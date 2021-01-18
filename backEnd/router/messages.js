@@ -2,7 +2,7 @@
  * @Description: 获取消息
  * @Author: wangqi
  * @Date: 2020-11-27 22:42:38
- * @LastEditTime: 2021-01-03 21:19:02
+ * @LastEditTime: 2021-01-18 17:32:52
  */
 const express = require('express');
 const path = require('path');
@@ -85,7 +85,7 @@ router.post('/uploadImg', upload.single('file'), function (req, res, next) {
         } else {
             fse.copySync('./static_temp', urlPath);
             img = path.join(urlPath, filename);
-            img = img.split(path.sep).join('/');
+            img = `/api/` + img.split(path.sep).join('/');
             rmDirFiles('./static_temp');
         }
         res.json({

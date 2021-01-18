@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2021-01-03 21:41:51
+ * @LastEditTime: 2021-01-18 17:37:27
 -->
 <template>
 	<div class="chat-module">
@@ -130,6 +130,7 @@ export default {
 				username: this.username,
 				src: '',
 				msg: this.msg,
+				img: '',
 				roomid: this.roomInfo.roomId,
 				roomType: this.roomInfo.roomType,
 				type: 'text',
@@ -165,7 +166,6 @@ export default {
 		 */
 		async fileup() {
 			const fileContext = document.getElementById('inputFile').files[0];
-			// console.log(fileContext, '图片上传');
 			if (!fileContext) {
 				this.$message({
 					message: '警告哦，这是一条警告消息',
@@ -195,11 +195,6 @@ export default {
 						time: new Date(),
 					};
 
-					this.$store.commit('message/setRoomDetailAfter', {
-						roomid: this.roomInfo.roomId,
-						msgs: [obj],
-					});
-
 					// 接口的发送
 					let imgurl = await this.$store.dispatch(
 						'message/uploadImg',
@@ -207,7 +202,7 @@ export default {
 					);
 					// imgurl.code == 500另外处理
 					// console.log(imgurl, 'imgurlxx');
-					obj.img = `${imgurl.data}`;
+					obj.img = `${imgurl.data}?width=${img.width}&height=${img.height}`;
 					// 发送
 					socket.emit('message', obj);
 				};
@@ -223,7 +218,7 @@ export default {
 
 <style lang="scss">
 .chat-module {
-	width: 500px;
+	// width: 500px;
 	border: 1px solid;
 	margin: auto;
 
