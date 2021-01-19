@@ -2,7 +2,7 @@
  * @Description: 消息模块
  * @Author: wangqi
  * @Date: 2020-12-16 21:28:47
- * @LastEditTime: 2020-12-22 17:39:20
+ * @LastEditTime: 2021-01-19 10:48:08
  */
 import { getMsgHistory, uploadImg } from '@/api';
 
@@ -78,7 +78,7 @@ const actions = {
      * @param {*}
      * @return {*}
      */
-    uploadImg({ }, data) {
+    uploadImg(context, data) {
         return new Promise((resolve, reject) => {
             uploadImg(data).then((res) => {
                 resolve(res);

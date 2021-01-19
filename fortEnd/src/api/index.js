@@ -2,7 +2,7 @@
  * @Description: axios请求配置列表
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:14
- * @LastEditTime: 2020-12-22 17:22:06
+ * @LastEditTime: 2021-01-19 17:44:25
  */
 
 import service from '@/api/request.js';
@@ -57,7 +57,16 @@ export function uploadImg(data) {
     return service({
         url: `/message/uploadImg`,
         method: 'post',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: { 'Content-Type': 'multipart/form-data' },
+        data
+    })
+}
+
+export function uploadRecording(data) {
+    return service({
+        url: `/message/uploadRecording`,
+        method: 'post',
+        headers: { 'Content-Type': 'multipart/form-data' },
         data
     })
 }

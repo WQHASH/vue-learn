@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2021-01-18 17:37:27
+ * @LastEditTime: 2021-01-19 17:52:40
 -->
 <template>
 	<div class="chat-module">
@@ -36,6 +36,10 @@
 							<span>
 								<svg-icon icon-class="smile" class-name="active" />
 							</span>
+							<span>
+								<i @click="startRecording(rc)" class="el-icon-microphone"></i>
+								<i @click="endRecording(rc)" class="el-icon-microphone"></i>
+							</span>
 						</div>
 						<div class="hide-area">
 							<input id="inputFile" name="inputFile" type="file" @change="fileup" multiple="mutiple" accept="image/gif,image/jpeg,image/png,image/webp,image/jpg;capture=camera" />
@@ -54,12 +58,14 @@
 </template>
 
 <script>
+import Recorderx, { ENCODE_TYPE } from 'recorderx';
 import socket from '@/socket';
 import { mapGetters, mapState } from 'vuex';
 import { getToken } from '@/tools/auth';
-import { getMsgHistory } from '@/api/index';
+import { getMsgHistory, uploadRecording } from '@/api/index';
 
 import ChatAside from './ChatAside';
+
 export default {
 	data() {
 		return {
@@ -74,8 +80,12 @@ export default {
 					msg: undefined,
 				},
 			],
+			rc: new Recorderx(),
+			audioaccet: '',
+			audioData: '你好啊，你是谁, hello man!',
 		};
 	},
+
 	computed: {
 		...mapState({
 			userId: (state) => state.user.userId,
@@ -96,7 +106,12 @@ export default {
 			},
 		},
 	},
+
 	async mounted() {
+		// const rc = new Recorderx();
+		// 检测当前环境是否支持麦克风权限
+		let havAuthority = await this.checkReaderAuthority(this.rc);
+
 		let userInfo = await this.$store.dispatch('user/getInfo');
 		this.username = userInfo.name;
 		// 获取用户聊天记录
@@ -119,6 +134,7 @@ export default {
 		// 	msgs: this.msgList,
 		// });
 	},
+
 	methods: {
 		/**
 		 * @description: 发送消息
@@ -179,7 +195,8 @@ export default {
 
 			let fileReader = new window.FileReader();
 			fileReader.readAsDataURL(fileContext);
-			fileReader.onload = () => {
+			fileReader.onload = (...e) => {
+				console.log(e);
 				let img = new Image();
 				img.src = fileReader.result;
 				img.onload = async () => {
@@ -207,6 +224,94 @@ export default {
 					socket.emit('message', obj);
 				};
 			};
+		},
+
+		/**
+		 * @description: 检测当前环境是否支持麦克风权限
+		 * @param {*}
+		 * @return {*}
+		 */
+		async checkReaderAuthority(rc) {
+			let MediaStream = await rc.start();
+			if (MediaStream.active) {
+				rc.pause();
+				rc.clear();
+				// this.audioaccet = true
+				this.$message({
+					message: '获取麦克风成功',
+					type: 'sucess',
+				});
+			} else {
+				this.$message({
+					message: '获取麦克风失败',
+					type: 'warning',
+				});
+				console.log('Recording failed.');
+			}
+
+			return MediaStream.active;
+		},
+
+		/**
+		 * @description: 开始录音
+		 * @param {*}
+		 * @return {*}
+		 */
+		startRecording(rc) {
+			console.log(rc, 'rc');
+			rc.start()
+				.then(() => {
+					console.log('start recording');
+				})
+				.catch((error) => {
+					console.log('Recording failed.', error);
+				});
+		},
+
+		/**
+		 * @description: 结束录音
+		 * @param {*}
+		 * @return {*}
+		 */
+		endRecording(rc) {
+			// this.statusaudio = true;
+			rc.pause();
+
+			// 上传录音
+			let wav = rc.getRecord({
+				encodeTo: ENCODE_TYPE.WAV,
+				compressible: true,
+			});
+			let params = {};
+			let formData = new FormData();
+			formData.append('recordFile', wav, Date.parse(new Date()) + '.wav');
+			formData.append('vo', JSON.stringify(params));
+			uploadRecording(formData)
+				.then((data) => {
+					console.log(data, 'data');
+					rc.clear();
+
+					// if (data.data.code == 1) rc.clear();
+					// this.statusaudio = false;
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+
+		/**
+		 * @description: 读取音频Test
+		 * @param {*}
+		 * @return {*}
+		 */
+		recordingTest() {
+			let readWords = this.audioData; //获取播报的文字（除去样式）
+			var url = `http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&text='encodeURI('${readWords}')`;
+			var n = new Audio(url);
+			n.src = url;
+			n.play(); //播放阅读
+			//  n.cancel();  //取消阅读
+			//  n.pause();  //暂停阅读
 		},
 	},
 

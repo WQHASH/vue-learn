@@ -2,7 +2,7 @@
  * @Description: 获取消息
  * @Author: wangqi
  * @Date: 2020-11-27 22:42:38
- * @LastEditTime: 2021-01-18 17:32:52
+ * @LastEditTime: 2021-01-19 17:59:07
  */
 const express = require('express');
 const path = require('path');
@@ -42,14 +42,13 @@ function fileFilter(req, file, cb) {
 // 文件上传
 let upload = multer({
     storage,
-    fileFilter,
+    // fileFilter,
     limits: {
         fields: 10,
         files: 10,
         fileSize: 4 * 1024 * 1024,
     }
 });
-
 
 // 获取当前房间历史消息
 router.get('/history', (req, res) => {
@@ -64,14 +63,6 @@ router.get('/history', (req, res) => {
 });
 
 // 上传文件
-router.post('/uploadImgs', (req, res) => {
-    res.json({
-        errno: 0,
-        data: { "name": "wq" }
-    })
-});
-
-
 router.post('/uploadImg', upload.single('file'), function (req, res, next) {
     // req.file 是 `avatar` 文件的信息
     // req.body 将具有文本域数据，如果存在的话
@@ -101,7 +92,16 @@ router.post('/uploadImg', upload.single('file'), function (req, res, next) {
     }
 
 
-})
+});
+
+// 上传录音文件
+router.post('/uploadRecording', upload.single('recordFile'), function (req, res, next) {
+    global.logger.info(req, "上传录音文件");
+    res.json({
+        errno: 0,
+        data: "ok",
+    })
+});
 
 module.exports = router;
 
