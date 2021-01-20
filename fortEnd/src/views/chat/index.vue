@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2021-01-19 17:52:40
+ * @LastEditTime: 2021-01-20 11:14:17
 -->
 <template>
 	<div class="chat-module">
@@ -24,7 +24,7 @@
 								</span>
 
 								<p class="msg-body" v-if="msg.msg">{{ msg.msg }}</p>
-								<img :src="msg.img" v-else>
+								<img :src="msg.img" v-else />
 							</li>
 						</ul>
 					</el-main>
@@ -40,6 +40,14 @@
 								<i @click="startRecording(rc)" class="el-icon-microphone"></i>
 								<i @click="endRecording(rc)" class="el-icon-microphone"></i>
 							</span>
+							<span>
+								<svg-icon icon-class="play-recording" class-name="active" @click="playRecording(rc)" />
+							</span>
+
+							<span class="recording-msg">
+								<i class="recording-icon"></i>
+								<em class="recording-time">3"</em>
+							</span>
 						</div>
 						<div class="hide-area">
 							<input id="inputFile" name="inputFile" type="file" @change="fileup" multiple="mutiple" accept="image/gif,image/jpeg,image/png,image/webp,image/jpg;capture=camera" />
@@ -50,7 +58,6 @@
 							<el-button class="msg-send" @click="sendMsg">发送消息</el-button>
 						</div>
 					</el-footer>
-
 				</el-container>
 			</el-container>
 		</el-container>
@@ -58,31 +65,31 @@
 </template>
 
 <script>
-import Recorderx, { ENCODE_TYPE } from 'recorderx';
-import socket from '@/socket';
-import { mapGetters, mapState } from 'vuex';
-import { getToken } from '@/tools/auth';
-import { getMsgHistory, uploadRecording } from '@/api/index';
+import Recorderx, { ENCODE_TYPE } from "recorderx";
+import socket from "@/socket";
+import { mapGetters, mapState } from "vuex";
+import { getToken } from "@/tools/auth";
+import { getMsgHistory, uploadRecording } from "@/api/index";
 
-import ChatAside from './ChatAside';
+import ChatAside from "./ChatAside";
 
 export default {
 	data() {
 		return {
 			//当前用户
-			username: '',
+			username: "",
 			//输入框内容
-			msg: '',
+			msg: "",
 			//存储消息列表
 			msgList: [
 				{
-					username: '',
+					username: "",
 					msg: undefined,
 				},
 			],
 			rc: new Recorderx(),
-			audioaccet: '',
-			audioData: '你好啊，你是谁, hello man!',
+			audioaccet: "",
+			audioData: "你好啊，你是谁, hello man!",
 		};
 	},
 
@@ -112,11 +119,11 @@ export default {
 		// 检测当前环境是否支持麦克风权限
 		let havAuthority = await this.checkReaderAuthority(this.rc);
 
-		let userInfo = await this.$store.dispatch('user/getInfo');
+		let userInfo = await this.$store.dispatch("user/getInfo");
 		this.username = userInfo.name;
 		// 获取用户聊天记录
 		let msgHistory = await this.$store.dispatch(
-			'message/getMsgHistory',
+			"message/getMsgHistory",
 			this.roomInfo.roomId
 		);
 
@@ -144,16 +151,16 @@ export default {
 		sendMsg() {
 			let msg = {
 				username: this.username,
-				src: '',
+				src: "",
 				msg: this.msg,
-				img: '',
+				img: "",
 				roomid: this.roomInfo.roomId,
 				roomType: this.roomInfo.roomType,
-				type: 'text',
+				type: "text",
 				time: new Date(),
 			};
-			socket.emit('message', msg);
-			this.msg = '';
+			socket.emit("message", msg);
+			this.msg = "";
 		},
 
 		/**
@@ -171,7 +178,7 @@ export default {
 		 * @return {*}
 		 */
 		imgupload() {
-			const file = document.getElementById('inputFile');
+			const file = document.getElementById("inputFile");
 			file.click();
 		},
 
@@ -181,17 +188,17 @@ export default {
 		 * @return {*}
 		 */
 		async fileup() {
-			const fileContext = document.getElementById('inputFile').files[0];
+			const fileContext = document.getElementById("inputFile").files[0];
 			if (!fileContext) {
 				this.$message({
-					message: '警告哦，这是一条警告消息',
-					type: 'warning',
+					message: "警告哦，这是一条警告消息",
+					type: "warning",
 				});
 				return;
 			}
 
 			let formData = new window.FormData();
-			formData.append('file', fileContext);
+			formData.append("file", fileContext);
 
 			let fileReader = new window.FileReader();
 			fileReader.readAsDataURL(fileContext);
@@ -202,26 +209,26 @@ export default {
 				img.onload = async () => {
 					let obj = {
 						username: this.username,
-						src: '',
-						msg: '',
+						src: "",
+						msg: "",
 						// img: `${fileReader.result}?width=${img.width}&height=${img.height}`,
-						img: '',
+						img: "",
 						roomid: this.roomInfo.roomId,
 						roomType: this.roomInfo.roomType,
-						type: 'img',
+						type: "img",
 						time: new Date(),
 					};
 
 					// 接口的发送
 					let imgurl = await this.$store.dispatch(
-						'message/uploadImg',
+						"message/uploadImg",
 						formData
 					);
 					// imgurl.code == 500另外处理
 					// console.log(imgurl, 'imgurlxx');
 					obj.img = `${imgurl.data}?width=${img.width}&height=${img.height}`;
 					// 发送
-					socket.emit('message', obj);
+					socket.emit("message", obj);
 				};
 			};
 		},
@@ -231,23 +238,53 @@ export default {
 		 * @param {*}
 		 * @return {*}
 		 */
-		async checkReaderAuthority(rc) {
-			let MediaStream = await rc.start();
-			if (MediaStream.active) {
-				rc.pause();
-				rc.clear();
-				// this.audioaccet = true
-				this.$message({
-					message: '获取麦克风成功',
-					type: 'sucess',
-				});
-			} else {
-				this.$message({
-					message: '获取麦克风失败',
-					type: 'warning',
-				});
-				console.log('Recording failed.');
-			}
+		// async checkReaderAuthority(rc) {
+		// 	let MediaStream = await rc.start();
+		// 	if (MediaStream.active) {
+		// 		rc.pause();
+		// 		rc.clear();
+		// 		// this.audioaccet = true
+		// 		this.$message({
+		// 			message: '获取麦克风成功',
+		// 			type: 'sucess',
+		// 		});
+		// 	} else {
+		// 		this.$message({
+		// 			message: '获取麦克风失败',
+		// 			type: 'warning',
+		// 		});
+		// 		console.log('Recording failed.');
+		// 	}
+
+		// 	return MediaStream.active;
+		// },
+
+		/**
+		 * @description: 检测当前环境是否支持麦克风权限
+		 * @param {*}
+		 * @return {*}
+		 */
+		checkReaderAuthority(rc) {
+			return new Promise((resolve, reject) => {
+				rc.start()
+					.then((MediaStream) => {
+						rc.pause();
+						rc.clear();
+						// this.audioaccet = true
+						this.$message({
+							message: "获取麦克风成功",
+							type: "sucess",
+						});
+						resolve(MediaStream);
+					})
+					.catch((error) => {
+						this.$message({
+							message: "获取麦克风失败",
+							type: "warning",
+						});
+						reject(error);
+					});
+			});
 
 			return MediaStream.active;
 		},
@@ -258,13 +295,13 @@ export default {
 		 * @return {*}
 		 */
 		startRecording(rc) {
-			console.log(rc, 'rc');
+			console.log(rc, "rc");
 			rc.start()
 				.then(() => {
-					console.log('start recording');
+					console.log("start recording");
 				})
 				.catch((error) => {
-					console.log('Recording failed.', error);
+					console.log("Recording failed.", error);
 				});
 		},
 
@@ -284,19 +321,34 @@ export default {
 			});
 			let params = {};
 			let formData = new FormData();
-			formData.append('recordFile', wav, Date.parse(new Date()) + '.wav');
-			formData.append('vo', JSON.stringify(params));
+			formData.append("recordFile", wav, Date.parse(new Date()) + ".wav");
+			formData.append("vo", JSON.stringify(params));
 			uploadRecording(formData)
 				.then((data) => {
-					console.log(data, 'data');
+					console.log(data, "data");
 					rc.clear();
-
 					// if (data.data.code == 1) rc.clear();
 					// this.statusaudio = false;
 				})
 				.catch((err) => {
 					console.log(err);
 				});
+		},
+
+		/**
+		 * @description: 播放录音
+		 * @param {*}
+		 * @return {*}
+		 */
+		playRecording(rc) {
+			let wav = rc.getRecord({
+				encodeTo: ENCODE_TYPE.WAV,
+				compressible: true,
+			});
+			console.log(wav, "wav");
+			console.log(URL.createObjectURL(wav), "url");
+			rc.clear();
+			// document.getElementById('audio').src = URL.createObjectURL(wav);
 		},
 
 		/**
@@ -351,6 +403,7 @@ export default {
 					font-weight: 700;
 					display: inline-block;
 				}
+
 				img {
 					width: 200px;
 					height: 200px;
@@ -362,18 +415,51 @@ export default {
 					display: flex;
 					flex-direction: row;
 					justify-content: flex-start;
+
 					span {
 						margin: 5px 10px;
 						font-size: 22px;
 					}
+
+					.recording-msg {
+						display: flex;
+						align-items: center;
+						width: 100px;
+						height: 30px;
+						line-height: 30px;
+						padding: 0 4px;
+						cursor: pointer;
+						background: rgba(255, 255, 255, 1);
+						box-shadow: 1px 1px 4px 2px rgba(215, 215, 215, 0.5);
+						border-radius: 16px;
+
+						.recording-icon {
+							width: 32px;
+							height: 32px;
+							display: inline-block;
+							margin: 0px 8px 0px 4px;
+							background: url('~@/assets/images/chat/icon-shengyin.png')
+								center center no-repeat;
+						}
+
+						.recording-time {
+							display: inline-block;
+							height: 32px;
+							line-height: 32px;
+							font-size: 16px;
+						}
+					}
 				}
+
 				.hide-area {
 					display: none;
 				}
+
 				.msg-send-wrap {
 					.msg-ipt {
 						width: calc(100% - 100px);
 					}
+
 					.msg-send {
 						height: 30px;
 						position: relative;
