@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2021-01-20 11:14:17
+ * @LastEditTime: 2021-01-20 17:21:41
 -->
 <template>
 	<div class="chat-module">
@@ -48,6 +48,10 @@
 								<i class="recording-icon"></i>
 								<em class="recording-time">3"</em>
 							</span>
+
+							<span>
+								<maudio :src="recordingSrc"></maudio>
+							</span>
 						</div>
 						<div class="hide-area">
 							<input id="inputFile" name="inputFile" type="file" @change="fileup" multiple="mutiple" accept="image/gif,image/jpeg,image/png,image/webp,image/jpg;capture=camera" />
@@ -72,6 +76,7 @@ import { getToken } from "@/tools/auth";
 import { getMsgHistory, uploadRecording } from "@/api/index";
 
 import ChatAside from "./ChatAside";
+import Maudio from "@/components/Maudio";
 
 export default {
 	data() {
@@ -87,9 +92,11 @@ export default {
 					msg: undefined,
 				},
 			],
+			// 录音对象
 			rc: new Recorderx(),
 			audioaccet: "",
 			audioData: "你好啊，你是谁, hello man!",
+			recordingSrc:"/api/static_temp/1611134284560-1611134284000.wav"
 		};
 	},
 
@@ -238,26 +245,30 @@ export default {
 		 * @param {*}
 		 * @return {*}
 		 */
-		// async checkReaderAuthority(rc) {
-		// 	let MediaStream = await rc.start();
-		// 	if (MediaStream.active) {
-		// 		rc.pause();
-		// 		rc.clear();
-		// 		// this.audioaccet = true
-		// 		this.$message({
-		// 			message: '获取麦克风成功',
-		// 			type: 'sucess',
-		// 		});
-		// 	} else {
-		// 		this.$message({
-		// 			message: '获取麦克风失败',
-		// 			type: 'warning',
-		// 		});
-		// 		console.log('Recording failed.');
-		// 	}
-
-		// 	return MediaStream.active;
-		// },
+		/* async checkReaderAuthority(rc) {
+			try {
+				let MediaStream = await rc.start();
+				if (MediaStream.active) {
+					rc.pause();
+					rc.clear();
+					// this.audioaccet = true
+					this.$message({
+						message: '获取麦克风成功',
+						type: 'sucess',
+					});
+				} else {
+					this.$message({
+						message: '获取麦克风失败',
+						type: 'warning',
+					});
+					console.log('Recording failed.');
+				}
+				return MediaStream.active;
+			} catch (error) {
+				console.log("当前环境不支持录音");
+				return false;
+			}
+		}, */
 
 		/**
 		 * @description: 检测当前环境是否支持麦克风权限
@@ -369,6 +380,7 @@ export default {
 
 	components: {
 		ChatAside,
+		Maudio,
 	},
 };
 </script>

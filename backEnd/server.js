@@ -2,7 +2,7 @@
  * @Description: 项目入口文件
  * @Author: wangqi
  * @Date: 2020-11-08 22:14:51
- * @LastEditTime: 2020-12-18 14:15:25
+ * @LastEditTime: 2021-01-20 17:20:19
  */
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
@@ -24,6 +24,7 @@ let router = express.Router();
 
 // 静态资源
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/static_temp', express.static(path.join(__dirname, 'static_temp')));
 
 app.use(router);
 // 服务器提交的数据json化
