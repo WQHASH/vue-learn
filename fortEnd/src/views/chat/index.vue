@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2021-01-24 13:07:07
+ * @LastEditTime: 2021-01-24 18:17:31
 -->
 <template>
 	<div class="chat-module">
@@ -44,10 +44,10 @@
 								<svg-icon icon-class="play-recording" class-name="active" @click="playRecording()" />
 							</span>
 
-							<span class="recording-msg">
+							<!-- <span class="recording-msg">
 								<i class="recording-icon"></i>
 								<em class="recording-time">3"</em>
-							</span>
+							</span> -->
 
 							<span>
 								<maudio :src="recordingSrc"></maudio>
@@ -105,8 +105,6 @@ export default {
 					msg: undefined,
 				},
 			],
-			// 录音对象
-			rc: Recorder, //new Recorderx(),
 			audioaccet: "",
 			audioData: "你好啊，你是谁, hello man!",
 			recordingSrc: '', // '/api/static_temp/1611463223935-1611463223000.mp3',
@@ -276,7 +274,6 @@ export default {
 					// wave.input(buffers[buffers.length - 1], powerLevel, bufferSampleRate);
 				},
 			});
-
 			//打开麦克风授权获得相关资源
 			await newRec.open(() => {
 				this.rec = newRec;
@@ -286,7 +283,7 @@ export default {
 				this.recBlob = null;
 				this.rec.start();
 			}, (msg, isUserNotAllow) => {
-				console.log("打开录音失败:)");
+				this.$message({ message: "打开录音失败", type: "error" });
 			});
 
 		},
@@ -306,21 +303,15 @@ export default {
 		 * @return {*}
 		 */
 		endRecording() {
-			if (!(this.rec && this.Recorder.IsOpen())) {
-				console.log("未打开录音-结束");
-				return;
-			}
+			if (!(this.rec && this.Recorder.IsOpen())) { return };
 			this.rec.stop(async (blob, duration) => {
 				this.recBlob = blob;
-				console.log("录音ok:");
 				// 上传录音
 				let result = await this.uploadRecordinFile();
-				console.log(result, "result")
 				// this.recordingSrc = (window.URL || webkitURL).createObjectURL(this.recBlob);
 				this.recordingSrc = result.data.src;
 				this.rec.close();
 			}, (msg) => {
-				console.log("录音失败:" + msg);
 				this.rec.close();
 			});
 

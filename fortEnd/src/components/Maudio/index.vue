@@ -116,7 +116,10 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	cursor: pointer;
-	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.25);
+	background: white;
+    box-shadow: 1px 1px 4px 2px rgb(215 215 215 / 50%);
+    border-radius: 16px;
+
 	.x-sector {
 		height: 7px;
 		width: 7px;
