@@ -2,7 +2,7 @@
  * @Description: 获取消息
  * @Author: wangqi
  * @Date: 2020-11-27 22:42:38
- * @LastEditTime: 2021-01-24 12:53:47
+ * @LastEditTime: 2021-01-24 18:27:37
  */
 const express = require('express');
 const path = require('path');
@@ -72,7 +72,7 @@ router.post('/uploadImg', upload.single('file'), function (req, res, next) {
         let { filename, size, path: localPath } = file;
         let staticUrl = path.join('./static_temp', filename);
         if (process.env.NODE_ENV === 'production') {
-            global.logger.info('生产环境下');
+            global.logger.info('生产环境下'); 
         } else {
             fse.copySync('./static_temp', urlPath);
             img = path.join(urlPath, filename);
