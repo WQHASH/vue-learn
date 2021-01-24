@@ -32,7 +32,22 @@ export default {
 			audio: null,
 			animate: false,
 			timer: null,
-			duration: null
+			duration: null,
+			newSrc: undefined,
+		}
+	},
+
+	watch: {
+		src: {
+			deep: true,
+			immediate: true,
+			handler(newV, oldV) {
+				this.newSrc = newV;
+				if (newV) {
+					this.audio.src = newV;
+				}
+
+			},
 		}
 	},
 	mounted() {
@@ -40,7 +55,8 @@ export default {
 		this.audio.src = this.src
 		this.audio.addEventListener('canplaythrough', () => {
 			this.duration = this.format(this.audio.duration)
-		})
+		});
+
 		this.audio.onplay = () => {
 			this.animate = true
 			this.timer = setInterval(() => {
@@ -49,23 +65,24 @@ export default {
 					this.animate = true
 				}, 50)
 			}, 1250);
-		}
+		};
+
 		this.audio.onpause = () => {
 			this.animate = false
 			this.timer && clearInterval(this.timer)
-		}
+		};
+
 		this.audio.onended = () => {
 			this.animate = false
 			this.timer && clearInterval(this.timer)
-		}
+		};
 		// window.audioList.push(this.audio)//所有实例加入全局变量
 	},
 	methods: {
 		play() {
 			// window.audioList.forEach(audio => {//开始前先关闭所有可能正在运行的实例
 			// 	audio.pause()
-            // })
-            console.log(this.audio.paused,"paused")
+			// })
 			if (this.audio.paused) {
 				this.audio.play();
 			} else {

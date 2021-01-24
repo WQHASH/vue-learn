@@ -2,7 +2,7 @@
  * @Description: 获取消息
  * @Author: wangqi
  * @Date: 2020-11-27 22:42:38
- * @LastEditTime: 2021-01-19 17:59:07
+ * @LastEditTime: 2021-01-24 12:53:47
  */
 const express = require('express');
 const path = require('path');
@@ -96,10 +96,13 @@ router.post('/uploadImg', upload.single('file'), function (req, res, next) {
 
 // 上传录音文件
 router.post('/uploadRecording', upload.single('recordFile'), function (req, res, next) {
-    global.logger.info(req, "上传录音文件");
+    let resFilePath =  req.file.path;
+    resFilePath = `/api/` + resFilePath.split(path.sep).join('/');
     res.json({
         errno: 0,
-        data: "ok",
+        data: {
+            src: resFilePath,
+        },
     })
 });
 

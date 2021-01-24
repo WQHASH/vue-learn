@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2021-01-24 13:07:07
+ * @LastEditTime: 2021-01-24 09:53:23
 -->
 <template>
 	<div class="chat-module">
@@ -37,11 +37,11 @@
 								<svg-icon icon-class="smile" class-name="active" />
 							</span>
 							<span>
-								<i @click="startRecording()" class="el-icon-microphone"></i>
-								<i @click="endRecording()" class="el-icon-microphone"></i>
+								<i @click="startRecording(rc)" class="el-icon-microphone"></i>
+								<i @click="endRecording(rc)" class="el-icon-microphone"></i>
 							</span>
 							<span>
-								<svg-icon icon-class="play-recording" class-name="active" @click="playRecording()" />
+								<svg-icon icon-class="play-recording" class-name="active" @click="playRecording(rc)" />
 							</span>
 
 							<span class="recording-msg">
@@ -69,20 +69,7 @@
 </template>
 
 <script>
-// import Recorderx, { ENCODE_TYPE } from 'recorderx';
-
-// import Recorder from 'recorder-core'
-// import 'recorder-core/src/engine/mp3'
-// import 'recorder-core/src/engine/mp3-engine'
-
-//以上三个也可以合并使用压缩好的recorder.xxx.min.js
-import Recorder from "recorder-core/recorder.mp3.min"; //已包含recorder-core和mp3格式支持
-
-//可选的扩展支持项
-import "recorder-core/src/extensions/waveview";
-import "recorder-core/src/extensions/frequency.histogram.view";
-import "recorder-core/src/extensions/lib.fft";
-
+import Recorderx, { ENCODE_TYPE } from "recorderx";
 import socket from "@/socket";
 import { mapGetters, mapState } from "vuex";
 import { getToken } from "@/tools/auth";
@@ -106,16 +93,10 @@ export default {
 				},
 			],
 			// 录音对象
-			rc: Recorder, //new Recorderx(),
+			rc: new Recorderx(),
 			audioaccet: "",
 			audioData: "你好啊，你是谁, hello man!",
-			recordingSrc: '', // '/api/static_temp/1611463223935-1611463223000.mp3',
-
-			// recorder-core
-			Recorder: Recorder,
-			rec: undefined,
-			wave: undefined,
-			recBlob: undefined,
+			recordingSrc:"/api/static_temp/1611329629241-1611329628000.wav"
 		};
 	},
 
@@ -141,8 +122,9 @@ export default {
 	},
 
 	async mounted() {
+		// const rc = new Recorderx();
 		// 检测当前环境是否支持麦克风权限
-		// this.checkReaderAuthority(this.Recorder);
+		let havAuthority = await this.checkReaderAuthority(this.rc);
 
 		let userInfo = await this.$store.dispatch("user/getInfo");
 		this.username = userInfo.name;
@@ -263,32 +245,59 @@ export default {
 		 * @param {*}
 		 * @return {*}
 		 */
-		async checkReaderAuthority(Recorder) {
-			let newRec = Recorder({
-				type: "mp3",
-				sampleRate: 16000,
-				bitRate: 16, //mp3格式，指定采样率hz、比特率kbps，其他参数使用默认配置；注意：是数字的参数必须提供数字，不要用字符串；需要使用的type类型，需提前把格式支持文件加载进来，比如使用wav格式需要提前加载wav.js编码引擎
-				onProcess: function (buffers, powerLevel, bufferDuration, bufferSampleRate, newBufferIdx, asyncEnd) {
-					//录音实时回调，大约1秒调用12次本回调
-					// document.querySelector(".recpowerx").style.width = powerLevel + "%";
-					// document.querySelector(".recpowert").innerText = bufferDuration + " / " + powerLevel;
-					//可视化图形绘制
-					// wave.input(buffers[buffers.length - 1], powerLevel, bufferSampleRate);
-				},
+		/* async checkReaderAuthority(rc) {
+			try {
+				let MediaStream = await rc.start();
+				if (MediaStream.active) {
+					rc.pause();
+					rc.clear();
+					// this.audioaccet = true
+					this.$message({
+						message: '获取麦克风成功',
+						type: 'sucess',
+					});
+				} else {
+					this.$message({
+						message: '获取麦克风失败',
+						type: 'warning',
+					});
+					console.log('Recording failed.');
+				}
+				return MediaStream.active;
+			} catch (error) {
+				console.log("当前环境不支持录音");
+				return false;
+			}
+		}, */
+
+		/**
+		 * @description: 检测当前环境是否支持麦克风权限
+		 * @param {*}
+		 * @return {*}
+		 */
+		checkReaderAuthority(rc) {
+			return new Promise((resolve, reject) => {
+				rc.start()
+					.then((MediaStream) => {
+						rc.pause();
+						rc.clear();
+						// this.audioaccet = true
+						this.$message({
+							message: "获取麦克风成功",
+							type: "sucess",
+						});
+						resolve(MediaStream);
+					})
+					.catch((error) => {
+						this.$message({
+							message: "获取麦克风失败",
+							type: "warning",
+						});
+						reject(error);
+					});
 			});
 
-			//打开麦克风授权获得相关资源
-			await newRec.open(() => {
-				this.rec = newRec;
-				this.wave = Recorder.FrequencyHistogramView({ elem: ".recwave" });
-				this.$message({ message: "获取麦克风成功", type: "sucess" });
-
-				this.recBlob = null;
-				this.rec.start();
-			}, (msg, isUserNotAllow) => {
-				console.log("打开录音失败:)");
-			});
-
+			return MediaStream.active;
 		},
 
 		/**
@@ -296,8 +305,15 @@ export default {
 		 * @param {*}
 		 * @return {*}
 		 */
-		startRecording() {
-			this.checkReaderAuthority(this.Recorder);
+		startRecording(rc) {
+			console.log(rc, "rc");
+			rc.start()
+				.then(() => {
+					console.log("start recording");
+				})
+				.catch((error) => {
+					console.log("Recording failed.", error);
+				});
 		},
 
 		/**
@@ -305,47 +321,29 @@ export default {
 		 * @param {*}
 		 * @return {*}
 		 */
-		endRecording() {
-			if (!(this.rec && this.Recorder.IsOpen())) {
-				console.log("未打开录音-结束");
-				return;
-			}
-			this.rec.stop(async (blob, duration) => {
-				this.recBlob = blob;
-				console.log("录音ok:");
-				// 上传录音
-				let result = await this.uploadRecordinFile();
-				console.log(result, "result")
-				// this.recordingSrc = (window.URL || webkitURL).createObjectURL(this.recBlob);
-				this.recordingSrc = result.data.src;
-				this.rec.close();
-			}, (msg) => {
-				console.log("录音失败:" + msg);
-				this.rec.close();
+		endRecording(rc) {
+			// this.statusaudio = true;
+			rc.pause();
+
+			// 上传录音
+			let wav = rc.getRecord({
+				encodeTo: ENCODE_TYPE.WAV,
+				compressible: true,
 			});
-
-		},
-
-		/**
-		 * @description: 录音文件上传
-		 * @param {*}
-		 * @return {*}
-		 */
-		async uploadRecordinFile() {
-			let result;
 			let params = {};
 			let formData = new FormData();
-			formData.append("recordFile", this.recBlob, Date.parse(new Date()) + ".mp3");
+			formData.append("recordFile", wav, Date.parse(new Date()) + ".wav");
 			formData.append("vo", JSON.stringify(params));
-			try {
-				result = await uploadRecording(formData);
-			} catch (error) {
-				this.$message({
-					message: "录音失败",
-					type: "error",
+			uploadRecording(formData)
+				.then((data) => {
+					console.log(data, "data");
+					rc.clear();
+					// if (data.data.code == 1) rc.clear();
+					// this.statusaudio = false;
+				})
+				.catch((err) => {
+					console.log(err);
 				});
-			}
-			return result;
 		},
 
 		/**
@@ -353,26 +351,15 @@ export default {
 		 * @param {*}
 		 * @return {*}
 		 */
-		playRecording() {
-			if (!this.recBlob) {
-				console.log("请先录音，然后停止后再播放");
-				return;
-			}
-			let cls = ("a" + Math.random()).replace(".", "");
-			// var audio = document.createElement("audio");
-			// audio.controls = true;
-			// document.querySelector("." + cls).appendChild(audio);
-			//简单利用URL生成播放地址，注意不用了时需要revokeObjectURL，否则霸占内存
-			// audio.src = (window.URL || webkitURL).createObjectURL(recBlob);
-			// audio.play();
-
-			this.recordingSrc = (window.URL || webkitURL).createObjectURL(
-				this.recBlob
-			);
-			console.log(this.recordingSrc, " 播放-this.recordingSrc");
-			// setTimeout(function () {
-			// 	(window.URL || webkitURL).revokeObjectURL(audio.src);
-			// }, 5000);
+		playRecording(rc) {
+			let wav = rc.getRecord({
+				encodeTo: ENCODE_TYPE.WAV,
+				compressible: true,
+			});
+			console.log(wav, "wav");
+			console.log(URL.createObjectURL(wav), "url");
+			rc.clear();
+			// document.getElementById('audio').src = URL.createObjectURL(wav);
 		},
 
 		/**

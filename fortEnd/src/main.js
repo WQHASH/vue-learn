@@ -2,7 +2,7 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2021-01-03 20:56:24
+ * @LastEditTime: 2021-01-24 11:38:55
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -24,6 +24,7 @@ Vue.use(Element, {
   zIndex: 3000
 });
 Vue.config.productionTip = false;
+Vue.config.devtools = true
 import './icons';
 import '@/permission';
 import '@/registerServiceWorker';
