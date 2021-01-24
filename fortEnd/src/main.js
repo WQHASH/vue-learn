@@ -2,13 +2,13 @@
  * @Description: 项目入口
  * @Author: wangqi
  * @Date: 2020-05-29 17:18:31
- * @LastEditTime: 2021-01-24 11:38:55
+ * @LastEditTime: 2021-01-24 19:07:42
  */
 import Vue from 'vue'
 import App from './App.vue'
 
 import 'element-ui/lib/theme-chalk/index.css';
-import Element from 'element-ui';
+import Element from 'element-ui';  
 
 import './style/common.scss';
 // import './style/scrollBar.scss';
