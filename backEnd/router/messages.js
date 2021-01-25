@@ -2,7 +2,7 @@
  * @Description: 获取消息
  * @Author: wangqi
  * @Date: 2020-11-27 22:42:38
- * @LastEditTime: 2021-01-24 18:27:37
+ * @LastEditTime: 2021-01-26 00:33:25
  */
 const express = require('express');
 const path = require('path');
@@ -12,7 +12,8 @@ const multer = require('multer');
 const Message = require('../models/message');
 const router = express.Router();
 
-const urlPath = './public/files';
+const urlPathImg = './public/files/imgs';
+const urlPathAudio = './public/files/audios';
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -68,20 +69,20 @@ router.post('/uploadImg', upload.single('file'), function (req, res, next) {
     // req.body 将具有文本域数据，如果存在的话
     let file = req.file;
     if (file) {
-        let img;
+        let imgPath;
         let { filename, size, path: localPath } = file;
         let staticUrl = path.join('./static_temp', filename);
         if (process.env.NODE_ENV === 'production') {
             global.logger.info('生产环境下'); 
         } else {
-            fse.copySync('./static_temp', urlPath);
-            img = path.join(urlPath, filename);
-            img = `/api/` + img.split(path.sep).join('/');
+            fse.copySync('./static_temp', urlPathImg);
+            imgPath = path.join(urlPathImg, filename);
+            imgPath = `/api/` + imgPath.split(path.sep).join('/');
             rmDirFiles('./static_temp');
         }
         res.json({
             errno: 0,
-            data: img,
+            data: imgPath,
             msg: "上传成功!"
         });
     } else {
@@ -96,12 +97,15 @@ router.post('/uploadImg', upload.single('file'), function (req, res, next) {
 
 // 上传录音文件
 router.post('/uploadRecording', upload.single('recordFile'), function (req, res, next) {
-    let resFilePath =  req.file.path;
-    resFilePath = `/api/` + resFilePath.split(path.sep).join('/');
+    let audioPath =  req.file.filename;
+    fse.copySync('./static_temp', urlPathAudio);
+    audioPath = path.join(urlPathAudio, audioPath);
+    audioPath = `/api/` + audioPath.split(path.sep).join('/');
+    rmDirFiles('./static_temp');
     res.json({
         errno: 0,
         data: {
-            src: resFilePath,
+            src: audioPath,
         },
     })
 });

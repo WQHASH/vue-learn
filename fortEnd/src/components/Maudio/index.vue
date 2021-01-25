@@ -12,19 +12,19 @@ export default {
 	props: {
 		src: {
 			type: String,
-			default: ''
+			default: '',
 		},
 		text: {
 			type: String,
-			default: ""
+			default: '',
 		},
 		showDuration: {
 			type: Boolean,
-			default: true
+			default: true,
 		},
 		block: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 	},
 	data() {
@@ -34,47 +34,46 @@ export default {
 			timer: null,
 			duration: null,
 			newSrc: undefined,
-		}
+		};
 	},
 
 	watch: {
 		src: {
 			deep: true,
-			immediate: true,
+			immediate: false,
 			handler(newV, oldV) {
 				this.newSrc = newV;
 				if (newV) {
 					this.audio.src = newV;
 				}
-
 			},
-		}
+		},
 	},
 	mounted() {
-		this.audio = new Audio()
-		this.audio.src = this.src
+		this.audio = new Audio();
+		this.audio.src = this.src;
 		this.audio.addEventListener('canplaythrough', () => {
-			this.duration = this.format(this.audio.duration)
+			this.duration = this.format(this.audio.duration);
 		});
 
 		this.audio.onplay = () => {
-			this.animate = true
+			this.animate = true;
 			this.timer = setInterval(() => {
-				this.animate = false
+				this.animate = false;
 				setTimeout(() => {
-					this.animate = true
-				}, 50)
+					this.animate = true;
+				}, 50);
 			}, 1250);
 		};
 
 		this.audio.onpause = () => {
-			this.animate = false
-			this.timer && clearInterval(this.timer)
+			this.animate = false;
+			this.timer && clearInterval(this.timer);
 		};
 
 		this.audio.onended = () => {
-			this.animate = false
-			this.timer && clearInterval(this.timer)
+			this.animate = false;
+			this.timer && clearInterval(this.timer);
 		};
 		// window.audioList.push(this.audio)//所有实例加入全局变量
 	},
@@ -95,30 +94,33 @@ export default {
 				var min = Math.floor(s / 60) % 60;
 				var sec = s % 60;
 
-				if (min < 10) { t += "0"; }
+				if (min < 10) {
+					t += '0';
+				}
 				t += min + "'";
-				if (sec < 10) { t += "0"; }
+				if (sec < 10) {
+					t += '0';
+				}
 				t += sec.toFixed(2);
 			}
-			t = t.replace('.', '\"')
+			t = t.replace('.', '"');
 			return t;
 		},
-	}
-}
+	},
+};
 </script>
 <style lang="scss" scoped>
 .x-audio-wrap {
 	height: 30px;
-	width: 110px;
+	width: 110px;	
 	border-radius: 15px;
-	// border: 1px solid #ddd;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	cursor: pointer;
 	background: white;
-    box-shadow: 1px 1px 4px 2px rgb(215 215 215 / 50%);
-    border-radius: 16px;
+	box-shadow: 1px 1px 4px 2px rgb(215 215 215 / 50%);
+	border-radius: 16px;
 
 	.x-sector {
 		height: 7px;

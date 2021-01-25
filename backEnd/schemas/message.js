@@ -3,7 +3,7 @@
  * @Author: wangqi
  * @Date: 2020-11-27 13:48:46
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-01-03 20:54:39
+ * @LastEditTime: 2021-01-25 22:43:20
  */
 
 const mongoose = require('mongoose');
@@ -15,7 +15,14 @@ let MessageSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
-    img: String,
+    img: {
+        type: String,
+        default: "",
+    },
+    audio: {
+        type: String,
+        default: "",
+    },
     roomid: String,
     roomType: String,
     type: String,

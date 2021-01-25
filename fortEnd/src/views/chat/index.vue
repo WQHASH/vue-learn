@@ -2,13 +2,13 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2021-01-24 18:17:31
+ * @LastEditTime: 2021-01-26 00:27:16
 -->
 <template>
 	<div class="chat-module">
 		<el-container>
 			<el-header class="msg-title">
-				<el-card class="box-card"> 聊天模块1</el-card>
+				<el-card class="box-card"> 聊天模块1 </el-card>
 			</el-header>
 
 			<el-container class="msg-wrap">
@@ -23,7 +23,10 @@
 									{{ msg.username ? ` ${msg.username}: ` : msg.username }}
 								</span>
 
-								<p class="msg-body" v-if="msg.msg">{{ msg.msg }}</p>
+								<p class="msg-text-body" v-if="msg.msg"> {{ msg.msg }} </p>
+								<p class="msg-audio-body" v-else-if="msg.audio">
+									<maudio :src="msg.audio"></maudio>
+								</p>
 								<img :src="msg.img" v-else />
 							</li>
 						</ul>
@@ -76,38 +79,38 @@
 // import 'recorder-core/src/engine/mp3-engine'
 
 //以上三个也可以合并使用压缩好的recorder.xxx.min.js
-import Recorder from "recorder-core/recorder.mp3.min"; //已包含recorder-core和mp3格式支持
+import Recorder from 'recorder-core/recorder.mp3.min'; //已包含recorder-core和mp3格式支持
 
 //可选的扩展支持项
-import "recorder-core/src/extensions/waveview";
-import "recorder-core/src/extensions/frequency.histogram.view";
-import "recorder-core/src/extensions/lib.fft";
+import 'recorder-core/src/extensions/waveview';
+import 'recorder-core/src/extensions/frequency.histogram.view';
+import 'recorder-core/src/extensions/lib.fft';
 
-import socket from "@/socket";
-import { mapGetters, mapState } from "vuex";
-import { getToken } from "@/tools/auth";
-import { getMsgHistory, uploadRecording } from "@/api/index";
+import socket from '@/socket';
+import { mapGetters, mapState } from 'vuex';
+import { getToken } from '@/tools/auth';
+import { getMsgHistory, uploadRecording } from '@/api/index';
 
-import ChatAside from "./ChatAside";
-import Maudio from "@/components/Maudio";
+import ChatAside from './ChatAside';
+import Maudio from '@/components/Maudio';
 
 export default {
 	data() {
 		return {
 			//当前用户
-			username: "",
+			username: '',
 			//输入框内容
-			msg: "",
+			msg: '',
 			//存储消息列表
 			msgList: [
 				{
-					username: "",
+					username: '',
 					msg: undefined,
 				},
 			],
-			audioaccet: "",
-			audioData: "你好啊，你是谁, hello man!",
-			recordingSrc: '', // '/api/static_temp/1611463223935-1611463223000.mp3',
+			audioaccet: '',
+			audioData: '你好啊，你是谁, hello man!',
+			recordingSrc: '/api/public/files/audios/audio_202001252351.mp3', // '/api/static_temp/1611463223935-1611463223000.mp3',
 
 			// recorder-core
 			Recorder: Recorder,
@@ -142,11 +145,11 @@ export default {
 		// 检测当前环境是否支持麦克风权限
 		// this.checkReaderAuthority(this.Recorder);
 
-		let userInfo = await this.$store.dispatch("user/getInfo");
+		let userInfo = await this.$store.dispatch('user/getInfo');
 		this.username = userInfo.name;
 		// 获取用户聊天记录
 		let msgHistory = await this.$store.dispatch(
-			"message/getMsgHistory",
+			'message/getMsgHistory',
 			this.roomInfo.roomId
 		);
 
@@ -155,6 +158,7 @@ export default {
 				username: val.username,
 				msg: val.msg,
 				img: val.img,
+				audio: val.audio,
 				roomid: this.roomInfo.roomId,
 			};
 		});
@@ -174,16 +178,17 @@ export default {
 		sendMsg() {
 			let msg = {
 				username: this.username,
-				src: "",
+				src: '',
 				msg: this.msg,
-				img: "",
+				img: '',
+				audio: '',
 				roomid: this.roomInfo.roomId,
 				roomType: this.roomInfo.roomType,
-				type: "text",
+				type: 'text',
 				time: new Date(),
 			};
-			socket.emit("message", msg);
-			this.msg = "";
+			socket.emit('message', msg);
+			this.msg = '';
 		},
 
 		/**
@@ -201,7 +206,7 @@ export default {
 		 * @return {*}
 		 */
 		imgupload() {
-			const file = document.getElementById("inputFile");
+			const file = document.getElementById('inputFile');
 			file.click();
 		},
 
@@ -211,17 +216,17 @@ export default {
 		 * @return {*}
 		 */
 		async fileup() {
-			const fileContext = document.getElementById("inputFile").files[0];
+			const fileContext = document.getElementById('inputFile').files[0];
 			if (!fileContext) {
 				this.$message({
-					message: "警告哦，这是一条警告消息",
-					type: "warning",
+					message: '警告哦，这是一条警告消息',
+					type: 'warning',
 				});
 				return;
 			}
 
 			let formData = new window.FormData();
-			formData.append("file", fileContext);
+			formData.append('file', fileContext);
 
 			let fileReader = new window.FileReader();
 			fileReader.readAsDataURL(fileContext);
@@ -232,26 +237,26 @@ export default {
 				img.onload = async () => {
 					let obj = {
 						username: this.username,
-						src: "",
-						msg: "",
+						src: '',
+						msg: '',
 						// img: `${fileReader.result}?width=${img.width}&height=${img.height}`,
-						img: "",
+						img: '',
 						roomid: this.roomInfo.roomId,
 						roomType: this.roomInfo.roomType,
-						type: "img",
+						type: 'img',
 						time: new Date(),
 					};
 
 					// 接口的发送
 					let imgurl = await this.$store.dispatch(
-						"message/uploadImg",
+						'message/uploadImg',
 						formData
 					);
 					// imgurl.code == 500另外处理
 					// console.log(imgurl, 'imgurlxx');
 					obj.img = `${imgurl.data}?width=${img.width}&height=${img.height}`;
 					// 发送
-					socket.emit("message", obj);
+					socket.emit('message', obj);
 				};
 			};
 		},
@@ -263,10 +268,17 @@ export default {
 		 */
 		async checkReaderAuthority(Recorder) {
 			let newRec = Recorder({
-				type: "mp3",
+				type: 'mp3',
 				sampleRate: 16000,
 				bitRate: 16, //mp3格式，指定采样率hz、比特率kbps，其他参数使用默认配置；注意：是数字的参数必须提供数字，不要用字符串；需要使用的type类型，需提前把格式支持文件加载进来，比如使用wav格式需要提前加载wav.js编码引擎
-				onProcess: function (buffers, powerLevel, bufferDuration, bufferSampleRate, newBufferIdx, asyncEnd) {
+				onProcess: function (
+					buffers,
+					powerLevel,
+					bufferDuration,
+					bufferSampleRate,
+					newBufferIdx,
+					asyncEnd
+				) {
 					//录音实时回调，大约1秒调用12次本回调
 					// document.querySelector(".recpowerx").style.width = powerLevel + "%";
 					// document.querySelector(".recpowert").innerText = bufferDuration + " / " + powerLevel;
@@ -275,17 +287,24 @@ export default {
 				},
 			});
 			//打开麦克风授权获得相关资源
-			await newRec.open(() => {
-				this.rec = newRec;
-				this.wave = Recorder.FrequencyHistogramView({ elem: ".recwave" });
-				this.$message({ message: "获取麦克风成功", type: "sucess" });
+			await newRec.open(
+				() => {
+					this.rec = newRec;
+					this.wave = Recorder.FrequencyHistogramView({
+						elem: '.recwave',
+					});
+					this.$message({
+						message: '获取麦克风成功',
+						type: 'sucess',
+					});
 
-				this.recBlob = null;
-				this.rec.start();
-			}, (msg, isUserNotAllow) => {
-				this.$message({ message: "打开录音失败", type: "error" });
-			});
-
+					this.recBlob = null;
+					this.rec.start();
+				},
+				(msg, isUserNotAllow) => {
+					this.$message({ message: '打开录音失败', type: 'error' });
+				}
+			);
 		},
 
 		/**
@@ -303,18 +322,35 @@ export default {
 		 * @return {*}
 		 */
 		endRecording() {
-			if (!(this.rec && this.Recorder.IsOpen())) { return };
-			this.rec.stop(async (blob, duration) => {
-				this.recBlob = blob;
-				// 上传录音
-				let result = await this.uploadRecordinFile();
-				// this.recordingSrc = (window.URL || webkitURL).createObjectURL(this.recBlob);
-				this.recordingSrc = result.data.src;
-				this.rec.close();
-			}, (msg) => {
-				this.rec.close();
-			});
+			if (!(this.rec && this.Recorder.IsOpen())) {
+				return;
+			}
+			this.rec.stop(
+				async (blob, duration) => {
+					this.recBlob = blob;
+					// 上传录音
+					let result = await this.uploadRecordinFile();
+					// this.recordingSrc = (window.URL || webkitURL).createObjectURL(this.recBlob);
+					this.recordingSrc = result.data.src;
+					this.rec.close();
 
+					let obj = {
+						username: this.username,
+						src: '',
+						msg: '',
+						img: '',
+						audio: this.recordingSrc,
+						roomid: this.roomInfo.roomId,
+						roomType: this.roomInfo.roomType,
+						type: 'img',
+						time: new Date(),
+					};
+					socket.emit('message', obj);
+				},
+				(msg) => {
+					this.rec.close();
+				}
+			);
 		},
 
 		/**
@@ -326,14 +362,19 @@ export default {
 			let result;
 			let params = {};
 			let formData = new FormData();
-			formData.append("recordFile", this.recBlob, Date.parse(new Date()) + ".mp3");
-			formData.append("vo", JSON.stringify(params));
+			formData.append(
+				'recordFile',
+				this.recBlob,
+				Date.parse(new Date()) + '.mp3'
+			);
+			formData.append('vo', JSON.stringify(params));
+			// TODO : 需要使用vuex进行数据存储
 			try {
 				result = await uploadRecording(formData);
 			} catch (error) {
 				this.$message({
-					message: "录音失败",
-					type: "error",
+					message: '录音失败',
+					type: 'error',
 				});
 			}
 			return result;
@@ -346,10 +387,10 @@ export default {
 		 */
 		playRecording() {
 			if (!this.recBlob) {
-				console.log("请先录音，然后停止后再播放");
+				console.log('请先录音，然后停止后再播放');
 				return;
 			}
-			let cls = ("a" + Math.random()).replace(".", "");
+			let cls = ('a' + Math.random()).replace('.', '');
 			// var audio = document.createElement("audio");
 			// audio.controls = true;
 			// document.querySelector("." + cls).appendChild(audio);
@@ -360,7 +401,7 @@ export default {
 			this.recordingSrc = (window.URL || webkitURL).createObjectURL(
 				this.recBlob
 			);
-			console.log(this.recordingSrc, " 播放-this.recordingSrc");
+			console.log(this.recordingSrc, ' 播放-this.recordingSrc');
 			// setTimeout(function () {
 			// 	(window.URL || webkitURL).revokeObjectURL(audio.src);
 			// }, 5000);
@@ -414,9 +455,13 @@ export default {
 
 			.msg-list {
 				.username,
-				.msg-body {
+				.msg-text-body {
 					font-size: 18px;
 					font-weight: 700;
+					display: inline-block;
+				}
+				.msg-audio-body {
+					margin: 10px;
 					display: inline-block;
 				}
 

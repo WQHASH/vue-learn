@@ -6902,6 +6902,11 @@ readdirp@~3.4.0:
   dependencies:
     picomatch "^2.2.1"
 
+recorder-core@^1.1.20112600:
+  version "1.1.20112600"
+  resolved "https://registry.npm.taobao.org/recorder-core/download/recorder-core-1.1.20112600.tgz#d9a3417d1feecea9b310e2536fcf72ed177cad7d"
+  integrity sha1-2aNBfR/uzqmzEOJTb89y7Rd8rX0=
+
 recorderx@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/recorderx/-/recorderx-2.0.2.tgz#6410df5c73342fa2cbc1af224572b2d8d7c97632"
