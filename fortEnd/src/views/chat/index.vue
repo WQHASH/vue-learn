@@ -2,7 +2,7 @@
  * @Description: 聊天模块
  * @Author: wangqi
  * @Date: 2020-11-25 21:32:58
- * @LastEditTime: 2021-01-26 00:27:16
+ * @LastEditTime: 2021-01-27 22:58:00
 -->
 <template>
 	<div class="chat-module">
@@ -89,7 +89,7 @@ import 'recorder-core/src/extensions/lib.fft';
 import socket from '@/socket';
 import { mapGetters, mapState } from 'vuex';
 import { getToken } from '@/tools/auth';
-import { getMsgHistory, uploadRecording } from '@/api/index';
+import { getMsgHistory } from '@/api/index';
 
 import ChatAside from './ChatAside';
 import Maudio from '@/components/Maudio';
@@ -148,11 +148,7 @@ export default {
 		let userInfo = await this.$store.dispatch('user/getInfo');
 		this.username = userInfo.name;
 		// 获取用户聊天记录
-		let msgHistory = await this.$store.dispatch(
-			'message/getMsgHistory',
-			this.roomInfo.roomId
-		);
-
+		let msgHistory = await this.$store.dispatch('message/getMsgHistory', this.roomInfo.roomId);
 		this.msgList = msgHistory.map((val) => {
 			return {
 				username: val.username,
@@ -162,11 +158,6 @@ export default {
 				roomid: this.roomInfo.roomId,
 			};
 		});
-
-		// this.$store.commit('message/setRoomDetailAfter', {
-		// 	roomid: this.roomInfo.roomId,
-		// 	msgs: this.msgList,
-		// });
 	},
 
 	methods: {
@@ -252,6 +243,7 @@ export default {
 						'message/uploadImg',
 						formData
 					);
+
 					// imgurl.code == 500另外处理
 					// console.log(imgurl, 'imgurlxx');
 					obj.img = `${imgurl.data}?width=${img.width}&height=${img.height}`;
@@ -287,24 +279,21 @@ export default {
 				},
 			});
 			//打开麦克风授权获得相关资源
-			await newRec.open(
-				() => {
-					this.rec = newRec;
-					this.wave = Recorder.FrequencyHistogramView({
-						elem: '.recwave',
-					});
-					this.$message({
-						message: '获取麦克风成功',
-						type: 'sucess',
-					});
+			await newRec.open(() => {
+				this.rec = newRec;
+				this.wave = Recorder.FrequencyHistogramView({
+					elem: '.recwave',
+				});
+				this.$message({
+					message: '获取麦克风成功',
+					type: 'sucess',
+				});
 
-					this.recBlob = null;
-					this.rec.start();
-				},
-				(msg, isUserNotAllow) => {
-					this.$message({ message: '打开录音失败', type: 'error' });
-				}
-			);
+				this.recBlob = null;
+				this.rec.start();
+			}, (msg, isUserNotAllow) => {
+				this.$message({ message: '打开录音失败', type: 'error' });
+			});
 		},
 
 		/**
@@ -362,15 +351,12 @@ export default {
 			let result;
 			let params = {};
 			let formData = new FormData();
-			formData.append(
-				'recordFile',
-				this.recBlob,
-				Date.parse(new Date()) + '.mp3'
-			);
+			formData.append('recordFile', this.recBlob, Date.parse(new Date()) + '.mp3');
+
 			formData.append('vo', JSON.stringify(params));
-			// TODO : 需要使用vuex进行数据存储
 			try {
-				result = await uploadRecording(formData);
+				// result = await uploadRecording(formData);
+				result = await this.$store.dispatch('message/uploadRecording', formData);
 			} catch (error) {
 				this.$message({
 					message: '录音失败',

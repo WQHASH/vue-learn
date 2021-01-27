@@ -2,9 +2,9 @@
  * @Description: 消息模块
  * @Author: wangqi
  * @Date: 2020-12-16 21:28:47
- * @LastEditTime: 2021-01-19 10:48:08
+ * @LastEditTime: 2021-01-27 22:48:23
  */
-import { getMsgHistory, uploadImg } from '@/api';
+import { getMsgHistory, uploadImg, uploadRecording } from '@/api';
 
 const state = {
     roomInfo: {
@@ -74,7 +74,7 @@ const actions = {
     },
 
     /**
-     * @description: 文件上传
+     * @description: 图片上传
      * @param {*}
      * @return {*}
      */
@@ -86,8 +86,23 @@ const actions = {
                 reject(err)
             })
         });
-
     },
+
+    /**
+     * @description: 录音文件上传
+     * @param {*}
+     * @return {*}
+     */
+    uploadRecording(context, data) {
+        return new Promise((resolve, reject) => {
+            uploadRecording(data).then((res) => {
+                resolve(res);
+            }).catch((err) => {
+                reject(err)
+            })
+        });
+    },
+
 }
 
 export default {

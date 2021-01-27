@@ -2,7 +2,7 @@
  * @Description: axios请求配置列表
  * @Author: wangqi
  * @Date: 2020-06-02 13:17:14
- * @LastEditTime: 2021-01-19 17:44:25
+ * @LastEditTime: 2021-01-27 22:44:31
  */
 
 import service from '@/api/request.js';
@@ -62,6 +62,7 @@ export function uploadImg(data) {
     })
 }
 
+// 上传录音文件
 export function uploadRecording(data) {
     return service({
         url: `/message/uploadRecording`,
