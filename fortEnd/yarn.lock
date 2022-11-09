@@ -903,9 +903,9 @@
   integrity sha1-HBJhu+qhCoBVu8XYq4S3sq/IRqA=
 
 "@types/component-emitter@^1.2.10":
-  version "1.2.10"
-  resolved "https://registry.npm.taobao.org/@types/component-emitter/download/@types/component-emitter-1.2.10.tgz?cache=0&sync_timestamp=1605053057317&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fcomponent-emitter%2Fdownload%2F%40types%2Fcomponent-emitter-1.2.10.tgz#ef5b1589b9f16544642e473db5ea5639107ef3ea"
-  integrity sha1-71sVibnxZURkLkc9tepWORB+8+o=
+  version "1.2.11"
+  resolved "https://registry.yarnpkg.com/@types/component-emitter/-/component-emitter-1.2.11.tgz#50d47d42b347253817a39709fef03ce66a108506"
+  integrity sha512-SRXjM+tfsSlA9VuG8hGO2nft2p8zjXCK1VcC6N4NXbBbYbSia9kzCChYQajIjzIqOOOuh5Ock6MmV2oux4jDZQ==
 
 "@types/glob@^7.1.1":
   version "7.1.2"
@@ -2438,8 +2438,8 @@ component-bind@1.0.0:
 
 component-emitter@^1.2.1, component-emitter@~1.3.0:
   version "1.3.0"
-  resolved "https://registry.npm.taobao.org/component-emitter/download/component-emitter-1.3.0.tgz#16e4070fba8ae29b679f2215853ee181ab2eabc0"
-  integrity sha1-FuQHD7qK4ptnnyIVhT7hgasuq8A=
+  resolved "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.3.0.tgz#16e4070fba8ae29b679f2215853ee181ab2eabc0"
+  integrity sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==
 
 compressible@~2.0.16:
   version "2.0.18"
@@ -2873,7 +2873,14 @@ debug@^3.0.0, debug@^3.1.1, debug@^3.2.5:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@~4.1.0:
+debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@~4.3.1:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
+  dependencies:
+    ms "2.1.2"
+
+debug@~4.1.0:
   version "4.1.1"
   resolved "https://registry.npm.taobao.org/debug/download/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
   integrity sha1-O3ImAlUQnGtYnO4FDx1RYTlmR5E=
@@ -5544,7 +5551,7 @@ ms@2.1.1:
   resolved "https://registry.npm.taobao.org/ms/download/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha1-MKWGTrPrsKZvLr5tcnrwagnYbgo=
 
-ms@^2.1.1:
+ms@2.1.2, ms@^2.1.1:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/ms/download/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=
@@ -7494,12 +7501,13 @@ socket.io-client@^3.0.3:
     socket.io-parser "~4.0.1"
 
 socket.io-parser@~4.0.1:
-  version "4.0.1"
-  resolved "https://registry.npm.taobao.org/socket.io-parser/download/socket.io-parser-4.0.1.tgz?cache=0&sync_timestamp=1604587229039&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsocket.io-parser%2Fdownload%2Fsocket.io-parser-4.0.1.tgz#b8ec84364c7369ad32ae0c16dd4d388db19b3a04"
-  integrity sha1-uOyENkxzaa0yrgwW3U04jbGbOgQ=
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-4.0.5.tgz#cb404382c32324cc962f27f3a44058cf6e0552df"
+  integrity sha512-sNjbT9dX63nqUFIOv95tTVm6elyIU4RvB1m8dOeZt+IgWwcWklFDOdmGcfo3zSiRsnR/3pJkjY5lfoGqEe4Eig==
   dependencies:
+    "@types/component-emitter" "^1.2.10"
     component-emitter "~1.3.0"
-    debug "~4.1.0"
+    debug "~4.3.1"
 
 sockjs-client@1.4.0:
   version "1.4.0"
