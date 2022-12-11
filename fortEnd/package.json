@@ -16,7 +16,7 @@
     "gojs": "^2.1.19",
     "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
-    "qs": "^6.9.4",
+    "qs": "^6.9.7",
     "recorder-core": "^1.1.20112600",
     "recorderx": "^2.0.2",
     "register-service-worker": "^1.7.1",
